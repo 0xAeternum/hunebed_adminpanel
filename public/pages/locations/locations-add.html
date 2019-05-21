@@ -271,7 +271,18 @@
                               <label for="exampleInputEmail1">Monument Name</label>
                               <input type="text" class="form-control" id="name" placeholder="Enter monument name">
                             </div>
-                           
+                           <div class="form-group">
+                             <label for="longitude">Longitude</label>
+                             <input type="number" min="-180" max="180" value="0.00" step="0.01" class="form-control" id="longitude"> 
+                           </div>
+                           <div class="form-group">
+                            <label for="latitude">Latitude</label>
+                            <input type="number" min="-90" max="90" value="0.00" step="0.01°" class="form-control" id="latitude">
+                           </div>
+                           <div class="form-group">
+                            <label for="direction">Direction</label>
+                            <input type="number" min="0" max="360" value="0.00" step="0.01" class="form-control" id="direction">
+                           </div>
                             <div class="form-group">
                                     <label>Monument Location Provider</label>
                                     <select class="form-control select2" style="width: 100%;">
