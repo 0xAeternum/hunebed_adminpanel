@@ -57,7 +57,7 @@ var config = {
       direction:direction
     });*/
 
-    db.collection("attraction").add({
+    db.collection("attraction").doc(name).set({
       name:name,
       longitude:longitude,
       latitude:latitude,//position: new firebase.firestore.GeoPoint(latitude, longitude),
