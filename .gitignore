@@ -22,3 +22,5 @@ firebase-debug.log*
 .env
 firebase.json
 .firebaserc
+firestore.indexes.json
+firestore.rules
