@@ -21,4 +21,7 @@ firebase-debug.log*
 # dotenv environment variables file
 .env
 firebase.json
+database.rules.json
 .firebaserc
+firestore.indexes.json
+firestore.rules

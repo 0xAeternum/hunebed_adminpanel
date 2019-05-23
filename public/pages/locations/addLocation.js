@@ -11,21 +11,22 @@ var config = {
   firebase.initializeApp(config);
   
   // Reference attraction collection
-  var attractionRef = firebase.database().ref('attraction');
-  
+ // var attractionRef = firebase.database().ref('attraction');
+  var db = firebase.firestore();
   // Listen for form submit
-  document.getElementById('addLocationForm').addEventListener('submit', submitForm);
+  //document.getElementById('addLocationForm').addEventListener('submit', submitForm);
   
   // Submit form
   function submitForm(e){
-    e.preventDefault();
-  
+    //e.preventDefault();
+    //document.getElementById('addLocationForm').submit();
     // Get values
     var name = getInputVal('name');
     var longitude = getInputVal('longitude');
     var latitude = getInputVal('latitude');
     var direction = getInputVal('direction');
-  
+    document.getElementById('addLocationForm').submit();
+
     // Save attraction
     saveAttraction(name, longitude, latitude, direction);
   
@@ -48,11 +49,23 @@ var config = {
   
   // Save attractions to firebase
   function saveAttraction(name, longitude, latitude, direction){
-    var newAttractionRef = attractionRef.push();
+   /* var newAttractionRef = attractionRef.push();
     newAttractionRef.set({
       name:name,
       longitude:longitude,
       latitude:latitude,
       direction:direction
-    });
+    });*/
+
+    db.collection("attraction").add({
+      name:name,
+      longitude:longitude,
+      latitude:latitude,//position: new firebase.firestore.GeoPoint(latitude, longitude),
+      direction:direction
+    }).then(function(docRef) {
+      console.log("Document written with ID: ", docRef.id);
+  })
+  .catch(function(error) {
+      console.error("Error adding document: ", error);
+  });
   }
