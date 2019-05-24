@@ -17,10 +17,14 @@ var config = {
   function getAttraction(){
    
     db.collection("attraction").get().then(function(querySnapshot) {
+        var cache = {}
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
+            console.log(doc.data().name);
+            
         });
+        
+        //console.log(cache);
     });
   }
   function getAll(){

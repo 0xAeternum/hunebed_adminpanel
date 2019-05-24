@@ -56,16 +56,11 @@ var config = {
       latitude:latitude,
       direction:direction
     });*/
-
+    
     db.collection("attraction").doc(name).set({
       name:name,
-      longitude:longitude,
-      latitude:latitude,//position: new firebase.firestore.GeoPoint(latitude, longitude),
+      latitude: latitude,
+      longitude: longitude, 
       direction:direction
-    }).then(function(docRef) {
-      console.log("Document written with ID: ", docRef.id);
-  })
-  .catch(function(error) {
-      console.error("Error adding document: ", error);
-  });
+    });
   }
