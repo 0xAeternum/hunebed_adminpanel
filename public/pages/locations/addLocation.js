@@ -22,22 +22,23 @@ var config = {
     //document.getElementById('addLocationForm').submit();
     // Get values
     var name = getInputVal('name');
-    var longitude = getInputVal('longitude');
-    var latitude = getInputVal('latitude');
-    var direction = getInputVal('direction');
-    document.getElementById('addLocationForm').submit();
+    var longitude = parseFloat(getInputVal('longitude'));
+    var latitude =parseFloat(getInputVal('latitude'));
+    var direction = parseFloat(getInputVal('direction'));
+    var description = getInputVal('description');
+    //document.getElementById('addLocationForm').submit();
 
     // Save attraction
-    saveAttraction(name, longitude, latitude, direction);
+    saveAttraction(name, longitude, latitude, direction,description);
   
     // Show alert
-    document.querySelector('.alert').style.display = 'block';
+   // document.querySelector('.alert').style.display = 'block';
   
     // Hide alert after 3 seconds
     setTimeout(function(){
       document.querySelector('.alert').style.display = 'none';
     },3000);
-  
+    alert(name + " has been added!");
     // Clear form
     document.getElementById('addLocationForm').reset();
   }
@@ -48,7 +49,7 @@ var config = {
   }
   
   // Save attractions to firebase
-  function saveAttraction(name, longitude, latitude, direction){
+  function saveAttraction(name, longitude, latitude, direction,description){
    /* var newAttractionRef = attractionRef.push();
     newAttractionRef.set({
       name:name,
@@ -59,8 +60,15 @@ var config = {
     
     db.collection("attraction").doc(name).set({
       name:name,
-      latitude: latitude,
-      longitude: longitude, 
-      direction:direction
-    });
+     //latitude: latitude,
+     //longitude: longitude, 
+      position: new firebase.firestore.GeoPoint(latitude,longitude),
+      direction: direction,
+      description: description
+    }).then(function() {
+      console.log("Document successfully written!");
+    })
+    .catch(function(error) {
+      console.error("Error writing document: ", error);
+    });;
   }
