@@ -59,7 +59,9 @@ var config = {
     });*/
     
     db.collection("attraction").doc(name).set({
-      name:name,
+      created: firebase.firestore.FieldValue.serverTimestamp(),
+      updated: firebase.firestore.FieldValue.serverTimestamp(),
+      name: name,
      //latitude: latitude,
      //longitude: longitude, 
       position: new firebase.firestore.GeoPoint(latitude,longitude),
