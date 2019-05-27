@@ -22,6 +22,8 @@ var config = {
     //document.getElementById('addLocationForm').submit();
     // Get values
     var name = getInputVal('name');
+
+    
     var longitude = parseFloat(getInputVal('longitude'));
     var latitude =parseFloat(getInputVal('latitude'));
     var direction = parseFloat(getInputVal('direction'));
@@ -29,7 +31,7 @@ var config = {
     //document.getElementById('addLocationForm').submit();
 
     // Save attraction
-    saveAttraction(name, longitude, latitude, direction,description);
+    saveAttraction(name,longitude, latitude, direction,description);
   
     // Show alert
    // document.querySelector('.alert').style.display = 'block';
@@ -61,7 +63,7 @@ var config = {
     db.collection("attraction").doc(name).set({
       created: firebase.firestore.FieldValue.serverTimestamp(),
       updated: firebase.firestore.FieldValue.serverTimestamp(),
-      name: name,
+      
      //latitude: latitude,
      //longitude: longitude, 
       position: new firebase.firestore.GeoPoint(latitude,longitude),

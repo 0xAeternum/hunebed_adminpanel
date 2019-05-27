@@ -315,7 +315,7 @@
                           <!-- /.box-body -->
             
                           <div class="box-footer">
-                            <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
+                            <button type="submit" class="btn btn-primary" onclick="submitForm()">Submit</button>
                           </div>
                         </form>
                       </div>
@@ -421,6 +421,24 @@
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="../../bower_components/jquery-ui/jquery-ui.min.js"></script>
+<!-- test -->
+<script> 
+if(sessionStorage.getItem('id') != null){
+    document.getElementById('name').value = sessionStorage.getItem('id');
+    document.getElementById('longitude').value = sessionStorage.getItem('longitude');
+    document.getElementById('latitude').value = sessionStorage.getItem('latitude');
+    document.getElementById('direction').value = sessionStorage.getItem('direction');
+    document.getElementById('description').value = sessionStorage.getItem('description');
+    sessionStorage.removeItem('id');
+    sessionStorage.removeItem('longitude');
+    sessionStorage.removeItem('latitude');
+    sessionStorage.removeItem('direction');
+    sessionStorage.removeItem('description');
+    document.getElementById("name").readOnly = true;
+}
+    
+
+</script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button);

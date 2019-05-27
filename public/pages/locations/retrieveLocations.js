@@ -13,7 +13,7 @@ var config = {
   // Reference attraction collection
  // var attractionRef = firebase.database().ref('attraction');
   var db = firebase.firestore();
-
+  var table =  null;
   function getAttraction(){
    
   }
@@ -21,28 +21,81 @@ var config = {
     
     db.collection("attraction").get().then(function(querySnapshot) {
       
-      var table =  $('#monumentsTable').DataTable();
+      
+      i = 5;
       querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
-          //var table = document.getElementById("monumentsTable");
-          console.log(doc.data());
-          table.row.add([
-            String(doc.data().name),
-            String(doc.data().description),
-            String(doc.data().position),
-            String(doc.data().direction)
-          ]).draw(); 
-          /*
-          var row = table.insertRow(1);
-          var cell1 = row.insertCell(0);
-          var cell2 = row.insertCell(1);
-          var cell3 = row.insertCell(2);
-          var cell4 = row.insertCell(3);
-          cell1.innerHTML = doc.data().name;
-          cell2.innerHTML = doc.data().description;
-          cell3.innerHTML = doc.data().position;
-          cell4.innerHTML = doc.data().direction;
-         */
+        // doc.data() is never undefined for query doc snapshots
+        //var table = document.getElementById("monumentsTable");
+        //console.log(doc.id);
+        table =  $('#monumentsTable').DataTable();
+          
+        var btn = document.createElement('input');
+        btn.type = "button";
+        btn.className = "btn-warning";
+        btn.value = "Edit";
+        
+
+        var btnDelete = document.createElement('input');
+        btnDelete.type = "button";
+        btnDelete.className = "btn-danger";
+        btnDelete.value = "Delete";
+        // btn.setAttribute("id",doc.id)
+
+
+        table.row.add([
+          String(doc.id),
+          String(doc.data().description),
+          String(doc.data().position.latitude),
+          String(doc.data().position.longitude),
+          String(doc.data().direction),
+          null,
+          null
+        ]).draw(); 
+
+        btn.addEventListener ("click", function() {
+
+          alert(doc.id);
+          //Save data to sessionStorage
+          sessionStorage.setItem('id', doc.id);
+          sessionStorage.setItem('description', String(doc.data().description));
+          sessionStorage.setItem('latitude', String(doc.data().position.latitude));
+          sessionStorage.setItem('longitude', String(doc.data().position.longitude));
+          sessionStorage.setItem('direction', String(doc.data().direction));
+          window.location.assign('locations-add.html');
+          // Get saved data from sessionStorage
+          //var data = sessionStorage.getItem('key');
+          // Remove saved data from sessionStorage
+          //sessionStorage.removeItem('key');
+        });
+        btnDelete.addEventListener ("click", function() {
+
+         
+
+          var txt;
+          var r = confirm("Press a button!");
+          if (r == true) {
+            alert(doc.id + " would be deleted");
+            /*
+            db.collection("cities").doc(doc.id).delete().then(function() {
+              console.log("Document successfully deleted!");
+            }).catch(function(error) {
+                console.error("Error removing document: ", error);
+            });
+            table.draw();
+            */
+          } else {
+            alert("cancelled");
+          }
+
+        });
+        var td = document.getElementsByTagName('td')[i];
+        td.appendChild(btn);
+        var td = document.getElementsByTagName('td')[i+1];
+        td.appendChild(btnDelete);
+
+ 
+        i+=7;
+
       });
      //var table =  $('#monumentsTable').DataTable();
       
