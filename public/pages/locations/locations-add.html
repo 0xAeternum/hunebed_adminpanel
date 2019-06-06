@@ -157,22 +157,102 @@
             </ol>
         </section>
         <section class="content">
-          <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">Add Monument</h3>
-            <!-- <p class="alert" style="display: none;">The attraction has been added.</p>-->
-            </div>
-            <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form" id="addLocationForm">
-              <div class="box-body">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Monument Name *</label>
-                  <input type="text" class="form-control" id="name" placeholder="Enter monument name" required>
-                </div>
-              <div class="form-group">
-                <label for="longitude">Longitude *</label>
-                <input type="number" min="-180" max="180" value="0.00" step="0.0000001" class="form-control" id="longitude" required> 
+                <div class="box box-primary">
+                        <div class="box-header with-border">
+                          <h3 class="box-title">Add Monument</h3>
+                         <!-- <p class="alert" style="display: none;">The attraction has been added.</p>-->
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form role="form" id="addLocationForm">
+                          <div class="box-body">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Monument Name *</label>
+                              <input type="text" class="form-control" id="name" placeholder="Enter monument name" required>
+                            </div>
+                           <div class="form-group">
+                             <label for="longitude">Longitude *</label>
+                             <input type="number" min="-180" max="180" value="0.00" step="0.0000001" class="form-control" id="longitude" required> 
+                           </div>
+                           <div class="form-group">
+                            <label for="latitude">Latitude *</label>
+                            <input type="number" min="-90" max="90" value="0.00" step="0.0000001°" class="form-control" id="latitude" required>
+                           </div>
+                           <div class="form-group">
+                            <label for="direction">Direction *</label>
+                            <input type="number" min="0" max="360" value="0" step="1" class="form-control" id="direction" required>
+                           </div>
+                           <label for=""> Or </label>
+                            <div class="form-group">
+                                    <label>Send Location by Phone</label>
+                                    <select class="form-control select2" style="width: 100%;">
+                                      <option selected="selected">No phone selected</option>
+                                      <option>Mikolaj - Iphone</option>
+                                      <option>Pallares - HTC</option>
+                                      <option>Alpay - Huawei</option>
+  
+                                    </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Monument Description</label>
+                                <div class="pad">
+                                    
+                                    <textarea id="description" class="textarea" placeholder="Monument Description"
+                                                style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                                   
+                                </div>
+                            </div>
+                            <div class="form-group">
+                              <label for="exampleInputFile">File input</label>
+                              <input type="file" id="exampleInputFile">
+            
+                              
+                            </div>
+                          </div>
+                          <!-- /.box-body -->
+            
+                          <div class="box-footer">
+                            <button type="submit" class="btn btn-primary" id="write" onclick="submitForm()">Submit</button>
+                            <button class="btn btn-danger" id="delete" onclick="deleteInput()" hidden>Delete</button>
+                          </div>
+                        </form>
+                      </div>
+        </section>
+</div>
+
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 2.4.0
+    </div>
+    <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
+    reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+      <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <!-- Home tab content -->
+      <div class="tab-pane" id="control-sidebar-home-tab">
+        <!-- /.control-sidebar-menu -->
+
+        <h3 class="control-sidebar-heading">Tasks Progress</h3>
+        <ul class="control-sidebar-menu">
+          <li>
+            <a href="javascript:void(0)">
+              <h4 class="control-sidebar-subheading">
+                Custom Template Design
+                <span class="label label-danger pull-right">70%</span>
+              </h4>
+
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
               </div>
               <div class="form-group">
                 <label for="latitude">Latitude *</label>
@@ -226,26 +306,26 @@
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-firestore.js"></script>
     <script src="addLocation.js"></script>
 
-    <!-- jQuery 3 -->
-    <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="../../bower_components/jquery-ui/jquery-ui.min.js"></script>
-    <!-- test -->
-    <script> 
-    if(sessionStorage.getItem('id') != null){
-        document.getElementById('name').value = sessionStorage.getItem('id');
-        document.getElementById('longitude').value = sessionStorage.getItem('longitude');
-        document.getElementById('latitude').value = sessionStorage.getItem('latitude');
-        document.getElementById('direction').value = sessionStorage.getItem('direction');
-        document.getElementById('description').value = sessionStorage.getItem('description');
-        sessionStorage.removeItem('id');
-        sessionStorage.removeItem('longitude');
-        sessionStorage.removeItem('latitude');
-        sessionStorage.removeItem('direction');
-        sessionStorage.removeItem('description');
-        document.getElementById("name").readOnly = true;
-    }
-        
+<!-- jQuery 3 -->
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="../../bower_components/jquery-ui/jquery-ui.min.js"></script>
+<!-- test -->
+<script> 
+document.getElementById("delete").style.visibility = 'hidden';
+
+if(sessionStorage.getItem('id') != null){
+    document.getElementById('name').value = sessionStorage.getItem('id');
+    document.getElementById('longitude').value = sessionStorage.getItem('longitude');
+    document.getElementById('latitude').value = sessionStorage.getItem('latitude');
+    document.getElementById('direction').value = sessionStorage.getItem('direction');
+    document.getElementById('description').value = sessionStorage.getItem('description');
+    sessionStorage.clear();
+    document.getElementById("name").readOnly = true;
+    document.getElementById("write").innerHTML = "Update";
+    document.getElementById("delete").style.visibility = 'visible';
+}
+    
 
     </script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->

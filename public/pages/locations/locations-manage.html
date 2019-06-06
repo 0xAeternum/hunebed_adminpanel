@@ -140,68 +140,104 @@
                       </ul>
                   </li>
               </ul>
-          </section>
-      </aside>
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-              <h1>
-                Manage Locations
-                <small>Location</small>
-              </h1>
-              <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Main</a></li>
-                <li><a href="#">Locations</a></li>
-                <li class="active"><a href="#">Manage Locations</a></li>
-              </ol>
-            </section>
-            <section class="content">
-              <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">Monuments</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <table id="monumentsTable" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Description</th>
-                      <th>Latitude</th>
-                      <th>Longitude</th>
-                      <th>Direction</th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
+            </li>          
+          </ul>
+        </li>  
+      
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-users"></i> <span>Users</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="../../pages/users/users-block.html"><i class="fa fa-ban"></i> Block Users</a></li>
+            <li><a href="../../pages/users/users-manage.html"><i class="fa fa-circle-o"></i> Manage Blocked Users</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-map-marker"></i> <span>Locations</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="locations-add.html"><i class="fa fa-plus"></i> Add Location</a></li>
+            
+          </ul>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-exclamation"></i> <span>User Requests</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="../../pages/user_requests/ratings.html"><i class="fa fa-star"></i> View Ratings</a></li>
+              <li><a href="../../pages/user_requests/comments-manage.html"><i class="fa fa-comment-o"></i> Manage Comments</a></li>
+              <li><a href="../../pages/user_requests/suggestions-review.html"><i class="fa fa-lightbulb-o"></i> Review Suggestions</a></li>
+            </ul>
+        </li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+ <!-- Content Wrapper. Contains page content -->
+ <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Manage Locations
+            <small>Location</small>
+          </h1>
+        </section>
+        <section class="content">
+                <div class="box">
+                        <div class="box-header">
+                          <h3 class="box-title">Monuments</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                          <table id="monumentsTable" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Description</th>
+                              <th>Latitude</th>
+                              <th>Longitude</th>
+                              <th>Direction</th>
+                             
+                              <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
-                        <th>Direction</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </tfoot>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div>     
-            </section>
-        </div>
-      <!-- /.content-wrapper -->
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                                <th>Direction</th>
+                              
+                                <th></th>
+                            </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+                      
+        </section>
+    </div>
 
       <!-- Main footer -->
       <div id="main-footer"></div>
     </div>
     <!-- ./wrapper -->
-
     <!-- JS for adding location -->
     <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
@@ -264,7 +300,24 @@
     <!-- AdminLTE for demo purposes -->
     <script src="../../dist/js/demo.js"></script>
     <script>
-        getAll();
-    </script>
-  </body>
+    getAll();
+    var table = $('#monumentsTable').DataTable({
+      "columnDefs": [ {
+            "targets": -1,
+            "data": null,
+            "defaultContent": "<button class='btn-warning'>Edit</button>",
+
+        } ]});
+        $('#monumentsTable tbody').on( 'click', 'button', function () {
+        var data = table.row( $(this).parents('tr') ).data();
+        alert( data[0]);
+        sessionStorage.setItem('id', data[0]);
+        sessionStorage.setItem('description', data[1]);
+        sessionStorage.setItem('latitude', data[2]);
+        sessionStorage.setItem('longitude', data[3]);
+        sessionStorage.setItem('direction', data[4]);
+        window.location.assign('locations-add.html');
+    } );
+</script>
+</body>
 </html>
