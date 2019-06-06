@@ -44,7 +44,35 @@ var config = {
     // Clear form
     document.getElementById('addLocationForm').reset();
   }
-  
+  function deleteInput(){
+    //var txt;
+    var r = confirm("Press a button!");
+    if (r == true) {
+      //alert(name+ " would be deleted");
+      
+      db.collection("attraction").doc(name).delete().then(function() {
+        console.log("Document successfully deleted!");
+        setTimeout(function(){
+          document.querySelector('.alert').style.display = 'none';
+        },3000);
+        alert(name + " has deleted!");
+      }).catch(function(error) {
+          console.error("Error removing document: ", error);
+      });
+      
+     
+      
+      // Clear form
+      document.getElementById('addLocationForm').reset();
+    } else {
+      
+
+
+      alert("cancelled");
+      // Clear form
+
+    }
+  }
   // Function to get get form values
   function getInputVal(id){
     return document.getElementById(id).value;
