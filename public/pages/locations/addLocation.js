@@ -9,13 +9,15 @@ var config = {
     appId: "1:231032087489:web:37267e6ec937a3e6"
   };
   firebase.initializeApp(config);
-  
+
   // Reference attraction collection
  // var attractionRef = firebase.database().ref('attraction');
   var db = firebase.firestore();
+  var storage = firebase.storage();
+  var ref = storage.ref();
   // Listen for form submit
   //document.getElementById('addLocationForm').addEventListener('submit', submitForm);
-  
+
   // Submit form
   function submitForm(e){
     //e.preventDefault();
@@ -32,7 +34,7 @@ var config = {
 
     // Save attraction
     saveAttraction(name,longitude, latitude, direction,description);
-  
+    uploadFile();
     // Show alert
    // document.querySelector('.alert').style.display = 'block';
   
@@ -103,4 +105,27 @@ var config = {
     .catch(function(error) {
       console.error("Error writing document: ", error);
     });
+    
   }
+  function uploadFile(){
+    const file = $('#InputFile').get(0).files[0];
+    const fileName = (+new Date()) + '-' + file.name + '-' + name;
+    const task = ref.child(fileName).put(file, metadata);
+  
+  }
+
+    /*
+    // Create a root reference
+    var storageRef = firebase.storage().ref();
+
+    // Create a reference to 'mountains.jpg'
+    var mountainsRef = storageRef.child('mountains.jpg');
+
+    // Create a reference to 'images/mountains.jpg'
+    var mountainImagesRef = storageRef.child('images/mountains.jpg');
+
+    // While the file names are the same, the references point to different files
+    mountainsRef.name === mountainImagesRef.name            // true
+    //mountainsRef.fullPath === mountainImagesRef.fullPath    // false
+    */
+  
