@@ -13,22 +13,32 @@ var config = {
   // Reference attraction collection
  // var attractionRef = firebase.database().ref('attraction');
   var db = firebase.firestore();
-  var table =  null;
+ // var table =  null;
   function getAttraction(){
    
   }
   function getAll(){
-    
+    //table =  $('#monumentsTable').DataTable();
     db.collection("attraction").get().then(function(querySnapshot) {
       
       
-      i = 5;
+   
       querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
         //var table = document.getElementById("monumentsTable");
         //console.log(doc.id);
-        table =  $('#monumentsTable').DataTable();
-          
+        var table =  $('#monumentsTable').DataTable();
+
+        
+        table.row.add([
+          String(doc.id),
+          String(doc.data().description),
+          String(doc.data().position.latitude),
+          String(doc.data().position.longitude),
+          String(doc.data().direction),
+          null
+        ]).draw(); 
+   /*
         var btn = document.createElement('input');
         btn.type = "button";
         btn.className = "btn-warning";
@@ -40,21 +50,9 @@ var config = {
         btnDelete.className = "btn-danger";
         btnDelete.value = "Delete";
         // btn.setAttribute("id",doc.id)
-
-
-        table.row.add([
-          String(doc.id),
-          String(doc.data().description),
-          String(doc.data().position.latitude),
-          String(doc.data().position.longitude),
-          String(doc.data().direction),
-          null,
-          null
-        ]).draw(); 
-
         btn.addEventListener ("click", function() {
 
-          alert(doc.id);
+          //alert(doc.id);
           //Save data to sessionStorage
           sessionStorage.setItem('id', doc.id);
           sessionStorage.setItem('description', String(doc.data().description));
@@ -82,23 +80,26 @@ var config = {
                 console.error("Error removing document: ", error);
             });
             table.draw();
-            */
+            
           } else {
             alert("cancelled");
           }
 
         });
+     
         var td = document.getElementsByTagName('td')[i];
         td.appendChild(btn);
         var td = document.getElementsByTagName('td')[i+1];
         td.appendChild(btnDelete);
+*/
 
- 
-        i+=7;
+       
 
       });
      //var table =  $('#monumentsTable').DataTable();
       
   });
+ 
   }
+
   
