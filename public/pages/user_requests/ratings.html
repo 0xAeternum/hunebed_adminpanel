@@ -155,6 +155,20 @@
               <li><a href="#">User Requests</a></li>
               <li class="active"><a href="#">View Ratings</a></li>
             </ol>
+
+            <div class="row">
+              <div class="col-md-12">
+                <!-- The time line -->
+                <ul id="timeline" class="timeline">
+                  <!-- timeline time label -->
+
+
+                </ul>
+              </div>
+              <!-- /.col -->
+            </div>
+
+
           </section>
         </div>
         <!-- /.content-wrapper -->
@@ -188,15 +202,11 @@
     <!-- Bootstrap 3.3.7 -->
     <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Morris.js charts -->
-    <script src="../../bower_components/raphael/raphael.min.js"></script>
-    <script src="../../bower_components/morris.js/morris.min.js"></script>
     <!-- Sparkline -->
     <script src="../../bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
     <!-- jvectormap -->
     <script src="../../plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
     <script src="../../plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="../../bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
     <!-- daterangepicker -->
     <script src="../../bower_components/moment/min/moment.min.js"></script>
     <script src="../../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
@@ -210,9 +220,14 @@
     <script src="../../bower_components/fastclick/lib/fastclick.js"></script>
     <!-- AdminLTE App -->
     <script src="../../dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="../../dist/js/pages/dashboard.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="../../dist/js/demo.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-firestore.js"></script>
+    <script src="requests.js"></script>
+    <script>
+      
+      getRatings();
+    </script>
   </body>
 </html>
