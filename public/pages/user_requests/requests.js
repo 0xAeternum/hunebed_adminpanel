@@ -144,12 +144,22 @@ var config = {
             manageButton.className = "btn btn-primary btn-xs";
             manageButton.innerHTML = "Edit";
             manageButton.href = "#";
+            manageButton.addEventListener("click" , function(){
+                //alert(doc.data().comment);
+                
+                document.getElementById("myModal").style.display = "block";
+                document.getElementById("description").value = String(doc.data().comment);
+            });
+            
 
             var blockButton = document.createElement("a");
             blockButton.className = "btn btn-danger btn-xs";
             blockButton.innerHTML = "Delete and Block user";
             blockButton.href = "#";
-
+            blockButton.addEventListener("click" , function(){
+                alert(doc.data().comment);
+            });
+            
             li.appendChild(iStar);
             li.appendChild(divTimelineItem);   
 
@@ -167,3 +177,14 @@ var config = {
         });
     });
   }
+  var span = document.getElementsByClassName("close")[0];
+  span.onclick = function() {
+    document.getElementById("myModal").style.display = "none";
+    }
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("myModal")) {
+            document.getElementById("myModal").style.display = "none";
+        }
+    }
