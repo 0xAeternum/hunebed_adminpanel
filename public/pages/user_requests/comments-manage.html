@@ -146,6 +146,28 @@
             <div class="content-wrapper">
               <!-- Content Header (Page header) -->
               <section class="content-header">
+                  <div id="myModal" class="modal">
+
+                      <!-- Modal content -->
+                      <div class="modal-content" style="margin: auto; margin-top: 90px; width: 70%; padding: 10px;">
+                        <span class="close">&times;</span>
+                        <form role="form" id="addLocationForm">
+                          <div class="form-group">
+                            <label>Edit Comment</label>
+                            <div class="pad">          
+                              <textarea id="description" class="textarea" placeholder="Comment"
+                                            style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                               
+                            </div>
+                          </div>
+                          <div class="form-group"> 
+                            <input type="submit" class="btn btn-primary" value="Update">
+                          </div>
+                        </form>
+                        
+                      </div>
+                    
+                    </div>
                 <h1>
                   Manage Comments
                   <small>User Requests</small>
@@ -170,7 +192,7 @@
               </div>
               </section>
           </div>
-
+         
         <!-- /.content-wrapper -->
         <!-- Main footer -->
         <div id="main-footer"></div>
