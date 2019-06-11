@@ -275,7 +275,7 @@
         } ]});
         $('#monumentsTable tbody').on( 'click', 'button', function () {
         var data = table.row( $(this).parents('tr') ).data();
-        alert( data[0]);
+       // alert( data[0]);
         sessionStorage.setItem('id', data[0]);
         sessionStorage.setItem('description', data[1]);
         sessionStorage.setItem('latitude', data[2]);

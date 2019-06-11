@@ -18,7 +18,7 @@ firebase.initializeApp(config);
   }
   function getAll(){
     //table =  $('#monumentsTable').DataTable();
-    db.collection("attraction").get().then(function(querySnapshot) {
+    db.collection("attraction").where('active','==',true).get().then(function(querySnapshot) {
       
       
    

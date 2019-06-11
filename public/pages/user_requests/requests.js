@@ -90,9 +90,12 @@ var config = {
   }
 
   function getComments(){
-    db.collection("comments").orderBy("date", 'desc').get().then(function (querySnapshot) {
+    db.collection("comments").orderBy('date','desc').get().then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
            // var dateDiff = Date.now() - doc.data().date.seconds;
+           if(doc.data().active){
+
+           
             var time = doc.data().date;
             var diffTime = Date.now() - time.toDate();
             
@@ -143,7 +146,7 @@ var config = {
             var manageButton = document.createElement("a");
             manageButton.className = "btn btn-primary btn-xs";
             manageButton.innerHTML = "Edit";
-            manageButton.href = "#";
+            manageButton.style.marginLeft = '5px';
             manageButton.addEventListener("click" , function(){
                 //alert(doc.data().comment);
                 
@@ -155,9 +158,65 @@ var config = {
             var blockButton = document.createElement("a");
             blockButton.className = "btn btn-danger btn-xs";
             blockButton.innerHTML = "Delete and Block user";
-            blockButton.href = "#";
+            
             blockButton.addEventListener("click" , function(){
-                alert(doc.data().comment);
+                            //var txt;
+                
+                var r = confirm("Remove " + doc.data().user + "s' comment ?");
+                if (r == true) {
+                //alert(name+ " would be deleted");
+                //deleteComment(doc.id);
+                    
+                
+                db.collection("comments").doc(doc.id).update({
+                    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+                    active: false
+                  }).then(function() {
+                    alert("Document successfully deleted!");
+                    var r = confirm("Block " + doc.data().user + "?");
+                    if (r == true) {
+                        db.collection("users").where("username", "==", doc.data().user)
+                        .get()
+                        .then(function(querySnapshot) {
+                          querySnapshot.forEach(function(doc) {
+                            db.collection("users").doc(doc.id).update({
+                            
+                            updated: firebase.firestore.FieldValue.serverTimestamp(),
+
+                            status: true
+                            }).then(function() {
+                              //console.log("Document successfully written!");
+                              alert("User successfully blocked!");
+                              location.reload();
+                    
+                            })
+                            .catch(function(error) {
+                              console.error("Error writing document: ", error);
+                            });
+                          });
+                        })
+                        .catch(function(error) {
+                            console.log("Error getting documents: ", error);
+                        });
+                    }else{
+                        location.reload();
+                    }
+                  
+                  }).catch(function(error) {
+                      console.error("Error removing document: ", error);
+                  });
+                
+                // Clear form
+                //document.getElementById('addLocationForm').reset();
+
+                } else {
+                
+
+
+                    alert("Cancelled");
+                // Clear form
+
+                }
             });
             
             li.appendChild(iStar);
@@ -174,9 +233,12 @@ var config = {
             divTimelineItem.appendChild(divTimelineFooter);
             
             document.getElementById("timeline").appendChild(li);   
+        }
         });
     });
   }
+  
+
   var span = document.getElementsByClassName("close")[0];
   span.onclick = function() {
     document.getElementById("myModal").style.display = "none";
