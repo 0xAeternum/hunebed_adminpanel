@@ -220,11 +220,11 @@
               <div class="box-header">
                 <!-- tools box -->
                 <div class="pull-right box-tools">
-                  <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" title="Date range">
-                    <i class="fa fa-calendar"></i>
-                  </button>
                   <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="Collapse" style="margin-right: 5px;">
                     <i class="fa fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" title="Date range">
+                    <i class="fa fa-calendar"></i>
                   </button>
                 </div>
                 <!-- /. tools -->
@@ -257,7 +257,7 @@
               <div class="box-body bg-green">
                 <div class="info-box bg-green">
                   <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <span class="info-box-icon">
                         <i class="fa fa-thumbs-o-up"></i>
                       </span>
@@ -266,7 +266,7 @@
                         <span class="info-box-number" id="newRatingsCount">0</span>
                       </div>
                     </div>
-                    <div class="col-md-6" id="ratingbox">
+                    <div class="col-md-7" id="ratingbox">
                       <a class="info-box-more bg-green" href="../../pages/user_requests/ratings.html">No new ratings...</a>
                     </div>
                   </div>
@@ -292,7 +292,7 @@
               <div class="box-body bg-blue">
                 <div class="info-box bg-blue">
                   <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <span class="info-box-icon">
                         <i class="fa fa-comments-o"></i>
                       </span>
@@ -301,9 +301,8 @@
                         <span class="info-box-number" id="newCommentsCount">0</span>
                       </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                       <a class="info-box-more bg-blue" id="commentbox1" href="../../pages/user_requests/comments-manage.html">No new comments...</a>
-                      <br />
                       <a class="info-box-more bg-blue"  id="commentbox2" href="../../pages/user_requests/comments-manage.html"></a>
                     </div>
                   </div>
@@ -370,9 +369,8 @@
 
     <!-- jQuery 3 -->
     <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="../../bower_components/jquery-ui/jquery-ui.min.js"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <!-- Bootstrap 3.3.7 -->
+    <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script>
       //Header import script
       $.ajax({
@@ -400,10 +398,6 @@
         }
       });
     </script>
-    <!-- Bootstrap 3.3.7 -->
-    <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- Sparkline -->
-    <script src="../../bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
     <!-- jvectormap -->
     <script src="../../plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
     <script src="../../plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
@@ -416,16 +410,12 @@
     <script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     <!-- Bootstrap WYSIHTML5 -->
     <script src="../../plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-    <!-- Slimscroll -->
-    <script src="../../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <!-- ChartJs-->
     <script src="../../bower_components/chart.js/Chart.js"></script>
     <!-- FastClick -->
     <script src="../../bower_components/fastclick/lib/fastclick.js"></script>
     <!-- AdminLTE App -->
     <script src="../../dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="../../dist/js/pages/dashboard.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="../../dist/js/demo.js"></script>
     <!-- JS for retrieveing statistics -->
