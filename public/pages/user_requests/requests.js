@@ -12,9 +12,8 @@ var config = {
   var db = firebase.firestore();
 
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  var cacheY = null;
-  var cacheM = null;
-  var cacheD = null;
+  var cacheY = cacheM = cacheD = null;
+  
   function getDates(){
 
     var li = document.createElement("li");
@@ -109,7 +108,7 @@ var config = {
             diffTime -= diffMinutes * 1000 * 60;
 
             const diffSeconds = Math.floor(diffTime / 1000);
-/*
+
             if(cacheY != time.toDate().getFullYear() || cacheM != time.toDate().getMonth() || cacheD  != time.toDate().getDate()){
                 
                 cacheY = time.toDate().getFullYear();
@@ -117,7 +116,7 @@ var config = {
                 cacheD = time.toDate().getDate();
                 getDates();
             }
-*/
+
             var li = document.createElement("li");
             var iStar = document.createElement("i");
             iStar.className = "fa fa-envelope bg-blue";
@@ -146,14 +145,15 @@ var config = {
             var manageButton = document.createElement("a");
             manageButton.className = "btn btn-primary btn-xs";
             manageButton.innerHTML = "Edit";
-            //manageButton.style.marginLeft = '5px';
+            manageButton.style.marginLeft = '10pt';
 
             
             manageButton.addEventListener("click" , function(){
                 //alert(doc.data().comment);
                 
-                document.getElementById("myModal").style.display = "block";
+                document.getElementById("myModal").style.display = "block";               
 
+               // sessionStorage.setItem("comment",doc.data().comment);
             });
             
 
@@ -163,51 +163,54 @@ var config = {
             
             blockButton.addEventListener("click" , function(){    
                 var r = confirm("Remove " + doc.data().user + "s' comment ?");
-                if (r == true) {                
+
+                if (r == true) {
+
                     db.collection("comments").doc(doc.id).update({
                         updated_at: firebase.firestore.FieldValue.serverTimestamp(),
                         active: false
-                        }).then(function() {
+                    }).then(function() {
                         alert("Document successfully deleted!");
+
                         var r = confirm("Block " + doc.data().user + "?");
+
                         if (r == true) {
-                            db.collection("users").where("username", "==", doc.data().user)
-                            .get()
+
+                            db.collection("users").where("username", "==", doc.data().user).get()
                             .then(function(querySnapshot) {
                                 querySnapshot.forEach(function(doc) {
-                                db.collection("users").doc(doc.id).update({
-                                
-                                updated: firebase.firestore.FieldValue.serverTimestamp(),
-
-                                status: true
-                                }).then(function() {
-                                    //console.log("Document successfully written!");
-                                    alert("User successfully blocked!");
-                                    location.reload();
-                        
-                                })
-                                .catch(function(error) {
-                                    console.error("Error writing document: ", error);
-                                });
+                                    db.collection("users").doc(doc.id).update({                                  
+                                    updated: firebase.firestore.FieldValue.serverTimestamp(),
+                                    status: true
+                                    }).then(function() {
+                                        //console.log("Document successfully written!");
+                                        alert("User successfully blocked!");
+                                        location.reload();
+                                    })
+                                    .catch(function(error) {
+                                        console.error("Error writing document: ", error);
+                                    });
                                 });
                             })
                             .catch(function(error) {
                                 console.log("Error getting documents: ", error);
                             });
-                            }else{
-                                location.reload();
-                            }                
-                  }).catch(function(error) {
-                      console.error("Error removing document: ", error);
-                  });
+
+                        }else{
+                            location.reload();
+                        }                
+                    }).catch(function(error) {
+                        console.error("Error removing document: ", error);
+                    });
 
                 } else {
                     alert("Cancelled");
                 }
             });
             
+            
             li.appendChild(iStar);
-            li.appendChild(divTimelineItem);   
+            li.appendChild(divTimelineItem);
 
             span.appendChild(iClock);    
 
@@ -218,7 +221,7 @@ var config = {
             divTimelineItem.appendChild(timelineHeader);
             divTimelineItem.appendChild(divTimelineBody);
             divTimelineItem.appendChild(divTimelineFooter);
-            
+          
             document.getElementById("timeline").appendChild(li);   
 
         }
@@ -227,14 +230,3 @@ var config = {
   }
   
 
-  var span = document.getElementsByClassName("close")[0];
-  span.onclick = function() {
-    document.getElementById("myModal").style.display = "none";
-    }
-    
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == document.getElementById("myModal")) {
-            document.getElementById("myModal").style.display = "none";
-        }
-    }
