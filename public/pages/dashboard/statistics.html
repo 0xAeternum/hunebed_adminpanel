@@ -214,7 +214,7 @@
           </div>
           <!-- /.row -->
 
-          <section class="col-lg-6 connectedSortable">
+          <section class="col-lg-6">
             <!-- Map box -->
             <div class="box box-solid bg-light-blue-gradient">
               <div class="box-header">
@@ -240,66 +240,81 @@
             </div>
             <!-- /.box -->
           </section>
-            
-          <section class="col-lg-6 connectedSortable">
+
+          <section class="col-lg-6">
             <div class="box box-success">
+              <div class="box-header">
+                <h3 class="box-title">Ratings</h3>
+                <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                  </button>
+                  <!-- <button type="button" class="btn btn-box-tool" data-widget="remove">
+                    <i class="fa fa-times"></i>
+                  </button> -->
+                </div>
+              </div>
+              <div class="box-body bg-green">
+                <div class="info-box bg-green">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <span class="info-box-icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                      </span>
+                      <div class="info-box-content">
+                        <span class="info-box-text">New ratings today</span>
+                        <span class="info-box-number" id="newRatingsCount">0</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6" id="ratingbox">
+                      <a class="info-box-more bg-green" href="../../pages/user_requests/ratings.html">No new ratings...</a>
+                    </div>
+                  </div>
+                  <!-- /.info-box-content --> 
+                </div>
+              </div>
+            </div>
+          </section>
+            
+          <section class="col-lg-6">
+            <div class="box box-primary">
               <div class="box-header">
                 <h3 class="box-title">Comments</h3>
                 <div class="box-tools pull-right">
                   <button type="button" class="btn btn-box-tool" data-widget="collapse">
                     <i class="fa fa-minus"></i>
                   </button>
-                  <button type="button" class="btn btn-box-tool" data-widget="remove">
+                  <!-- <button type="button" class="btn btn-box-tool" data-widget="remove">
                     <i class="fa fa-times"></i>
-                  </button>
+                  </button> -->
                 </div>
               </div>
-              <div class="box-body bg-green">
-                <div class="info-box bg-green">                           
-                    <span class="info-box-icon">
-                      <i class="fa fa-comments-o"></i>
-                    </span>
-                    <div class="info-box-content">
-                      <span class="info-box-text">New comments</span>
-                      <span class="info-box-number">0</span>
+              <div class="box-body bg-blue">
+                <div class="info-box bg-blue">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <span class="info-box-icon">
+                        <i class="fa fa-comments-o"></i>
+                      </span>
+                      <div class="info-box-content">
+                        <span class="info-box-text">New comments<br />today</span>
+                        <span class="info-box-number" id="newCommentsCount">0</span>
+                      </div>
                     </div>
-                  </a>
+                    <div class="col-md-6">
+                      <a class="info-box-more bg-blue" id="commentbox1" href="../../pages/user_requests/comments-manage.html">No new comments...</a>
+                      <br />
+                      <a class="info-box-more bg-blue"  id="commentbox2" href="../../pages/user_requests/comments-manage.html"></a>
+                    </div>
+                  </div>
                   <!-- /.info-box-content -->
                 </div>
               </div>
             </div>
           </section>
           
-          <section class="col-lg-6 connectedSortable">
-            <div class="box box-primary">
-              <div class="box-header">
-                <h3 class="box-title">Likes</h3>
-                <div class="box-tools pull-right">
-                  <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                    <i class="fa fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-box-tool" data-widget="remove">
-                    <i class="fa fa-times"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="box-body bg-blue">
-                <div class="info-box bg-blue">
-                  <span class="info-box-icon">
-                    <i class="fa fa-thumbs-o-up"></i>
-                  </span>
-                  <div class="info-box-content">
-                    <span class="info-box-text">New likes on attractions</span>
-                    <span class="info-box-number">0</span>
-                    <!-- /.info-box-content -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          
           <!-- right col (We are only adding the ID to make the widgets sortable)-->
-          <section class="col-lg-6 connectedSortable">
+          <section class="col-lg-6">
             <!-- BAR CHART -->
             <div class="box box-warning">
               <div class="box-header with-border">
@@ -308,9 +323,9 @@
                   <button type="button" class="btn btn-box-tool" data-widget="collapse">
                     <i class="fa fa-minus"></i>
                   </button>
-                  <button type="button" class="btn btn-box-tool" data-widget="remove">
+                  <!-- <button type="button" class="btn btn-box-tool" data-widget="remove">
                     <i class="fa fa-times"></i>
-                  </button>
+                  </button> -->
                 </div>
               </div>
               <div class="box-body">
@@ -322,7 +337,7 @@
             </div>            
           </section>
 
-          <section class="col-lg-6 connectedSortable">
+          <section class="col-lg-6">
             <div class="box box-danger">
               <div class="box-header with-border">
                 <h3 class="box-title">Liked attractions by area</h3>
@@ -330,9 +345,9 @@
                     <button type="button" class="btn btn-box-tool" data-widget="collapse">
                       <i class="fa fa-minus"></i>
                     </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove">
+                    <!-- <button type="button" class="btn btn-box-tool" data-widget="remove">
                       <i class="fa fa-times"></i>
-                    </button>
+                    </button> -->
                   </div>
               </div>
               <div class="box-body">
@@ -387,9 +402,6 @@
     </script>
     <!-- Bootstrap 3.3.7 -->
     <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- Morris.js charts -->
-    <script src="../../bower_components/raphael/raphael.min.js"></script>
-    <script src="../../bower_components/morris.js/morris.min.js"></script>
     <!-- Sparkline -->
     <script src="../../bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
     <!-- jvectormap -->
@@ -416,6 +428,11 @@
     <script src="../../dist/js/pages/dashboard.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="../../dist/js/demo.js"></script>
+    <!-- JS for retrieveing statistics -->
+    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-firestore.js"></script>
+    <script src="Rstatistics.js"></script>
     <script>
         $(function () {
         //-------------

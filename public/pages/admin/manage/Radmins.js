@@ -37,7 +37,7 @@ function getAll() {
   db.collection("administrators").get().then(function(querySnapshot) {
     querySnapshot.forEach(function(admin) {
       if(admin.data().active == true) {
-        var deviceName = 'No device';
+        var deviceName = '<b>No device</b>';
         if(admin.data().device) {
           deviceName = admin.data().device.id;
         }

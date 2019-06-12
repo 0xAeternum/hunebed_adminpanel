@@ -32,21 +32,29 @@ $('#deviceTable tbody').on('click', 'button', function () {
 });
 
 function getAll(){
-  db.collection("administrators").get().then(function(querySnapshot) {
-    querySnapshot.forEach(function(admin) {
-      if(admin.data().device) {
-        db.collection("device").doc(admin.data().device.id).get().then(function(device) {
-          if(device.data().active == true) { 
-            var deviceTable = $('#deviceTable').DataTable();
-            deviceTable.row.add([
-              String(device.data().name),
-              String(admin.data().name),
-              String(device.data().mac_address),
-              null
-            ]).draw();
+  db.collection("administrators").get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(admin) {
+        if(admin.data().device) {
+          db.collection("device").doc(admin.data().device.id).get()
+            .then(function(device) {
+              if(device.data().active == true) { 
+                var deviceTable = $('#deviceTable').DataTable();
+                deviceTable.row.add([
+                  String(device.data().name),
+                  String(admin.data().name),
+                  String(device.data().mac_address),
+                  null
+                ]).draw();
+              }
+            })
+            .catch(function(error) {
+              console.log("Error getting documents: ", error);
+            });
           }
         });
-      }
+      })
+    .catch(function(error) {
+      console.log("Error getting documents: ", error);
     });
-  });
 }
