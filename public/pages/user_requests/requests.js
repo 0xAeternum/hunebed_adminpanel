@@ -109,7 +109,7 @@ var config = {
             diffTime -= diffMinutes * 1000 * 60;
 
             const diffSeconds = Math.floor(diffTime / 1000);
-
+/*
             if(cacheY != time.toDate().getFullYear() || cacheM != time.toDate().getMonth() || cacheD  != time.toDate().getDate()){
                 
                 cacheY = time.toDate().getFullYear();
@@ -117,7 +117,7 @@ var config = {
                 cacheD = time.toDate().getDate();
                 getDates();
             }
-
+*/
             var li = document.createElement("li");
             var iStar = document.createElement("i");
             iStar.className = "fa fa-envelope bg-blue";
@@ -146,12 +146,14 @@ var config = {
             var manageButton = document.createElement("a");
             manageButton.className = "btn btn-primary btn-xs";
             manageButton.innerHTML = "Edit";
-            manageButton.style.marginLeft = '5px';
+            //manageButton.style.marginLeft = '5px';
+
+            
             manageButton.addEventListener("click" , function(){
                 //alert(doc.data().comment);
                 
                 document.getElementById("myModal").style.display = "block";
-                document.getElementById("description").value = String(doc.data().comment);
+
             });
             
 
@@ -159,63 +161,48 @@ var config = {
             blockButton.className = "btn btn-danger btn-xs";
             blockButton.innerHTML = "Delete and Block user";
             
-            blockButton.addEventListener("click" , function(){
-                            //var txt;
-                
+            blockButton.addEventListener("click" , function(){    
                 var r = confirm("Remove " + doc.data().user + "s' comment ?");
-                if (r == true) {
-                //alert(name+ " would be deleted");
-                //deleteComment(doc.id);
-                    
-                
-                db.collection("comments").doc(doc.id).update({
-                    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-                    active: false
-                  }).then(function() {
-                    alert("Document successfully deleted!");
-                    var r = confirm("Block " + doc.data().user + "?");
-                    if (r == true) {
-                        db.collection("users").where("username", "==", doc.data().user)
-                        .get()
-                        .then(function(querySnapshot) {
-                          querySnapshot.forEach(function(doc) {
-                            db.collection("users").doc(doc.id).update({
-                            
-                            updated: firebase.firestore.FieldValue.serverTimestamp(),
+                if (r == true) {                
+                    db.collection("comments").doc(doc.id).update({
+                        updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+                        active: false
+                        }).then(function() {
+                        alert("Document successfully deleted!");
+                        var r = confirm("Block " + doc.data().user + "?");
+                        if (r == true) {
+                            db.collection("users").where("username", "==", doc.data().user)
+                            .get()
+                            .then(function(querySnapshot) {
+                                querySnapshot.forEach(function(doc) {
+                                db.collection("users").doc(doc.id).update({
+                                
+                                updated: firebase.firestore.FieldValue.serverTimestamp(),
 
-                            status: true
-                            }).then(function() {
-                              //console.log("Document successfully written!");
-                              alert("User successfully blocked!");
-                              location.reload();
-                    
+                                status: true
+                                }).then(function() {
+                                    //console.log("Document successfully written!");
+                                    alert("User successfully blocked!");
+                                    location.reload();
+                        
+                                })
+                                .catch(function(error) {
+                                    console.error("Error writing document: ", error);
+                                });
+                                });
                             })
                             .catch(function(error) {
-                              console.error("Error writing document: ", error);
+                                console.log("Error getting documents: ", error);
                             });
-                          });
-                        })
-                        .catch(function(error) {
-                            console.log("Error getting documents: ", error);
-                        });
-                    }else{
-                        location.reload();
-                    }
-                  
+                            }else{
+                                location.reload();
+                            }                
                   }).catch(function(error) {
                       console.error("Error removing document: ", error);
                   });
-                
-                // Clear form
-                //document.getElementById('addLocationForm').reset();
 
                 } else {
-                
-
-
                     alert("Cancelled");
-                // Clear form
-
                 }
             });
             
@@ -233,6 +220,7 @@ var config = {
             divTimelineItem.appendChild(divTimelineFooter);
             
             document.getElementById("timeline").appendChild(li);   
+
         }
         });
     });
