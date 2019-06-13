@@ -91,6 +91,7 @@ var config = {
     
 
     var li = document.createElement("li");
+    li.id = review.id;
     var iStar = document.createElement("i");
     iStar.className = "fa fa-envelope bg-blue";
 
