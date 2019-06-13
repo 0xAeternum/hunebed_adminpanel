@@ -15,10 +15,11 @@
  // var table =  null;
   function getAll(status){
     //table =  $('#monumentsTable').DataTable();
-    db.collection("users").where("status", "==", status).get().then(function(querySnapshot) {
+    db.collection("users").where("status", "==", status).onSnapshot(function(querySnapshot) {
       
+     
       
-   
+
       querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
         //var table = document.getElementById("monumentsTable");

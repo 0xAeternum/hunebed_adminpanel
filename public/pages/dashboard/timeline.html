@@ -210,44 +210,7 @@
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-firestore.js"></script>
     <script src='dashboard.js'></script>
     <script>
-    function sortList(ul){
-      var new_ul = ul.cloneNode(false);
-
-    // Add all lis to an array
-      var lis = [];
-     // console.log(lis);
-      for(var i = ul.childNodes.length; i--;){
-        
-          if(ul.childNodes[i].nodeName === 'LI')
-              lis.push(ul.childNodes[i]);
-              
-      }
-
-    // Sort the lis in ascending order
-      lis.sort(function(a, b){
-        
-       return b.id - 
-              a.id;
-    });
-
-      // Add them into the ul in order
-      for(var i = 0; i < lis.length; i++){
-          new_ul.appendChild(lis[i]);
-          
-      }
-      ul.parentNode.replaceChild(new_ul, ul);
-      
-    }
-
-
-    generateFeed();
-
-
-    setTimeout(function(){
-      //document.querySelector('.alert').style.display = 'none';
-      sortList(document.getElementById('timeline'));
-    },500);
-     
+      getReviews();
     </script>
 
     <!-- FastClick -->

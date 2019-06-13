@@ -7,14 +7,14 @@ var config = {
     messagingSenderId: "231032087489",
     appId: "1:231032087489:web:37267e6ec937a3e6"
   };
-firebase.initializeApp(config);
+  firebase.initializeApp(config);
 
-var db = firebase.firestore();
+  var db = firebase.firestore();
 
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  var cacheY = cacheM = cacheD = null;
   
-var cacheY = cacheM = cacheD = null;
-var feed = []; 
-function getDates(y,m,d){
+  function getDates(y,m,d){
 
     if(cacheY != y || cacheM != m || cacheD  != d){
         cacheY = y;
@@ -31,18 +31,13 @@ function getDates(y,m,d){
 
     }
   }
-async function generateFeed(){
+  function getReviews(){
 
- getRating();
- getComments();
- 
-}
-
-function getRating(){
-    db.collection("rating").orderBy("date", 'desc').get().then(function (querySnapshot) {
+    db.collection("reviews").orderBy("created_at", 'desc').onSnapshot(function (querySnapshot) {
+        document.getElementById("timeline").innerHTML = "";
         querySnapshot.forEach(function (doc) {
-        // var dateDiff = Date.now() - doc.data().date.seconds;
-            var time = doc.data().date;
+           if(doc.data().active == true){
+            var time = doc.data().created_at;
             var diffTime = Date.now() - time.toDate();
             
             const diffDays = Math.floor(diffTime / 1000 / 60 / 60 / 24); 
@@ -56,108 +51,152 @@ function getRating(){
 
             const diffSeconds = Math.floor(diffTime / 1000);
 
-            
 
-            var li = document.createElement("li");
-            li.id = time.seconds;
-            var iStar = document.createElement("i");
-            iStar.className = "fa fa-star bg-yellow";
+            getDates(time.toDate().getFullYear(),time.toDate().getMonth(),time.toDate().getDate());
 
-            var divTimelineItem = document.createElement("div");
-            divTimelineItem.className="timeline-item";
-            
-            var iClock = document.createElement("i");
-            iClock.className = "fa fa-clock-o";
-
-            var span = document.createElement("span"); 
-            span.className = "time";
-            span.innerHTML = diffDays + " days " + diffHours + " hours " +  diffMinutes +" minutes and " + diffSeconds + " seconds ago ";
-
-            var timelineHeader = document.createElement("h3");
-            timelineHeader.className = "timeline-header";
-            timelineHeader.innerHTML = "<b>" + doc.data().user + "</b>" + " reviewed " + "<b>" + doc.data().attraction + "</b>";
-
-
-            var divTimelineBody = document.createElement("div");
-            divTimelineBody.className = "timeline-body";
-            divTimelineBody.innerHTML = "Rating: " + doc.data().rating;
-            li.appendChild(iStar);
-            li.appendChild(divTimelineItem);           
-            
-            span.appendChild(iClock);     
-
-            divTimelineItem.appendChild(span);
-            divTimelineItem.appendChild(timelineHeader);
-            divTimelineItem.appendChild(divTimelineBody);
-            document.getElementById("timeline").appendChild(li);   
-             
-        });
-    });
-}
-
-
-function getComments(){
-    db.collection("comments").orderBy('date','desc').get().then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-            // var dateDiff = Date.now() - doc.data().date.seconds;
-            if(doc.data().active){
-    
-                var time = doc.data().date;
-                var diffTime = Date.now() - time.toDate();
+            if(doc.data().type == 0){
                 
-                const diffDays = Math.floor(diffTime / 1000 / 60 / 60 / 24); 
-                diffTime -= diffDays * 1000 * 60 * 60 * 24;
-
-                const diffHours = Math.floor(diffTime / 1000 /60 / 60);
-                diffTime -= diffHours * 1000 * 60 * 60;
-
-                const diffMinutes = Math.floor(diffTime / 1000 / 60);
-                diffTime -= diffMinutes * 1000 * 60;
-
-                const diffSeconds = Math.floor(diffTime / 1000);
-
-                var li = document.createElement("li");
-                li.id = time.seconds;
-                var iStar = document.createElement("i");
-                iStar.className = "fa fa-envelope bg-blue";
-
-                var divTimelineItem = document.createElement("div");
-                divTimelineItem.className="timeline-item";
-                
-                var iClock = document.createElement("i");
-                iClock.className = "fa fa-clock-o";
-
-                var span = document.createElement("span"); 
-                span.className = "time";
-                span.innerHTML = diffDays + " days " + diffHours + " hours " +  diffMinutes +" minutes and " + diffSeconds + " seconds ago ";
-
-                var timelineHeader = document.createElement("h3");
-                timelineHeader.className = "timeline-header";
-                timelineHeader.innerHTML = "<b>" + doc.data().user + "</b>" + " commented on " + "<b>" + doc.data().attraction + "</b>";
-                
-                var divTimelineBody = document.createElement("div");
-                divTimelineBody.className = "timeline-body";
-                divTimelineBody.innerHTML = "Comment: " + doc.data().comment;
-
-                var divTimelineFooter = document.createElement("div");
-                divTimelineFooter.className = "timeline-footer";
-                
-                li.appendChild(iStar);
-                li.appendChild(divTimelineItem);
-
-                span.appendChild(iClock);    
-
-                divTimelineItem.appendChild(span);  
-                divTimelineItem.appendChild(timelineHeader);
-                divTimelineItem.appendChild(divTimelineBody);
-                divTimelineItem.appendChild(divTimelineFooter);
-                document.getElementById("timeline").appendChild(li);   
-            
+                createCommentItem(doc,diffDays,diffHours,diffMinutes,diffSeconds);
+            }
+            else if(doc.data().type == 1)
+            {
+              
+                createRatingItem(doc,diffDays,diffHours,diffMinutes,diffSeconds);
+            }else{
 
             }
+
+           }
+
+
         });
     });
-}
+  }
+
+  function createCommentItem(review,days,hours,minutes,seconds){
+
+    var li = document.createElement("li");
+    var iStar = document.createElement("i");
+    iStar.className = "fa fa-envelope bg-blue";
+
+    var divTimelineItem = document.createElement("div");
+    divTimelineItem.className="timeline-item";
+    
+    var iClock = document.createElement("i");
+    iClock.className = "fa fa-clock-o";
+
+    var span = document.createElement("span"); 
+    span.className = "time";
+    span.innerHTML = createTimeAgoTimestamp(days,hours,minutes,seconds);
+
+    var timelineHeader = document.createElement("h3");
+    timelineHeader.className = "timeline-header";
+    timelineHeader.innerHTML = "<b>" + review.data().user.username + "</b>" + " commented on " + "<b>" + review.data().attraction.id + "</b>";
+    
+    var divTimelineBody = document.createElement("div");
+    divTimelineBody.className = "timeline-body";
+    divTimelineBody.innerHTML = review.data().review;
+
+    var divTimelineFooter = document.createElement("div");
+    divTimelineFooter.className = "timeline-footer";
+
+    var viewButton = document.createElement("a");
+    viewButton.className = "btn btn-primary btn-xs";
+    viewButton.innerHTML = "View";
+    viewButton.style.marginRight = '3px';
+
+    viewButton.addEventListener("click" , function(){
+        //alert(doc.data().comment);
+        
+        //document.getElementById("myModal").style.display = "block";               
+        location.assign('../user_requests/comments-manage.html#'+review.id)
+        // sessionStorage.setItem("comment",doc.data().comment);
+    });
+
+    li.appendChild(iStar);
+    li.appendChild(divTimelineItem);
+
+    span.appendChild(iClock);    
+
+    divTimelineFooter.appendChild(viewButton);
+
+    divTimelineItem.appendChild(span);  
+    divTimelineItem.appendChild(timelineHeader);
+    divTimelineItem.appendChild(divTimelineBody);
+    divTimelineItem.appendChild(divTimelineFooter);
+ 
+    
+    document.getElementById("timeline").appendChild(li);   
+
+    }
+  
+
+  function createRatingItem(review,days,hours,minutes,seconds){
+    var li = document.createElement("li");
+    var iStar = document.createElement("i");
+    iStar.className = "fa fa-star bg-yellow";
+
+    var divTimelineItem = document.createElement("div");
+    divTimelineItem.className="timeline-item";
+    
+    var iClock = document.createElement("i");
+    iClock.className = "fa fa-clock-o";
+
+    var span = document.createElement("span"); 
+    span.className = "time";
+    span.innerHTML = createTimeAgoTimestamp(days,hours,minutes,seconds);
+
+    var timelineHeader = document.createElement("h3");
+    timelineHeader.className = "timeline-header";
+    timelineHeader.innerHTML = "<b>" + review.data().user.username + "</b>" + " reviewed " + "<b>" + review.data().attraction.id + "</b>";
 
 
+    var divTimelineBody = document.createElement("div");
+    divTimelineBody.className = "timeline-body";
+    divTimelineBody.innerHTML = "Rating: " + review.data().review;
+
+    var divTimelineFooter = document.createElement("div");
+    divTimelineFooter.className = "timeline-footer";
+
+    var viewButton = document.createElement("a");
+    viewButton.className = "btn btn-primary btn-xs";
+    viewButton.innerHTML = "View";
+    viewButton.style.marginRight = '3px';
+
+    viewButton.addEventListener("click" , function(){
+        //alert(doc.data().comment);
+        
+        //document.getElementById("myModal").style.display = "block";               
+        location.assign('../user_requests/ratings.html#'+review.id)
+        // sessionStorage.setItem("comment",doc.data().comment);
+    });
+
+    li.appendChild(iStar);
+    li.appendChild(divTimelineItem);           
+    
+    span.appendChild(iClock);     
+ 
+    divTimelineFooter.appendChild(viewButton);
+
+    divTimelineItem.appendChild(span);
+    divTimelineItem.appendChild(timelineHeader);
+    divTimelineItem.appendChild(divTimelineBody);
+    divTimelineItem.appendChild(divTimelineFooter);
+    
+    document.getElementById("timeline").appendChild(li);   
+  }
+  function createTimeAgoTimestamp(days,hours,minutes,seconds){
+    var message = '';
+    if(days != 0){
+        message += days + " days ";
+    }
+    if(hours != 0){
+        message += hours + " hours "; 
+    }
+    if(minutes != 0){
+        message += minutes +  " minutes and "; 
+    }
+    message += seconds + " ago ";
+    return message;
+  }
 
