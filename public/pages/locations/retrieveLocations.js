@@ -18,13 +18,15 @@ firebase.initializeApp(config);
     //table =  $('#monumentsTable').DataTable();
     db.collection("attraction").where('active','==',true).onSnapshot(function(querySnapshot) {
       
-      document.getElementById('tbody').innerHTML = "";
+
+      var table =  $('#monumentsTable').DataTable();
+      table.rows().remove();
      
       querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
         //var table = document.getElementById("monumentsTable");
         //console.log(doc.id);
-        var table =  $('#monumentsTable').DataTable();
+        
 
         
         table.row.add([

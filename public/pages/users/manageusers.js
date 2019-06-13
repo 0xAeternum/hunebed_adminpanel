@@ -17,14 +17,14 @@
     //table =  $('#monumentsTable').DataTable();
     db.collection("users").where("status", "==", status).onSnapshot(function(querySnapshot) {
       
-     
       
-
+      var table =  $('#usersTable').DataTable();
+      table.rows().remove();
       querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
         //var table = document.getElementById("monumentsTable");
         //console.log(doc.id);
-        var table =  $('#usersTable').DataTable();
+        
 
         
         table.row.add([
@@ -64,7 +64,7 @@
         status: blocked
         }).then(function() {
           //console.log("Document successfully written!");
-          location.reload();
+         // location.reload();
 
         })
         .catch(function(error) {
