@@ -91,6 +91,9 @@ var config = {
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
+    /*
+    * undefined here
+    */
     timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " commented on " + "<b>" + review.data().attraction.id + "</b>";
     
     var divTimelineBody = document.createElement("div");
@@ -148,12 +151,27 @@ var config = {
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
+    /*
+    * undefined here
+    */
     timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " reviewed " + "<b>" + review.data().attraction.id + "</b>";
 
 
     var divTimelineBody = document.createElement("div");
     divTimelineBody.className = "timeline-body";
-    divTimelineBody.innerHTML = "Rating: " + review.data().review;
+    divTimelineBody.style.paddingBottom = "2%";
+    for(var x = review.data().review; x > 0; x--) {
+      
+        var i = document.createElement('i');
+        i.className = "fa fa-star pull-left";
+        divTimelineBody.appendChild(i);
+    }
+    for(var x = 5 - review.data().review; x > 0; x--) {
+
+        var i = document.createElement('i');
+        i.className = "fa fa-star-o pull-left";
+        divTimelineBody.appendChild(i);
+    }
 
     var divTimelineFooter = document.createElement("div");
     divTimelineFooter.className = "timeline-footer";
@@ -164,11 +182,9 @@ var config = {
     viewButton.style.marginRight = '3px';
 
     viewButton.addEventListener("click" , function(){
-        //alert(doc.data().comment);
-        
-        //document.getElementById("myModal").style.display = "block";               
+               
         location.assign('../user_requests/ratings.html#'+review.id)
-        // sessionStorage.setItem("comment",doc.data().comment);
+
     });
 
     li.appendChild(iStar);
@@ -185,6 +201,7 @@ var config = {
     
     document.getElementById("timeline").appendChild(li);   
   }
+
   function createTimeAgoTimestamp(days,hours,minutes,seconds){
     var message = '';
     if(days != 0){
@@ -199,6 +216,7 @@ var config = {
     message += seconds + " ago ";
     return message;
   }
+
   function getUser(id){
     db.collection("users").doc(id).get().then(function(doc) {
         if (doc.exists) {
