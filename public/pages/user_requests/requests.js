@@ -85,6 +85,10 @@ var config = {
   }
 
   function createCommentItem(review,days,hours,minutes,seconds){
+  
+
+    
+    
 
     var li = document.createElement("li");
     var iStar = document.createElement("i");
@@ -102,7 +106,8 @@ var config = {
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
-    timelineHeader.innerHTML = "<b>" + review.data().user.username + "</b>" + " commented on " + "<b>" + review.data().attraction.id + "</b>";
+    
+    timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " commented on " + "<b>" + review.data().attraction.id + "</b>";
     
     var divTimelineBody = document.createElement("div");
     divTimelineBody.className = "timeline-body";
@@ -115,14 +120,20 @@ var config = {
     manageButton.className = "btn btn-primary btn-xs";
     manageButton.innerHTML = "Edit";
     manageButton.style.marginRight = '3px';
-
+/**
+ * 
+ * HERE !!!!!
+ * 
+ * this is where the modal is opened(its at the top of the comments-manage page)
+ * 
+ */
     
     manageButton.addEventListener("click" , function(){
         //alert(doc.data().comment);
         
         document.getElementById("myModal").style.display = "block";               
-
-        // sessionStorage.setItem("comment",doc.data().comment);
+////////////// this part is supposed to load the comment inside the textare like it is in add location but its not working for some reason
+        document.getElementById("description").innerText = review.data().review;
     });
     
 
@@ -131,7 +142,7 @@ var config = {
     blockButton.innerHTML = "Delete and Block user";
     
     blockButton.addEventListener("click" , function(){    
-        var r = confirm("Remove " + review.data().user.id + "s' comment ?");
+        var r = confirm("Remove " + getUser(review.data().user.id) + "s' comment ?");
 
         if (r == true) {
 
@@ -141,11 +152,11 @@ var config = {
             }).then(function() {
                 alert("Document successfully deleted!");
 
-                var r = confirm("Block " + review.data().user.username + "?");
+                var r = confirm("Block " + getUser(review.data().user.id) + "?");
 
                 if (r == true) {
 
-                    db.collection("users").where("username", "==", review.data().user.username).get()
+                    db.collection("users").where("username", "==", getUser(review.data().user.id)).get()
                     .then(function(querySnapshot) {
                         querySnapshot.forEach(function(doc) {
                             db.collection("users").doc(doc.id).update({                                  
@@ -213,7 +224,7 @@ var config = {
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
-    timelineHeader.innerHTML = "<b>" + review.data().user.username + "</b>" + " reviewed " + "<b>" + review.data().attraction.id + "</b>";
+    timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " reviewed " + "<b>" + review.data().attraction.id + "</b>";
 
 
     var divTimelineBody = document.createElement("div");
@@ -243,5 +254,17 @@ var config = {
     }
     message += seconds + " ago " ;
     return message;
+  }
+  function getUser(id){
+    db.collection("users").doc(id).get().then(function(doc) {
+        if (doc.exists) {
+            user = doc.data().username;
+            console.log(user);
+            return user;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    });
   }
 

@@ -91,7 +91,7 @@ var config = {
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
-    timelineHeader.innerHTML = "<b>" + review.data().user.username + "</b>" + " commented on " + "<b>" + review.data().attraction.id + "</b>";
+    timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " commented on " + "<b>" + review.data().attraction.id + "</b>";
     
     var divTimelineBody = document.createElement("div");
     divTimelineBody.className = "timeline-body";
@@ -148,7 +148,7 @@ var config = {
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
-    timelineHeader.innerHTML = "<b>" + review.data().user.username + "</b>" + " reviewed " + "<b>" + review.data().attraction.id + "</b>";
+    timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " reviewed " + "<b>" + review.data().attraction.id + "</b>";
 
 
     var divTimelineBody = document.createElement("div");
@@ -198,5 +198,17 @@ var config = {
     }
     message += seconds + " ago ";
     return message;
+  }
+  function getUser(id){
+    db.collection("users").doc(id).get().then(function(doc) {
+        if (doc.exists) {
+            user = doc.data().username;
+            console.log(user);
+            return user;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    });
   }
 
