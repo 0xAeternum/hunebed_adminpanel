@@ -82,6 +82,24 @@ var config = {
     var divTimelineItem = document.createElement("div");
     divTimelineItem.className="timeline-item";
     
+    divTimelineItem.addEventListener("mouseover", function(){
+       
+      divTimelineItem.style.outline.none;
+      divTimelineItem.style.borderColor = "#9ecaed";
+      divTimelineItem.style.boxShadow = "0 0 10px #9ecaed";
+    });
+    divTimelineItem.addEventListener("mouseout", function(){
+     
+      setTimeout(function(){
+        divTimelineItem.style.outline.none;
+        divTimelineItem.style.borderColor = "black";
+        divTimelineItem.style.boxShadow = "0 0 0px black";
+      }, 650);
+    });
+    divTimelineItem.addEventListener("click", function(){
+      location.assign('../user_requests/comments-manage.html#'+review.id);
+    });
+
     var iClock = document.createElement("i");
     iClock.className = "fa fa-clock-o";
 
@@ -116,7 +134,7 @@ var config = {
         //alert(doc.data().comment);
         
         //document.getElementById("myModal").style.display = "block";               
-        location.assign('../user_requests/comments-manage.html#'+review.id)
+        location.assign('../user_requests/comments-manage.html#'+review.id);
         // sessionStorage.setItem("comment",doc.data().comment);
     });
 
@@ -125,7 +143,7 @@ var config = {
 
     span.appendChild(iClock);    
 
-    divTimelineFooter.appendChild(viewButton);
+  //  divTimelineFooter.appendChild(viewButton);
 
     divTimelineItem.appendChild(span);  
     divTimelineItem.appendChild(timelineHeader);
@@ -145,7 +163,25 @@ var config = {
 
     var divTimelineItem = document.createElement("div");
     divTimelineItem.className="timeline-item";
-    
+
+    divTimelineItem.addEventListener("mouseover", function(){
+       
+      divTimelineItem.style.outline.none;
+      divTimelineItem.style.borderColor = "#9ecaed";
+      divTimelineItem.style.boxShadow = "0 0 10px #9ecaed";
+      divTimelineItem.style.tooltip
+    });
+    divTimelineItem.addEventListener("mouseout", function(){
+     
+      setTimeout(function(){
+        divTimelineItem.style.outline.none;
+        divTimelineItem.style.borderColor = "black";
+        divTimelineItem.style.boxShadow = "0 0 0px black";
+      }, 650);
+    });
+    divTimelineItem.addEventListener("click", function(){
+      location.assign('../user_requests/ratings.html#'+review.id);
+    });
     var iClock = document.createElement("i");
     iClock.className = "fa fa-clock-o";
 
@@ -195,7 +231,7 @@ var config = {
 
     viewButton.addEventListener("click" , function(){
                
-        location.assign('../user_requests/ratings.html#'+review.id)
+        location.assign('../user_requests/ratings.html#'+review.id);
 
     });
 
@@ -204,7 +240,7 @@ var config = {
     
     span.appendChild(iClock);     
  
-    divTimelineFooter.appendChild(viewButton);
+   // divTimelineFooter.appendChild(viewButton);
 
     divTimelineItem.appendChild(span);
     divTimelineItem.appendChild(timelineHeader);

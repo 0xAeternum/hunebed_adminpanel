@@ -92,22 +92,26 @@ var config = {
     divTimelineItem.className="timeline-item";
  
     if(pathname != null && pathname == review.id){
+
         divTimelineItem.style.outline.none;
         divTimelineItem.style.borderColor = "#FF0000";
-        divTimelineItem.style.boxShadow = "0 0 10px #FF0000"
+        divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
     }
 
     divTimelineItem.addEventListener("mouseover", function(){
        
         divTimelineItem.style.outline.none;
-        divTimelineItem.style.borderColor = "#9ecaed";
-        divTimelineItem.style.boxShadow = "0 0 10px #9ecaed"
+        divTimelineItem.style.borderColor = "#FF0000";
+        divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
     });
     divTimelineItem.addEventListener("mouseout", function(){
        
-        divTimelineItem.style.outline.none;
-        divTimelineItem.style.borderColor = "black";
-        divTimelineItem.style.boxShadow = "0 0 0px black";
+        setTimeout(function(){
+            divTimelineItem.style.outline.none;
+            divTimelineItem.style.borderColor = "black";
+            divTimelineItem.style.boxShadow = "0 0 0px black";
+        }, 650);
+
     });
     
     var iClock = document.createElement("i");
@@ -243,20 +247,22 @@ var config = {
     if(pathname != null && pathname == review.id){
         divTimelineItem.style.outline.none;
         divTimelineItem.style.borderColor = "#FF0000";
-        divTimelineItem.style.boxShadow = "0 0 10px #FF0000"
+        divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
     }
 
     divTimelineItem.addEventListener("mouseover", function(){
        
         divTimelineItem.style.outline.none;
-        divTimelineItem.style.borderColor = "#9ecaed";
-        divTimelineItem.style.boxShadow = "0 0 10px #9ecaed"
+        divTimelineItem.style.borderColor = "#FF0000";
+        divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
     });
     divTimelineItem.addEventListener("mouseout", function(){
        
-        divTimelineItem.style.outline.none;
-        divTimelineItem.style.borderColor = "black";
-        divTimelineItem.style.boxShadow = "0 0 0px black";
+        setTimeout(function(){
+            divTimelineItem.style.outline.none;
+            divTimelineItem.style.borderColor = "black";
+            divTimelineItem.style.boxShadow = "0 0 0px black";
+        }, 650);
     });
 
     var iClock = document.createElement("i");
@@ -306,6 +312,8 @@ var config = {
     
     document.getElementById("timeline").appendChild(li);   
   }
+
+
   function createTimeAgoTimestamp(review){
     var time = review.data().created_at;
     var diffTime = Date.now() - time.toDate();
