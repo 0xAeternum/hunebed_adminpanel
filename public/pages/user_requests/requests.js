@@ -214,6 +214,7 @@ var config = {
 
   function createRatingItem(review){
     var li = document.createElement("li");
+    li.id = review.id;
     var iStar = document.createElement("i");
     iStar.className = "fa fa-star bg-yellow";
 
