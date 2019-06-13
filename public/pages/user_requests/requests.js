@@ -14,6 +14,7 @@ var config = {
 
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var cacheY = cacheM = cacheD = null;
+  var pathname = window.location.href.split('#')[1] ;
   
   function getDates(y,m,d){
 
@@ -82,12 +83,32 @@ var config = {
     
 
     var li = document.createElement("li");
-    li.id = review.id;
+  
+
     var iStar = document.createElement("i");
-    iStar.className = "fa fa-envelope bg-blue";
+    iStar.className = "fa fa-comment bg-blue";
 
     var divTimelineItem = document.createElement("div");
     divTimelineItem.className="timeline-item";
+ 
+    if(pathname != null && pathname == review.id){
+        divTimelineItem.style.outline.none;
+        divTimelineItem.style.borderColor = "#FF0000";
+        divTimelineItem.style.boxShadow = "0 0 10px #FF0000"
+    }
+
+    divTimelineItem.addEventListener("mouseover", function(){
+       
+        divTimelineItem.style.outline.none;
+        divTimelineItem.style.borderColor = "#9ecaed";
+        divTimelineItem.style.boxShadow = "0 0 10px #9ecaed"
+    });
+    divTimelineItem.addEventListener("mouseout", function(){
+       
+        divTimelineItem.style.outline.none;
+        divTimelineItem.style.borderColor = "black";
+        divTimelineItem.style.boxShadow = "0 0 0px black";
+    });
     
     var iClock = document.createElement("i");
     iClock.className = "fa fa-clock-o";
@@ -210,13 +231,34 @@ var config = {
 
   function createRatingItem(review){
     var li = document.createElement("li");
-    li.id = review.id;
+    
     var iStar = document.createElement("i");
     iStar.className = "fa fa-star bg-yellow";
 
     var divTimelineItem = document.createElement("div");
     divTimelineItem.className="timeline-item";
     
+
+    
+    if(pathname != null && pathname == review.id){
+        divTimelineItem.style.outline.none;
+        divTimelineItem.style.borderColor = "#FF0000";
+        divTimelineItem.style.boxShadow = "0 0 10px #FF0000"
+    }
+
+    divTimelineItem.addEventListener("mouseover", function(){
+       
+        divTimelineItem.style.outline.none;
+        divTimelineItem.style.borderColor = "#9ecaed";
+        divTimelineItem.style.boxShadow = "0 0 10px #9ecaed"
+    });
+    divTimelineItem.addEventListener("mouseout", function(){
+       
+        divTimelineItem.style.outline.none;
+        divTimelineItem.style.borderColor = "black";
+        divTimelineItem.style.boxShadow = "0 0 0px black";
+    });
+
     var iClock = document.createElement("i");
     iClock.className = "fa fa-clock-o";
 

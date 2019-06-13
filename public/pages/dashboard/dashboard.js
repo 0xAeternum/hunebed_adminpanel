@@ -77,7 +77,7 @@ var config = {
 
     var li = document.createElement("li");
     var iStar = document.createElement("i");
-    iStar.className = "fa fa-envelope bg-blue";
+    iStar.className = "fa fa-comment bg-blue";
 
     var divTimelineItem = document.createElement("div");
     divTimelineItem.className="timeline-item";
