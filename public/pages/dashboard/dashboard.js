@@ -73,7 +73,7 @@ var config = {
     });
   }
 
-  function createCommentItem(review,days,hours,minutes,seconds){
+  function createCommentItem(review){
 
     var li = document.createElement("li");
     var iStar = document.createElement("i");
@@ -87,7 +87,11 @@ var config = {
 
     var span = document.createElement("span"); 
     span.className = "time";
-    span.innerHTML = createTimeAgoTimestamp(days,hours,minutes,seconds);
+    span.innerHTML = createTimeAgoTimestamp(review);
+    setInterval(() => {
+        span.innerHTML = createTimeAgoTimestamp(review);
+        span.appendChild(iClock);   
+      }, 500);
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
@@ -134,7 +138,7 @@ var config = {
     }
   
 
-  function createRatingItem(review,days,hours,minutes,seconds){
+  function createRatingItem(review){
     var li = document.createElement("li");
     var iStar = document.createElement("i");
     iStar.className = "fa fa-star bg-yellow";
@@ -147,7 +151,15 @@ var config = {
 
     var span = document.createElement("span"); 
     span.className = "time";
-    span.innerHTML = createTimeAgoTimestamp(days,hours,minutes,seconds);
+    
+    
+    span.innerHTML = createTimeAgoTimestamp(review);
+    span.className = "time";
+    span.innerHTML = createTimeAgoTimestamp(review);
+    setInterval(() => {
+        span.innerHTML = createTimeAgoTimestamp(review);
+        span.appendChild(iClock);   
+      }, 500);
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
@@ -201,19 +213,34 @@ var config = {
     
     document.getElementById("timeline").appendChild(li);   
   }
+  function createTimeAgoTimestamp(review){
+    var time = review.data().created_at;
+    var diffTime = Date.now() - time.toDate();
+    
+    const diffDays = Math.floor(diffTime / 1000 / 60 / 60 / 24); 
+    diffTime -= diffDays * 1000 * 60 * 60 * 24;
 
-  function createTimeAgoTimestamp(days,hours,minutes,seconds){
+    const diffHours = Math.floor(diffTime / 1000 /60 / 60);
+    diffTime -= diffHours * 1000 * 60 * 60;
+
+    const diffMinutes = Math.floor(diffTime / 1000 / 60);
+    diffTime -= diffMinutes * 1000 * 60;
+
+    const diffSeconds = Math.floor(diffTime / 1000);
+
     var message = '';
-    if(days != 0){
-        message += days + " days ";
+
+    if(diffDays != 0){
+        message += diffDays + " days ";
     }
-    if(hours != 0){
-        message += hours + " hours "; 
+    if(diffHours != 0){
+        message += diffHours + " hours "; 
     }
-    if(minutes != 0){
-        message += minutes +  " minutes and "; 
+    if(diffMinutes != 0){
+        message += diffMinutes +  " minutes"; 
     }
-    message += seconds + " ago ";
+    message += " and " + diffSeconds + " seconds ago " ;
+
     return message;
   }
 

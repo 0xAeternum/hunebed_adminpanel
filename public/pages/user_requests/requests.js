@@ -75,9 +75,14 @@ var config = {
     });
   }
 
-  function createCommentItem(review,days,hours,minutes,seconds){
+  function createCommentItem(review){
+  
+
+    
+    
 
     var li = document.createElement("li");
+    li.id = review.id;
     var iStar = document.createElement("i");
     iStar.className = "fa fa-envelope bg-blue";
 
@@ -89,7 +94,12 @@ var config = {
 
     var span = document.createElement("span"); 
     span.className = "time";
-    span.innerHTML = createTimeAgoTimestamp(days,hours,minutes,seconds);
+    span.innerHTML = createTimeAgoTimestamp(review);
+    span.className = "time";
+    setInterval(() => {
+        span.innerHTML = span.innerHTML = createTimeAgoTimestamp(review);
+        span.appendChild(iClock);   
+      }, 500);
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
@@ -116,10 +126,11 @@ var config = {
  * 
  */  
     manageButton.addEventListener("click" , function(){
-
+        //alert(doc.data().comment);
+        document.getElementById("description").innerHTML = review.data().review;
         document.getElementById("myModal").style.display = "block";               
-////////////// this part is supposed to load the comment inside the textarea like it is in add location but its not working for some reason
-        document.getElementById("description").innerText = review.data().review;
+////////////// this part is supposed to load the comment inside the textare like it is in add location but its not working for some reason
+       
     });
     
     var blockButton = document.createElement("a");
@@ -145,9 +156,7 @@ var config = {
                 var r = confirm("Block " + getUser(review.data().user.id) + "?");
 
                 if (r == true) {
-                    /*
-                    * undefined here
-                    */
+                    
                     db.collection("users").where("username", "==", getUser(review.data().user.id)).get()
                     .then(function(querySnapshot) {
                         querySnapshot.forEach(function(doc) {
@@ -184,7 +193,7 @@ var config = {
     li.appendChild(iStar);
     li.appendChild(divTimelineItem);
 
-    span.appendChild(iClock);    
+    span.appendChild(iClock);   
 
     divTimelineFooter.appendChild(manageButton);   
     divTimelineFooter.appendChild(blockButton);   
@@ -198,8 +207,10 @@ var config = {
 
     }
   
-  function createRatingItem(review,days,hours,minutes,seconds){
+
+  function createRatingItem(review){
     var li = document.createElement("li");
+    li.id = review.id;
     var iStar = document.createElement("i");
     iStar.className = "fa fa-star bg-yellow";
 
@@ -211,7 +222,11 @@ var config = {
 
     var span = document.createElement("span"); 
     span.className = "time";
-    span.innerHTML = createTimeAgoTimestamp(days,hours,minutes,seconds);
+    span.innerHTML = createTimeAgoTimestamp(review);
+    setInterval(() => {
+        span.innerHTML = createTimeAgoTimestamp(review);
+        span.appendChild(iClock);   
+      }, 500);
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
@@ -249,19 +264,34 @@ var config = {
     
     document.getElementById("timeline").appendChild(li);   
   }
+  function createTimeAgoTimestamp(review){
+    var time = review.data().created_at;
+    var diffTime = Date.now() - time.toDate();
+    
+    const diffDays = Math.floor(diffTime / 1000 / 60 / 60 / 24); 
+    diffTime -= diffDays * 1000 * 60 * 60 * 24;
 
-  function createTimeAgoTimestamp(days,hours,minutes,seconds){
+    const diffHours = Math.floor(diffTime / 1000 /60 / 60);
+    diffTime -= diffHours * 1000 * 60 * 60;
+
+    const diffMinutes = Math.floor(diffTime / 1000 / 60);
+    diffTime -= diffMinutes * 1000 * 60;
+
+    const diffSeconds = Math.floor(diffTime / 1000);
+
     var message = '';
-    if(days != 0){
-        message += days + " days ";
+
+    if(diffDays != 0){
+        message += diffDays + " days ";
     }
-    if(hours != 0){
-        message += hours + " hours "; 
+    if(diffHours != 0){
+        message += diffHours + " hours "; 
     }
-    if(minutes != 0){
-        message += minutes +  " minutes and "; 
+    if(diffMinutes != 0){
+        message += diffMinutes +  " minutes and "; 
     }
-    message += seconds + " ago " ;
+    message += " and " + diffSeconds + " seconds ago " ;
+
     return message;
   }
 
