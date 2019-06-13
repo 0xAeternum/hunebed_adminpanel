@@ -14,15 +14,22 @@ var config = {
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var cacheY = cacheM = cacheD = null;
   
-  function getDates(){
+  function getDates(y,m,d){
 
-    var li = document.createElement("li");
-    li.className = "time-label";
-    var span = document.createElement("span"); 
-    span.className = "bg-red";
-    span.innerHTML = cacheD + " " + months[cacheM] + " " + cacheY; //diffDays + " days " + diffHours + " hours " +  diffMinutes +" minutes and " + diffSeconds + " seconds ago ";
-    li.appendChild(span);
-    document.getElementById("timeline").appendChild(li);   
+    if(cacheY != y || cacheM != m || cacheD  != d){
+        cacheY = y;
+        cacheM = m;
+        cacheD = d;
+
+        var li = document.createElement("li");
+        li.className = "time-label";
+        var span = document.createElement("span"); 
+        span.className = "bg-red";
+        span.innerHTML = cacheD + " " + months[cacheM] + " " + cacheY; //diffDays + " days " + diffHours + " hours " +  diffMinutes +" minutes and " + diffSeconds + " seconds ago ";
+        li.appendChild(span);
+        document.getElementById("timeline").appendChild(li);   
+
+    }
   }
   
   function getRatings(){
@@ -44,13 +51,9 @@ var config = {
 
             const diffSeconds = Math.floor(diffTime / 1000);
 
-            if(cacheY != time.toDate().getFullYear() || cacheM != time.toDate().getMonth() || cacheD  != time.toDate().getDate()){
-                
-                cacheY = time.toDate().getFullYear();
-                cacheM = time.toDate().getMonth();
-                cacheD = time.toDate().getDate();
-                getDates();
-            }
+
+            getDates(time.toDate().getFullYear(),time.toDate().getMonth(),time.toDate().getDate());
+
 
             var li = document.createElement("li");
             var iStar = document.createElement("i");
@@ -109,13 +112,7 @@ var config = {
 
             const diffSeconds = Math.floor(diffTime / 1000);
 
-            if(cacheY != time.toDate().getFullYear() || cacheM != time.toDate().getMonth() || cacheD  != time.toDate().getDate()){
-                
-                cacheY = time.toDate().getFullYear();
-                cacheM = time.toDate().getMonth();
-                cacheD = time.toDate().getDate();
-                getDates();
-            }
+            getDates(time.toDate().getFullYear(),time.toDate().getMonth(),time.toDate().getDate());
 
             var li = document.createElement("li");
             var iStar = document.createElement("i");
@@ -180,7 +177,7 @@ var config = {
                             .then(function(querySnapshot) {
                                 querySnapshot.forEach(function(doc) {
                                     db.collection("users").doc(doc.id).update({                                  
-                                    updated: firebase.firestore.FieldValue.serverTimestamp(),
+                                    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
                                     status: true
                                     }).then(function() {
                                         //console.log("Document successfully written!");

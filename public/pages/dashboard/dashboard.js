@@ -14,17 +14,25 @@ var db = firebase.firestore();
   
 var cacheY = cacheM = cacheD = null;
 var feed = []; 
-function getDates(){
+function getDates(y,m,d){
 
-    var li = document.createElement("li");
-    li.className = "time-label";
-    var span = document.createElement("span"); 
-    span.className = "bg-red";
-    span.innerHTML = cacheD + " " + months[cacheM] + " " + cacheY; //diffDays + " days " + diffHours + " hours " +  diffMinutes +" minutes and " + diffSeconds + " seconds ago ";
-    li.appendChild(span);
-    document.getElementById("timeline").appendChild(li);   
+    if(cacheY != y || cacheM != m || cacheD  != d){
+        cacheY = y;
+        cacheM = m;
+        cacheD = d;
+
+        var li = document.createElement("li");
+        li.className = "time-label";
+        var span = document.createElement("span"); 
+        span.className = "bg-red";
+        span.innerHTML = cacheD + " " + months[cacheM] + " " + cacheY; //diffDays + " days " + diffHours + " hours " +  diffMinutes +" minutes and " + diffSeconds + " seconds ago ";
+        li.appendChild(span);
+        document.getElementById("timeline").appendChild(li);   
+
+    }
   }
 async function generateFeed(){
+
  getRating();
  getComments();
  
