@@ -15,15 +15,16 @@
  // var table =  null;
   function getAll(status){
     //table =  $('#monumentsTable').DataTable();
-    db.collection("users").where("status", "==", status).get().then(function(querySnapshot) {
+    db.collection("users").where("status", "==", status).onSnapshot(function(querySnapshot) {
       
       
-   
+      var table =  $('#usersTable').DataTable();
+      table.rows().remove();
       querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
         //var table = document.getElementById("monumentsTable");
         //console.log(doc.id);
-        var table =  $('#usersTable').DataTable();
+        
 
         
         table.row.add([
@@ -54,24 +55,27 @@
      db.collection("users").where("username", "==", name)
     .get()
     .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+      querySnapshot.forEach(function(doc) {
         db.collection("users").doc(doc.id).set({
         created: firebase.firestore.FieldValue.serverTimestamp(),
         updated: firebase.firestore.FieldValue.serverTimestamp(),
 
         username: name,
-        status: blocked,
+        status: blocked
         }).then(function() {
-        console.log("Document successfully written!");
+          //console.log("Document successfully written!");
+         // location.reload();
+
         })
         .catch(function(error) {
-        console.error("Error writing document: ", error);
+          console.error("Error writing document: ", error);
         });
-        });
+      });
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
+
    }
 
   

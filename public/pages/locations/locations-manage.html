@@ -177,7 +177,7 @@
                               <th></th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbody">
 
                             </tbody>
                             <tfoot>
@@ -267,15 +267,15 @@
     <script>
     getAll();
     var table = $('#monumentsTable').DataTable({
-      "columnDefs": [ {
-            "targets": -1,
-            "data": null,
-            "defaultContent": "<button class='btn-warning'>Edit</button>",
-
-        } ]});
-        $('#monumentsTable tbody').on( 'click', 'button', function () {
+        "columnDefs": [ {
+              "targets": -1,
+              "data": null,
+              "defaultContent": "<button class='btn-warning'>Edit</button>",
+  
+          } ]});
+    $('#monumentsTable tbody').on( 'click', 'button', function () {
         var data = table.row( $(this).parents('tr') ).data();
-        alert( data[0]);
+       // alert( data[0]);
         sessionStorage.setItem('id', data[0]);
         sessionStorage.setItem('description', data[1]);
         sessionStorage.setItem('latitude', data[2]);

@@ -7,14 +7,12 @@ var config = {
     messagingSenderId: "231032087489",
     appId: "1:231032087489:web:37267e6ec937a3e6"
   };
-
   firebase.initializeApp(config);
 
   var db = firebase.firestore();
 
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var cacheY = cacheM = cacheD = null;
-  var pathname = window.location.href.split('#')[1] ;
   
   function getDates(y,m,d){
 
@@ -27,19 +25,18 @@ var config = {
         li.className = "time-label";
         var span = document.createElement("span"); 
         span.className = "bg-red";
-        span.innerHTML = cacheD + " " + months[cacheM] + " " + cacheY; 
+        span.innerHTML = cacheD + " " + months[cacheM] + " " + cacheY; //diffDays + " days " + diffHours + " hours " +  diffMinutes +" minutes and " + diffSeconds + " seconds ago ";
         li.appendChild(span);
         document.getElementById("timeline").appendChild(li);   
 
     }
   }
-
-  function getReviews(type){
+  function getReviews(){
 
     db.collection("reviews").orderBy("created_at", 'desc').onSnapshot(function (querySnapshot) {
         document.getElementById("timeline").innerHTML = "";
         querySnapshot.forEach(function (doc) {
-           if(doc.data().active == true && doc.data().type == type){
+           if(doc.data().active == true){
             var time = doc.data().created_at;
             var diffTime = Date.now() - time.toDate();
             
@@ -77,58 +74,48 @@ var config = {
   }
 
   function createCommentItem(review){
-  
-
-    
-    
 
     var li = document.createElement("li");
-  
-
     var iStar = document.createElement("i");
     iStar.className = "fa fa-comment bg-blue";
 
     var divTimelineItem = document.createElement("div");
     divTimelineItem.className="timeline-item";
- 
-    if(pathname != null && pathname == review.id){
-
-        divTimelineItem.style.outline.none;
-        divTimelineItem.style.borderColor = "#FF0000";
-        divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
-    }
-
+    
     divTimelineItem.addEventListener("mouseover", function(){
        
-        divTimelineItem.style.outline.none;
-        divTimelineItem.style.borderColor = "#FF0000";
-        divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
+      divTimelineItem.style.outline.none;
+      divTimelineItem.style.borderColor = "#9ecaed";
+      divTimelineItem.style.boxShadow = "0 0 10px #9ecaed";
     });
     divTimelineItem.addEventListener("mouseout", function(){
-       
-        setTimeout(function(){
-            divTimelineItem.style.outline.none;
-            divTimelineItem.style.borderColor = "black";
-            divTimelineItem.style.boxShadow = "0 0 0px black";
-        }, 650);
-
+     
+      setTimeout(function(){
+        divTimelineItem.style.outline.none;
+        divTimelineItem.style.borderColor = "black";
+        divTimelineItem.style.boxShadow = "0 0 0px black";
+      }, 650);
     });
-    
+    divTimelineItem.addEventListener("click", function(){
+      location.assign('../user_requests/comments-manage.html#'+review.id);
+    });
+
     var iClock = document.createElement("i");
     iClock.className = "fa fa-clock-o";
 
     var span = document.createElement("span"); 
     span.className = "time";
     span.innerHTML = createTimeAgoTimestamp(review);
-    span.className = "time";
     setInterval(() => {
-        span.innerHTML = span.innerHTML = createTimeAgoTimestamp(review);
+        span.innerHTML = createTimeAgoTimestamp(review);
         span.appendChild(iClock);   
       }, 500);
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
-    
+    /*
+    * undefined here
+    */
     timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " commented on " + "<b>" + review.data().attraction.id + "</b>";
     
     var divTimelineBody = document.createElement("div");
@@ -137,96 +124,32 @@ var config = {
 
     var divTimelineFooter = document.createElement("div");
     divTimelineFooter.className = "timeline-footer";
-    
-    var manageButton = document.createElement("a");
-    manageButton.className = "btn btn-primary btn-xs";
-    manageButton.innerHTML = "Edit";
-    manageButton.style.marginRight = '3px';
 
-/**
- * 
- * HERE !!!!!
- * 
- * this is where the modal is opened(its at the top of the comments-manage page)
- * 
- */  
-    manageButton.addEventListener("click" , function(){
+    var viewButton = document.createElement("a");
+    viewButton.className = "btn btn-primary btn-xs";
+    viewButton.innerHTML = "View";
+    viewButton.style.marginRight = '3px';
+
+    viewButton.addEventListener("click" , function(){
         //alert(doc.data().comment);
-        document.getElementById("description").innerHTML = review.data().review;
-        document.getElementById("myModal").style.display = "block";               
-////////////// this part is supposed to load the comment inside the textare like it is in add location but its not working for some reason
-       
+        
+        //document.getElementById("myModal").style.display = "block";               
+        location.assign('../user_requests/comments-manage.html#'+review.id);
+        // sessionStorage.setItem("comment",doc.data().comment);
     });
-    
-    var blockButton = document.createElement("a");
-    blockButton.className = "btn btn-danger btn-xs";
-    blockButton.innerHTML = "Delete and Block user";
-    
-    blockButton.addEventListener("click" , function(){    
-            /*
-            * undefined here
-            */
-        var r = confirm("Remove " + getUser(review.data().user.id) + "s' comment ?");
 
-        if (r == true) {
-
-            db.collection("reviews").doc(review.id).update({
-                updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-                active: false
-            }).then(function() {
-                alert("Document successfully deleted!");
-                    /*
-                    * undefined here
-                    */
-                var r = confirm("Block " + getUser(review.data().user.id) + "?");
-
-                if (r == true) {
-                    
-                    db.collection("users").where("username", "==", getUser(review.data().user.id)).get()
-                    .then(function(querySnapshot) {
-                        querySnapshot.forEach(function(doc) {
-                            db.collection("users").doc(doc.id).update({                                  
-                            updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-                            status: true
-                            }).then(function() {
-                                //console.log("Document successfully written!");
-                                alert("User successfully blocked!");
-                                //location.reload();
-                            })
-                            .catch(function(error) {
-                                console.error("Error writing document: ", error);
-                            });
-                        });
-                    })
-                    .catch(function(error) {
-                        console.log("Error getting documents: ", error);
-                    });
-
-                }else{
-                   // location.reload();
-                }                
-            }).catch(function(error) {
-                console.error("Error removing document: ", error);
-            });
-
-        } else {
-            alert("Cancelled");
-        }
-    });
-    
-    
     li.appendChild(iStar);
     li.appendChild(divTimelineItem);
 
-    span.appendChild(iClock);   
+    span.appendChild(iClock);    
 
-    divTimelineFooter.appendChild(manageButton);   
-    divTimelineFooter.appendChild(blockButton);   
+  //  divTimelineFooter.appendChild(viewButton);
 
     divTimelineItem.appendChild(span);  
     divTimelineItem.appendChild(timelineHeader);
     divTimelineItem.appendChild(divTimelineBody);
     divTimelineItem.appendChild(divTimelineFooter);
+ 
     
     document.getElementById("timeline").appendChild(li);   
 
@@ -235,40 +158,38 @@ var config = {
 
   function createRatingItem(review){
     var li = document.createElement("li");
-    
     var iStar = document.createElement("i");
     iStar.className = "fa fa-star bg-yellow";
 
     var divTimelineItem = document.createElement("div");
     divTimelineItem.className="timeline-item";
-    
-
-    
-    if(pathname != null && pathname == review.id){
-        divTimelineItem.style.outline.none;
-        divTimelineItem.style.borderColor = "#FF0000";
-        divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
-    }
 
     divTimelineItem.addEventListener("mouseover", function(){
        
-        divTimelineItem.style.outline.none;
-        divTimelineItem.style.borderColor = "#FF0000";
-        divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
+      divTimelineItem.style.outline.none;
+      divTimelineItem.style.borderColor = "#9ecaed";
+      divTimelineItem.style.boxShadow = "0 0 10px #9ecaed";
+      divTimelineItem.style.tooltip
     });
     divTimelineItem.addEventListener("mouseout", function(){
-       
-        setTimeout(function(){
-            divTimelineItem.style.outline.none;
-            divTimelineItem.style.borderColor = "black";
-            divTimelineItem.style.boxShadow = "0 0 0px black";
-        }, 650);
+     
+      setTimeout(function(){
+        divTimelineItem.style.outline.none;
+        divTimelineItem.style.borderColor = "black";
+        divTimelineItem.style.boxShadow = "0 0 0px black";
+      }, 650);
     });
-
+    divTimelineItem.addEventListener("click", function(){
+      location.assign('../user_requests/ratings.html#'+review.id);
+    });
     var iClock = document.createElement("i");
     iClock.className = "fa fa-clock-o";
 
     var span = document.createElement("span"); 
+    span.className = "time";
+    
+    
+    span.innerHTML = createTimeAgoTimestamp(review);
     span.className = "time";
     span.innerHTML = createTimeAgoTimestamp(review);
     setInterval(() => {
@@ -300,20 +221,34 @@ var config = {
         divTimelineBody.appendChild(i);
     }
 
+    var divTimelineFooter = document.createElement("div");
+    divTimelineFooter.className = "timeline-footer";
+
+    var viewButton = document.createElement("a");
+    viewButton.className = "btn btn-primary btn-xs";
+    viewButton.innerHTML = "View";
+    viewButton.style.marginRight = '3px';
+
+    viewButton.addEventListener("click" , function(){
+               
+        location.assign('../user_requests/ratings.html#'+review.id);
+
+    });
 
     li.appendChild(iStar);
     li.appendChild(divTimelineItem);           
     
-   span.appendChild(iClock);     
+    span.appendChild(iClock);     
+ 
+   // divTimelineFooter.appendChild(viewButton);
 
     divTimelineItem.appendChild(span);
     divTimelineItem.appendChild(timelineHeader);
     divTimelineItem.appendChild(divTimelineBody);
+    divTimelineItem.appendChild(divTimelineFooter);
     
     document.getElementById("timeline").appendChild(li);   
   }
-
-
   function createTimeAgoTimestamp(review){
     var time = review.data().created_at;
     var diffTime = Date.now() - time.toDate();
@@ -338,7 +273,7 @@ var config = {
         message += diffHours + " hours "; 
     }
     if(diffMinutes != 0){
-        message += diffMinutes +  " minutes and "; 
+        message += diffMinutes +  " minutes"; 
     }
     message += " and " + diffSeconds + " seconds ago " ;
 

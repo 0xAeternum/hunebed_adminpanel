@@ -13,8 +13,8 @@ firebase.initializeApp(config);
   // Reference attraction collection
  // var attractionRef = firebase.database().ref('attraction');
   var db = firebase.firestore();
-  var storage = firebase.storage();
-  var ref = storage.ref();
+  //var storage = firebase.storage();
+  //var ref = storage.ref();
   // Listen for form submit
   //document.getElementById('addLocationForm').addEventListener('submit', submitForm);
 
@@ -23,6 +23,7 @@ firebase.initializeApp(config);
     //e.preventDefault();
     //document.getElementById('addLocationForm').submit();
     // Get values
+    
     var name = getInputVal('name');
 
     
@@ -34,7 +35,7 @@ firebase.initializeApp(config);
 
     // Save attraction
     saveAttraction(name,longitude, latitude, direction,description);
-    uploadFile();
+    //uploadFile();
     // Show alert
    // document.querySelector('.alert').style.display = 'block';
   
@@ -48,16 +49,17 @@ firebase.initializeApp(config);
   }
   function deleteInput(){
     //var txt;
-    var r = confirm("Press a button!");
+    var name = getInputVal('name');
+    var r = confirm("Remove " + name);
     if (r == true) {
       //alert(name+ " would be deleted");
       
-      db.collection("attraction").doc(name).delete().then(function() {
-        console.log("Document successfully deleted!");
-        setTimeout(function(){
-          document.querySelector('.alert').style.display = 'none';
-        },3000);
-        alert(name + " has deleted!");
+      db.collection("attraction").doc(name).update({
+        updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+        active: false
+      }).then(function() {
+        alert("Document successfully deleted!");
+
       }).catch(function(error) {
           console.error("Error removing document: ", error);
       });
@@ -65,7 +67,8 @@ firebase.initializeApp(config);
      
       
       // Clear form
-      document.getElementById('addLocationForm').reset();
+      //document.getElementById('addLocationForm').reset();
+
     } else {
       
 
@@ -96,6 +99,7 @@ firebase.initializeApp(config);
       
      //latitude: latitude,
      //longitude: longitude, 
+      active: true,
       position: new firebase.firestore.GeoPoint(latitude,longitude),
       direction: direction,
       description: description
@@ -110,7 +114,7 @@ firebase.initializeApp(config);
   function uploadFile(){
     const file = $('#InputFile').get(0).files[0];
     const fileName = (+new Date()) + '-' + file.name + '-' + name;
-    const task = ref.child(fileName).put(file, metadata);
+    //const task = ref.child(fileName).put(file, metadata);
   
   }
 
