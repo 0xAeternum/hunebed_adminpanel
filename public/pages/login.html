@@ -63,10 +63,8 @@
 
     <div class="social-auth-links text-center">
       <p>- OR -</p>
-      <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
-        Facebook</a>
-      <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
-        Google+</a>
+      <a class="btn btn-block btn-social btn-google btn-flat" onclick="login()"><i class="fa fa-google"></i> Sign in using
+        Google</a>
     </div>
     <!-- /.social-auth-links -->
 
@@ -93,8 +91,13 @@
     });
   });
 </script>
-<script>
 
-  </script>
+<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+<script src="/__/firebase/6.2.0/firebase-auth.js"></script>
+
+
+<script src="login.js"></script>
+
 </body>
 </html>
