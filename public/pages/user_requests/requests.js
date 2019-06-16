@@ -76,7 +76,7 @@ var config = {
     });
   }
 
-  function createCommentItem(review){
+  function createCommentItem(reviewDoc){
   
 
     
@@ -91,7 +91,7 @@ var config = {
     var divTimelineItem = document.createElement("div");
     divTimelineItem.className="timeline-item";
  
-    if(pathname != null && pathname == review.id){
+    if(pathname != null && pathname == reviewDoc.id){
 
         divTimelineItem.style.outline.none;
         divTimelineItem.style.borderColor = "#FF0000";
@@ -119,43 +119,105 @@ var config = {
 
     var span = document.createElement("span"); 
     span.className = "time";
-    span.innerHTML = createTimeAgoTimestamp(review);
+    span.innerHTML = createTimeAgoTimestamp(reviewDoc);
     span.className = "time";
     setInterval(() => {
-        span.innerHTML = span.innerHTML = createTimeAgoTimestamp(review);
+        span.innerHTML = span.innerHTML = createTimeAgoTimestamp(reviewDoc);
         span.appendChild(iClock);   
       }, 500);
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
+    //console.log(getUser(reviewDoc.data().user.id));
+    var user;
     
-    timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " commented on " + "<b>" + review.data().attraction.id + "</b>";
+    db.collection("users").doc(reviewDoc.data().user.id).get().then(function(doc) {
+        if (doc.exists) {
+            user = doc.data().username;
+            timelineHeader.innerHTML = "<b>" + user + "</b>" + " commented on " + "<b>" + reviewDoc.data().attraction.id + "</b>";           // console.log(user);
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    });
+    
     
     var divTimelineBody = document.createElement("div");
     divTimelineBody.className = "timeline-body";
-    divTimelineBody.innerHTML = review.data().review;
+    divTimelineBody.innerHTML = reviewDoc.data().review;
 
     var divTimelineFooter = document.createElement("div");
     divTimelineFooter.className = "timeline-footer";
     
+    var replyButton = document.createElement("a");
+    replyButton.className = "btn btn-warning btn-xs";
+    replyButton.innerHTML = "Reply";
+    replyButton.style.marginRight = '3px';
+
+
     var manageButton = document.createElement("a");
     manageButton.className = "btn btn-primary btn-xs";
     manageButton.innerHTML = "Edit";
     manageButton.style.marginRight = '3px';
 
-/**
- * 
- * HERE !!!!!
- * 
- * this is where the modal is opened(its at the top of the comments-manage page)
- * 
- */  
+
     manageButton.addEventListener("click" , function(){
         //alert(doc.data().comment);
-        document.getElementById("description").innerHTML = review.data().review;
-        document.getElementById("myModal").style.display = "block";               
-////////////// this part is supposed to load the comment inside the textare like it is in add location but its not working for some reason
-       
+       // document.getElementById("description").innerHTML = review.data().review; 
+        //var text = '<div class="modal-content" style="margin: auto; margin-top: 90px; width: 70%; padding: 10px;">';
+        
+        var modal = document.createElement('div');
+        modal.className = "modal";
+
+        var modalContent = document.createElement('div');
+        modalContent.className = "modal-content";
+        modalContent.style = "margin: auto; margin-top: 90px; width: 70%; padding: 10px;";
+
+        var pad = document.createElement('div');
+        pad.className = 'pad';
+
+        var textarea = document.createElement('textarea');
+        textarea.className = "textarea";
+        textarea.style = "width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;";
+        textarea.innerHTML = reviewDoc.data().review; 
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+              modal.style.display = "none";
+            }
+        }
+
+        var label = document.createElement('label');
+        label.innerHTML = 'Editing comment from ' + user;
+
+        var updateButton = document.createElement('a');
+        updateButton.className = 'btn btn-primary';
+        updateButton.innerHTML = 'Update';
+        
+        updateButton.addEventListener('click',function(){
+            db.collection('reviews').doc(reviewDoc.id).update(
+                {
+                    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+                    review: textarea.value
+                }   
+            ).then(function() {
+               // alert("Comment updated!");
+                modal.style.display = "none";
+            }).catch(function(error) {
+                console.error("Error removing document: ", error);
+            });
+            
+        });
+        
+        pad.appendChild(label);
+        pad.appendChild(textarea);
+        pad.appendChild(updateButton);
+        modalContent.appendChild(pad);
+        modal.appendChild(modalContent);
+        document.getElementsByClassName("content")[0].appendChild(modal);   
+        modal.style.display = "block";  
+
+
     });
     
     var blockButton = document.createElement("a");
@@ -166,11 +228,11 @@ var config = {
             /*
             * undefined here
             */
-        var r = confirm("Remove " + getUser(review.data().user.id) + "s' comment ?");
+        var r = confirm("Remove " + user + "s' comment ?");
 
         if (r == true) {
 
-            db.collection("reviews").doc(review.id).update({
+            db.collection("reviews").doc(reviewDoc.id).update({
                 updated_at: firebase.firestore.FieldValue.serverTimestamp(),
                 active: false
             }).then(function() {
@@ -178,11 +240,11 @@ var config = {
                     /*
                     * undefined here
                     */
-                var r = confirm("Block " + getUser(review.data().user.id) + "?");
+                var r = confirm("Block " + user + "?");
 
                 if (r == true) {
                     
-                    db.collection("users").where("username", "==", getUser(review.data().user.id)).get()
+                    db.collection("users").doc(reviewDoc.data().user.id).get()
                     .then(function(querySnapshot) {
                         querySnapshot.forEach(function(doc) {
                             db.collection("users").doc(doc.id).update({                                  
@@ -220,6 +282,7 @@ var config = {
 
     span.appendChild(iClock);   
 
+    divTimelineFooter.appendChild(replyButton);
     divTimelineFooter.appendChild(manageButton);   
     divTimelineFooter.appendChild(blockButton);   
 
@@ -233,7 +296,7 @@ var config = {
     }
   
 
-  function createRatingItem(review){
+  function createRatingItem(reviewDoc){
     var li = document.createElement("li");
     
     var iStar = document.createElement("i");
@@ -244,7 +307,7 @@ var config = {
     
 
     
-    if(pathname != null && pathname == review.id){
+    if(pathname != null && pathname == reviewDoc.id){
         divTimelineItem.style.outline.none;
         divTimelineItem.style.borderColor = "#FF0000";
         divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
@@ -270,30 +333,40 @@ var config = {
 
     var span = document.createElement("span"); 
     span.className = "time";
-    span.innerHTML = createTimeAgoTimestamp(review);
+    span.innerHTML = createTimeAgoTimestamp(reviewDoc);
     setInterval(() => {
-        span.innerHTML = createTimeAgoTimestamp(review);
+        span.innerHTML = createTimeAgoTimestamp(reviewDoc);
         span.appendChild(iClock);   
       }, 500);
 
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
-    /*
-    * undefined here
-    */
-    timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " reviewed " + "<b>" + review.data().attraction.id + "</b>";
+
+   db.collection("users").doc(reviewDoc.data().user.id).get().then(function(doc) {
+        if (doc.exists) {
+            user = doc.data().username;
+        
+            timelineHeader.innerHTML = "<b>" + user + "</b>" + " reviewed " + "<b>" + reviewDoc.data().attraction.id + "</b>";      // console.log(user);
+        
+            return user;
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    });
+    
 
 
     var divTimelineBody = document.createElement("div");
     divTimelineBody.className = "timeline-body";
     divTimelineBody.style.paddingBottom = "2%";
-    for(var x = review.data().review; x > 0; x--) {
+    for(var x = reviewDoc.data().review; x > 0; x--) {
       
         var i = document.createElement('i');
         i.className = "fa fa-star pull-left";
         divTimelineBody.appendChild(i);
     }
-    for(var x = 5 - review.data().review; x > 0; x--) {
+    for(var x = 5 - reviewDoc.data().review; x > 0; x--) {
 
         var i = document.createElement('i');
         i.className = "fa fa-star-o pull-left";
@@ -314,8 +387,8 @@ var config = {
   }
 
 
-  function createTimeAgoTimestamp(review){
-    var time = review.data().created_at;
+  function createTimeAgoTimestamp(reviewDoc){
+    var time = reviewDoc.data().created_at;
     var diffTime = Date.now() - time.toDate();
     
     const diffDays = Math.floor(diffTime / 1000 / 60 / 60 / 24); 
@@ -345,16 +418,4 @@ var config = {
     return message;
   }
 
-  function getUser(id){
-    db.collection("users").doc(id).get().then(function(doc) {
-        if (doc.exists) {
-            user = doc.data().username;
-            console.log(user);
-            return user;
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    });
-  }
 

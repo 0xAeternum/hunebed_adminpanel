@@ -146,29 +146,7 @@
           <div class="content-wrapper">
               <!-- Content Header (Page header) -->
             <section class="content-header">
-              <div id="myModal" class="modal">
 
-                  <!-- Modal content -->
-                  <div class="modal-content" style="margin: auto; margin-top: 90px; width: 70%; padding: 10px;">
-                    <span class="close">&times;</span>
-                    <form role="form" id="addLocationForm">
-                      <div class="form-group">
-                        <label>Edit Comment</label>
-                        <div class="pad">          
-                          <textarea id="description" class="textarea" placeholder="Comment"
-                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
-                          </textarea>
-                            
-                        </div>
-                      </div>
-                      <div class="form-group"> 
-                        <input type="submit" class="btn btn-primary" value="Update">
-                      </div>
-                    </form>
-                    
-                  </div>
-                
-                </div>
                 
                 <h1>
                   Manage Comments
@@ -183,6 +161,7 @@
 
                 </section>
                 <section class="content">
+
                 <div class="row">
                   <div class="col-md-12">
                     <!-- The time line -->
@@ -262,20 +241,7 @@
       
       getReviews(0);
 
-      var span = document.getElementsByClassName("close")[0];
-      span.onclick = function() {
-        document.getElementById("myModal").style.display = "none";
-      }
-    
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function(event) {
-          if (event.target == document.getElementById("myModal")) {
-              document.getElementById("myModal").style.display = "none";
-          }
-      }
-      
-
-
+  
     </script>
   </body>
 </html>
