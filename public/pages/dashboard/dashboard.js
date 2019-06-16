@@ -116,8 +116,18 @@ var config = {
     /*
     * undefined here
     */
-    timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " commented on " + "<b>" + review.data().attraction.id + "</b>";
-    
+   db.collection("users").doc(review.data().user.id).get().then(function(doc) {
+    if (doc.exists) {
+        user = doc.data().username;
+        timelineHeader.innerHTML = "<b>" + user + "</b>" + " commented on " + "<b>" + review.data().attraction.id + "</b>";           // console.log(user);
+        console.log(user);
+        return user;
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+});
+
     var divTimelineBody = document.createElement("div");
     divTimelineBody.className = "timeline-body";
     divTimelineBody.innerHTML = review.data().review;
@@ -202,7 +212,18 @@ var config = {
     /*
     * undefined here
     */
-    timelineHeader.innerHTML = "<b>" + getUser(review.data().user.id) + "</b>" + " reviewed " + "<b>" + review.data().attraction.id + "</b>";
+   db.collection("users").doc(review.data().user.id).get().then(function(doc) {
+    if (doc.exists) {
+        user = doc.data().username;
+    
+        timelineHeader.innerHTML = "<b>" + user + "</b>" + " reviewed " + "<b>" + review.data().attraction.id + "</b>";      // console.log(user);
+    
+        return user;
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+});
 
 
     var divTimelineBody = document.createElement("div");
@@ -280,16 +301,5 @@ var config = {
     return message;
   }
 
-  function getUser(id){
-    db.collection("users").doc(id).get().then(function(doc) {
-        if (doc.exists) {
-            user = doc.data().username;
-            console.log(user);
-            return user;
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    });
-  }
+
 
