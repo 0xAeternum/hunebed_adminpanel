@@ -10,14 +10,17 @@ var config = {
   firebase.initializeApp(config);
   var provider = new firebase.auth.GoogleAuthProvider();
 
-
 function login(){
     firebase.auth().signInWithPopup(provider).then(function(result) {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken;
+       
         // The signed-in user info.
         var user = result.user;
-        console.log(user.email)
+        sessionStorage.setItem('user',user.uid);
+        console.log(user.uid);
+        location.assign('../../pages/dashboard/timeline.html');
+        
+        
 
         // ...
       }).catch(function(error) {
@@ -29,5 +32,13 @@ function login(){
         // The firebase.auth.AuthCredential type that was used.
         var credential = error.credential;
         // ...
+      });
+}
+function logout(){
+    firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        location.assign('../../pages/login.html');
+      }).catch(function(error) {
+        // An error happened.
       });
 }

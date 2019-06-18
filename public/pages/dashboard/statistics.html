@@ -17,18 +17,13 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
         folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
-    <!-- Morris chart -->
-    <link rel="stylesheet" href="../../bower_components/morris.js/morris.css">
     <!-- jvectormap -->
     <link rel="stylesheet" href="../../bower_components/jvectormap/jquery-jvectormap.css">
-    <!-- Date Picker -->
-    <link rel="stylesheet" href="../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
     <!-- Daterange picker -->
     <link rel="stylesheet" href="../../bower_components/bootstrap-daterangepicker/daterangepicker.css">
-    <!-- bootstrap wysihtml5 - text editor -->
-    <link rel="stylesheet" href="../../plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,600,600i,700&display=swap">
   </head>
   <body class="hold-transition skin-blue-light sidebar-mini">
     <div class="wrapper">
@@ -59,38 +54,14 @@
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-lock"></i>
-                <span>Admin</span>
+                <span>Admins</span>
                 <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li class="treeview">
-                  <a href="#">
-                    <i class="fa fa-shield"></i>
-                    <span>Admin Settings</span>
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-                  <ul class="treeview-menu">
-                    <li><a href="../../pages/admin/manage/admin-add.html"><i class="fa fa-user-plus"></i>Add Admin</a></li>
-                    <li><a href="../../pages/admin/manage/admin-manage.html"><i class="fa fa-circle-o"></i> Manage Admins</a></li>
-                  </ul>
-                </li>          
-                <li class="treeview">
-                  <a href="#">
-                    <i class="fa fa-mobile"></i>
-                    <span>User-Device Settings</span>
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-                  <ul class="treeview-menu">
-                    <li><a href="../../pages/admin/manage_devices/device-add.html"><i class="fa fa-plus"></i>Add User-Device</a></li>
-                    <li><a href="../../pages/admin/manage_devices/device-manage.html"><i class="fa fa-circle-o"></i> Manage User-Devices</a></li>           
-                  </ul>
-                </li>          
+                <li><a href="../../pages/admin/admin-add.html"><i class="fa fa-user-plus"></i>Add Admin</a></li>
+                <li><a href="../../pages/admin/admin-manage.html"><i class="fa fa-circle-o"></i> Manage Admins</a></li>
               </ul>
             </li>  
         
@@ -108,19 +79,43 @@
             </li>
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-map-marker"></i> <span>Locations</span>
+                <i class="fa fa-map-marker"></i> <span>Attractions</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="../../pages/locations/locations-add.html"><i class="fa fa-plus"></i> Add Location</a></li>
-                <li><a href="../../pages/locations/locations-manage.html"><i class="fa fa-circle-o"></i> Manage Locations</a></li>
-              </ul>
+                  <li class="treeview">
+                    <a href="#">
+                      <i class="fa fa-map-pin"></i>
+                      <span>Attractions</span>
+                      <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                      </span>
+                    </a>
+                    <ul class="treeview-menu">
+                      <li><a href="../../pages/locations/attractions/attraction-add.html"><i class="fa fa-plus"></i> Add Attraction</a></li>
+                      <li><a href="../../pages/locations/attractions/attractions-manage.html"><i class="fa fa-circle-o"></i> Manage Attractions</a></li>
+                    </ul>
+                  </li>          
+                  <li class="treeview">
+                    <a href="#">
+                      <i class="fa fa-book"></i>
+                      <span>Stories</span>
+                      <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                      </span>
+                    </a>
+                    <ul class="treeview-menu">
+                      <li><a href="../../pages/locations/elements/element-add.html"><i class="fa fa-plus"></i>Add Story</a></li>
+                      <li><a href="../../pages/locations/elements/elements-manage.html"><i class="fa fa-circle-o"></i> Manage Stories</a></li>           
+                    </ul>
+                  </li>          
+                </ul>
             </li>
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-exclamation"></i> <span>User Requests</span>
+                <i class="fa fa-exclamation"></i> <span>User Submissions</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
@@ -128,7 +123,6 @@
               <ul class="treeview-menu">
               <li><a href="../../pages/user_requests/ratings.html"><i class="fa fa-star"></i> View Ratings</a></li>
               <li><a href="../../pages/user_requests/comments-manage.html"><i class="fa fa-comment-o"></i> Manage Comments</a></li>
-              <li><a href="../../pages/user_requests/suggestions-review.html"><i class="fa fa-lightbulb-o"></i> Review Suggestions</a></li>
               </ul>
             </li>
           </ul>
@@ -159,8 +153,8 @@
               <!-- small box -->
               <div class="small-box bg-yellow">
                 <div class="inner">
-                  <h3>0</h3>
-                  <p>User Registrations</p>
+                  <h3 id="newUsersTodayCount">0</h3>
+                  <p>User registrations today</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-person-add"></i>
@@ -173,11 +167,11 @@
               <!-- small box -->
               <div class="small-box bg-blue">
                 <div class="inner">
-                  <h3>0</h3>
-                  <p>Unique Users Today</p>
+                  <h3 id="newUsersMonthCount">0</h3>
+                  <p>User registrations in the last 30 days</p>
                 </div>
                 <div class="icon">
-                  <i class="ion ion-person"></i>
+                  <i class="ion ion-ios-people"></i>
                 </div>
                 <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
               </div>
@@ -187,11 +181,11 @@
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                  <h3>0</h3>
-                  <p>Users Last 30 Days</p>
+                  <h3 id="uniqueAttractionsCount">0</h3>
+                  <p>Unique attractions in the museum</p>
                 </div>
                 <div class="icon">
-                  <i class="ion ion-ios-people"></i>
+                  <i class="ion ion-location"></i>
                 </div>
                 <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
               </div>
@@ -201,11 +195,11 @@
               <!-- small box -->
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3>0</h3>
-                  <p>Users Last 90 Days</p>
+                  <h3 id="ratingsCommentsCount">0</h3>
+                  <p>Posted ratings and comments</p>
                 </div>
                 <div class="icon">
-                  <i class="ion ion-ios-people"></i>
+                  <i class="ion ion-compose"></i>
                 </div>
                 <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
               </div>
@@ -220,12 +214,12 @@
               <div class="box-header">
                 <!-- tools box -->
                 <div class="pull-right box-tools">
-                  <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="Collapse" style="margin-right: 5px;">
+                  <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                     <i class="fa fa-minus"></i>
                   </button>
-                  <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" title="Date range">
+                  <!-- TODO: <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" title="Date range" style="margin-right: 5px;">
                     <i class="fa fa-calendar"></i>
-                  </button>
+                  </button> -->
                 </div>
                 <!-- /. tools -->
                 <i class="fa fa-map-marker"></i>
@@ -234,7 +228,7 @@
                 </h3>
               </div>
               <div class="box-body">
-                <div id="world-map" style="height: 250px; width: 100%;"></div>
+                <div id="hunebed-map" style="height: 295px; width: 100%;"></div>
               </div>
               <!-- /.box-body-->
             </div>
@@ -262,7 +256,7 @@
                         <i class="fa fa-thumbs-o-up"></i>
                       </span>
                       <div class="info-box-content">
-                        <span class="info-box-text">New ratings today</span>
+                        <span class="info-box-text">New ratings<br />today</span>
                         <span class="info-box-number" id="newRatingsCount">0</span>
                       </div>
                     </div>
@@ -301,9 +295,8 @@
                         <span class="info-box-number" id="newCommentsCount">0</span>
                       </div>
                     </div>
-                    <div class="col-md-7">
-                      <a class="info-box-more bg-blue" id="commentbox1" href="../../pages/user_requests/comments-manage.html">No new comments...</a>
-                      <a class="info-box-more bg-blue"  id="commentbox2" href="../../pages/user_requests/comments-manage.html"></a>
+                    <div class="col-md-7" id="commentbox">
+                      <a class="info-box-more bg-blue" href="../../pages/user_requests/comments-manage.html">No new comments...</a>
                     </div>
                   </div>
                   <!-- /.info-box-content -->
@@ -317,7 +310,7 @@
             <!-- BAR CHART -->
             <div class="box box-warning">
               <div class="box-header with-border">
-                <h3 class="box-title">Monthly visitors</h3>
+                <h3 class="box-title">Visitors in the last 12 months</h3>
                 <div class="box-tools pull-right">
                   <button type="button" class="btn btn-box-tool" data-widget="collapse">
                     <i class="fa fa-minus"></i>
@@ -355,9 +348,7 @@
               <!--  /.box-body -->
             </div>
           </section>
-          <!-- right col -->
-          <!-- /.row (main row) -->
-        </section>
+        </div>
         <!-- /.content -->
       </div>
       <!-- /.content-wrapper -->
@@ -380,15 +371,6 @@
           $('#main-header').html($(data).html());
         }
       });
-      //Left navigation import script
-      // $.ajax({
-      //   url:'../../layout/leftnav.html',
-      //   type:'GET',
-      //   success: function(data){
-      //     console.log($(data).html());
-      //     $('#main-sidebar').html($(data).html());
-      //   }
-      // });
       //Footer import script
       $.ajax({
         url:'../../layout/footer.html',
@@ -400,14 +382,10 @@
     </script>
     <!-- jvectormap -->
     <script src="../../plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-    <script src="../../plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="../../bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
+    <script src="../../plugins/jvectormap/jquery-jvectormap-hunebed-map.js"></script>
     <!-- daterangepicker -->
     <script src="../../bower_components/moment/min/moment.min.js"></script>
     <script src="../../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-    <!-- datepicker -->
-    <script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     <!-- Bootstrap WYSIHTML5 -->
     <script src="../../plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
     <!-- ChartJs-->
@@ -423,150 +401,5 @@
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-firestore.js"></script>
     <script src="Rstatistics.js"></script>
-    <script>
-        $(function () {
-        //-------------
-        //- PIE CHART -
-        //-------------
-        // Get context with jQuery - using jQuery's .get() method.
-        var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-        var pieChart       = new Chart(pieChartCanvas)
-        var PieData        = [
-          {
-            value    : 700,
-            color    : 'rgb(151,181,33)',
-            highlight: 'rgb(151,181,33)',
-            label    : 'Chrome'
-          },
-          {
-            value    : 600,
-            color    : 'rgb(68,153,193)',
-            highlight: 'rgb(68,153,193)',
-            label    : 'FireFox'
-          },
-          {
-            value    : 500,
-            color    : 'rgb(229,29,68)',
-            highlight: 'rgb(229,29,68)',
-            label    : 'Opera'
-          },
-          {
-            value    : 400,
-            color    : 'rgb(225,163,11)',
-            highlight: 'rgb(225,163,11)',
-            label    : 'Navigator'
-          },
-          {
-            value    : 400,
-            color    : 'rgb(191,213,199)',
-            highlight: 'rgb(191,213,199)',
-            label    : 'IE'
-          },
-          {
-            value    : 300,
-            color    : 'rgb(210,225,232)',
-            highlight: 'rgb(210,225,232)',
-            label    : 'Safari'
-          },
-          {
-            value    : 100,
-            color    : 'rgb(237,212,211)',
-            highlight: 'rgb(237,212,211)',
-            label    : 'Navigator'
-          }
-        ]
-        var pieOptions     = {
-          //Boolean - Whether we should show a stroke on each segment
-          segmentShowStroke    : true,
-          //String - The colour of each segment stroke
-          segmentStrokeColor   : '#fff',
-          //Number - The width of each segment stroke
-          segmentStrokeWidth   : 2,
-          //Number - The percentage of the chart that we cut out of the middle
-          percentageInnerCutout: 50, // This is 0 for Pie charts
-          //Number - Amount of animation steps
-          animationSteps       : 100,
-          //String - Animation easing effect
-          animationEasing      : 'easeOutBounce',
-          //Boolean - Whether we animate the rotation of the Doughnut
-          animateRotate        : true,
-          //Boolean - Whether we animate scaling the Doughnut from the centre
-          animateScale         : false,
-          //Boolean - whether to make the chart responsive to window resizing
-          responsive           : true,
-          // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-          maintainAspectRatio  : true,
-          //String - A legend template
-          legendTemplate       : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
-        }
-        //Create pie or douhnut chart
-        // You can switch between pie and douhnut using the method below.
-        pieChart.Doughnut(PieData, pieOptions)
-        //-------------
-        //- BAR CHART -
-        //-------------
-        var barChartCanvas  = $('#barChart').get(0).getContext('2d')
-        var barChart        = new Chart(barChartCanvas)
-        var barChartData    = {
-                              labels  : ['December', 'January', 'February', 'March', 'April', 'May', 'June'],
-                              datasets: [
-                                {
-                                label               : 'Electronics',
-                                fillColor           : 'rgb(225, 214, 178)',
-                                strokeColor         : 'rgb(225, 214, 178)',
-                                pointColor          : 'rgb(225, 214, 178)',
-                                pointStrokeColor    : '#c1c7d1',
-                                pointHighlightFill  : '#fff',
-                                pointHighlightStroke: 'rgba(220,220,220,1)',
-                                data                : [65, 59, 80, 81, 56, 55, 40]
-                                },
-                                {
-                                label               : 'Digital Goods',
-                                fillColor           : 'rgba(225,163,11,0.9)',
-                                strokeColor         : 'rgba(225,163,11,0.8)',
-                                pointColor          : '#3b8bba',
-                                pointStrokeColor    : 'rgba(225,163,11,1)',
-                                pointHighlightFill  : '#fff',
-                                pointHighlightStroke: 'rgba(225,163,11,1)',
-                                data                : [28, 48, 40, 19, 86, 27, 90]
-                                }
-                              ]
-                            }
-        barChartData.datasets[1].fillColor   = 'rgb(225,163,11)'
-        barChartData.datasets[1].strokeColor = 'rgb(225,163,11)'
-        barChartData.datasets[1].pointColor  = 'rgb(225,163,11)'
-        var barChartOptions                  = {
-            //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-            scaleBeginAtZero        : true,
-            //Boolean - Whether grid lines are shown across the chart
-            scaleShowGridLines      : true,
-            //String - Colour of the grid lines
-            scaleGridLineColor      : 'rgba(0,0,0,.05)',
-            //Number - Width of the grid lines
-            scaleGridLineWidth      : 1,
-            //Boolean - Whether to show horizontal lines (except X axis)
-            scaleShowHorizontalLines: true,
-            //Boolean - Whether to show vertical lines (except Y axis)
-            scaleShowVerticalLines  : true,
-            //Boolean - If there is a stroke on each bar
-            barShowStroke           : true,
-            //Number - Pixel width of the bar stroke
-            barStrokeWidth          : 2,
-            //Number - Spacing between each of the X value sets
-            barValueSpacing         : 5,
-            //Number - Spacing between data sets within X values
-            barDatasetSpacing       : 1,
-            //String - A legend template
-            legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
-            //Boolean - whether to make the chart responsive
-            responsive              : true,
-            maintainAspectRatio     : true
-        }
-
-        barChartOptions.datasetFill = false
-        barChart.Bar(barChartData, barChartOptions)
-    })
-    
-    </script>
   </body>
 </html>

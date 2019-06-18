@@ -235,6 +235,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-firestore.js"></script>
     <script src="requests.js"></script>
     <script>
@@ -243,5 +244,17 @@
 
   
     </script>
+    <script>
+        function signout(){
+          firebase.auth().signOut().then(function() {
+          // Sign-out successful.
+          console.log('happy');
+          }).catch(function(error) {
+            console.log('sad');
+            // An error happened.
+          });
+        }
+      
+      </script>
   </body>
 </html>
