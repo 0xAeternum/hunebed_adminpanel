@@ -153,7 +153,9 @@ async function populateRatings() {
                   var date  =  a.getDate();
                   var hour  =  a.getHours();
                   var min   =   a.getMinutes();
+                  if(min < 10) min = "0" + min;
                   var sec   =   a.getSeconds();
+                  if(sec < 10) sec = "0" + sec;
                   var time  =  date + ' ' + month + ' ' + year + ' at ' + hour + ':' + min + ':' + sec;
                   document.getElementById("ratingdate" + i).innerHTML = time;
                 }
@@ -216,7 +218,9 @@ async function populateComments() {
               var date  = a.getDate();
               var hour  = a.getHours();
               var min   = a.getMinutes();
+              if(min < 10) min = "0" + min;
               var sec   = a.getSeconds();
+              if(sec < 10) sec = "0" + sec;
               var time  = date + ' ' + month + ' ' + year + ' at ' + hour + ':' + min + ':' + sec;
               document.getElementById("commentdate" + i).innerHTML = time;
             }
@@ -246,42 +250,37 @@ function seeUser(id) {
 }
 
 //Date range picker and map population
-$(function () {
+$(async function () {
 
   'use strict';
 
-  $('.daterange').daterangepicker({
-    ranges   : {
-      'Today'       : [moment(), moment()],
-      'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-      'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-      'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-      'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-    },
-    startDate: moment().subtract(29, 'days'),
-    endDate  : moment()
-  }, function (start, end) {
-    window.alert('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-  });
+  // $('.daterange').daterangepicker({
+  //   ranges   : {
+  //     'Today'       : [moment(), moment()],
+  //     'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+  //     'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+  //     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+  //     'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+  //     'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+  //   },
+  //   startDate: moment().subtract(29, 'days'),
+  //   endDate  : moment()
+  // }, function (start, end) {
+  //   window.alert('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+  // });
 
   // jvectormap data
   var visitorsData = {
-    US: 398, // USA
-    SA: 400, // Saudi Arabia
-    CA: 1000, // Canada
-    DE: 500, // Germany
-    FR: 760, // France
-    CN: 300, // China
-    AU: 700, // Australia
-    BR: 600, // Brazil
-    IN: 800, // India
-    GB: 320, // Great Britain
-    RU: 3000 // Russia
+    HC:   240,  // Hunebed Centre
+    D27:  148,  // Hunebed D27
+    HGEG: 78,   // Hundsrug Geopark Expedition Gateway
+    PP:   79,   // Prehistoric Park
+    BG:   37    // Boulder Garden
   };
-  // World map by jvectormap
-  $('#world-map').vectorMap({
-    map              : 'world_mill_en',
+
+  // Hunebed map by jvectormap
+  $('#hunebed-map').vectorMap({
+    map              : 'hunebed-map',
     backgroundColor  : 'transparent',
     regionStyle      : {
       initial: {
@@ -303,7 +302,168 @@ $(function () {
     },
     onRegionLabelShow: function (e, el, code) {
       if (typeof visitorsData[code] != 'undefined')
-        el.html(el.html() + ': ' + visitorsData[code] + ' new visitors');
+        el.html(el.html() + ': ' + visitorsData[code] + ' visitors');
     }
   });
+
+  //-------------
+  //- PIE CHART -
+  //-------------
+  // Get context with jQuery - using jQuery's .get() method.
+  var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+  var pieChart       = new Chart(pieChartCanvas);
+  var PieData        = [
+    {
+      value    : 700,
+      color    : 'rgb(151,181,33)',
+      highlight: 'rgb(151,181,33)',
+      label    : 'Chrome'
+    },
+    {
+      value    : 600,
+      color    : 'rgb(68,153,193)',
+      highlight: 'rgb(68,153,193)',
+      label    : 'FireFox'
+    },
+    {
+      value    : 500,
+      color    : 'rgb(229,29,68)',
+      highlight: 'rgb(229,29,68)',
+      label    : 'Opera'
+    },
+    {
+      value    : 400,
+      color    : 'rgb(225,163,11)',
+      highlight: 'rgb(225,163,11)',
+      label    : 'Navigator'
+    },
+    {
+      value    : 400,
+      color    : 'rgb(191,213,199)',
+      highlight: 'rgb(191,213,199)',
+      label    : 'IE'
+    },
+    {
+      value    : 300,
+      color    : 'rgb(210,225,232)',
+      highlight: 'rgb(210,225,232)',
+      label    : 'Safari'
+    },
+    {
+      value    : 100,
+      color    : 'rgb(237,212,211)',
+      highlight: 'rgb(237,212,211)',
+      label    : 'Navigator'
+    }
+  ];
+  var pieOptions     = {
+    //Boolean - Whether we should show a stroke on each segment
+    segmentShowStroke    : true,
+    //String - The colour of each segment stroke
+    segmentStrokeColor   : '#fff',
+    //Number - The width of each segment stroke
+    segmentStrokeWidth   : 2,
+    //Number - The percentage of the chart that we cut out of the middle
+    percentageInnerCutout: 50, // This is 0 for Pie charts
+    //Number - Amount of animation steps
+    animationSteps       : 100,
+    //String - Animation easing effect
+    animationEasing      : 'easeOutBounce',
+    //Boolean - Whether we animate the rotation of the Doughnut
+    animateRotate        : true,
+    //Boolean - Whether we animate scaling the Doughnut from the centre
+    animateScale         : false,
+    //Boolean - whether to make the chart responsive to window resizing
+    responsive           : true,
+    // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+    maintainAspectRatio  : true,
+    //String - A legend template
+    legendTemplate       : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+  };
+  //Create pie or douhnut chart
+  // You can switch between pie and douhnut using the method below.
+  pieChart.Doughnut(PieData, pieOptions);
+
+  //-------------
+  //- BAR CHART -
+  //-------------
+  var barChartCanvas  = $('#barChart').get(0).getContext('2d');
+  var barChart        = new Chart(barChartCanvas);
+
+  //Prepare month labels starting this month
+  var monthLabels = [];
+  var monthNumbers = [];
+  for(let i = 0; i < 12; i++) {
+    if(todayMidnight.getMonth() + i + 1 < 12) {
+      monthLabels[i] = monthsEnglishShort[todayMidnight.getMonth() + i + 1];
+      monthNumbers[i] = todayMidnight.getMonth() + i + 1;
+    } else {
+      monthLabels[i] = monthsEnglishShort[todayMidnight.getMonth() + i + 1 - 12];
+      monthNumbers[i] = todayMidnight.getMonth() + i + 1 - 12;
+    }
+  }
+
+  //Get data for bar chart
+  var lastYear = new Date();
+  lastYear.setDate(todayMidnight.getDate() - 365);
+  lastYear.setMonth(lastYear.getMonth() + 1, 1);
+  var monthlyUsers = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  await db.collection("users").where("created", ">", lastYear)
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(user) {
+        let userDate = new Date(user.data().created.seconds * 1000);
+        monthlyUsers[monthNumbers[userDate.getMonth()]]++;
+      })
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+  var barChartData = {
+    labels  : monthLabels,
+    datasets: [{
+      label               : 'Digital Goods',
+      fillColor           : 'rgba(225,163,11,0.9)',
+      strokeColor         : 'rgba(225,163,11,0.8)',
+      pointColor          : '#3b8bba',
+      pointStrokeColor    : 'rgba(225,163,11,1)',
+      pointHighlightFill  : '#fff',
+      pointHighlightStroke: 'rgba(225,163,11,1)',
+      data                : monthlyUsers
+    }]
+  };
+  barChartData.datasets[0].fillColor   = 'rgb(225,163,11)';
+  barChartData.datasets[0].strokeColor = 'rgb(225,163,11)';
+  barChartData.datasets[0].pointColor  = 'rgb(225,163,11)';
+  var barChartOptions                  = {
+    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+    scaleBeginAtZero        : true,
+    //Boolean - Whether grid lines are shown across the chart
+    scaleShowGridLines      : true,
+    //String - Colour of the grid lines
+    scaleGridLineColor      : 'rgba(0,0,0,.05)',
+    //Number - Width of the grid lines
+    scaleGridLineWidth      : 1,
+    //Boolean - Whether to show horizontal lines (except X axis)
+    scaleShowHorizontalLines: true,
+    //Boolean - Whether to show vertical lines (except Y axis)
+    scaleShowVerticalLines  : true,
+    //Boolean - If there is a stroke on each bar
+    barShowStroke           : true,
+    //Number - Pixel width of the bar stroke
+    barStrokeWidth          : 2,
+    //Number - Spacing between each of the X value sets
+    barValueSpacing         : 5,
+    //Number - Spacing between data sets within X values
+    barDatasetSpacing       : 1,
+    //String - A legend template
+    legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+    //Boolean - whether to make the chart responsive
+    responsive              : true,
+    maintainAspectRatio     : true
+  };
+
+  barChartOptions.datasetFill = false;
+  barChart.Bar(barChartData, barChartOptions);
 });
