@@ -6,22 +6,26 @@ var config = {
     storageBucket: "fir-test-c91f4.appspot.com",
     messagingSenderId: "231032087489",
     appId: "1:231032087489:web:37267e6ec937a3e6"
-  };
-  firebase.initializeApp(config);
-  var provider = new firebase.auth.GoogleAuthProvider();
+};
+firebase.initializeApp(config);
+
+var provider = new firebase.auth.GoogleAuthProvider();
+var db = firebase.firestore();
 
 function login(){
     firebase.auth().signInWithPopup(provider).then(function(result) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
+        
        
-        // The signed-in user info.
-        var user = result.user;
-        sessionStorage.setItem('user',user.uid);
-        console.log(user.uid);
-        location.assign('../../pages/dashboard/timeline.html');
-        
-        
-
+        db.collection('administrator').doc(result.user.uid).get().then(function(doc){
+            if(doc.data().email == result.user.email){
+               // console.log(doc.data());
+                location.assign('../../pages/dashboard/statistics.html');
+            }else{
+                
+            }
+        }).catch(function(error){
+           // console.log(error);
+        });
         // ...
       }).catch(function(error) {
         // Handle Errors here.
@@ -32,6 +36,7 @@ function login(){
         // The firebase.auth.AuthCredential type that was used.
         var credential = error.credential;
         // ...
+        console.log(error)
       });
 }
 function logout(){
@@ -42,3 +47,21 @@ function logout(){
         // An error happened.
       });
 }
+/*
+$( document ).ready(function() {
+    var user = firebase.auth().currentUser;
+
+    if (user != null) {
+        document.getElementById('profileImage').setAttribute('src', user.photoURL);
+        document.getElementById('displayName').innerHTML = user.displayName;
+        document.getElementById('profileImageL').setAttribute('src', user.photoURL);
+        document.getElementById('displayNameL').innerHTML = user.displayName;
+        // The user's ID, unique to the Firebase project. Do NOT use
+        // this value to authenticate with your backend server, if
+        // you have one. Use User.getToken() instead.
+    }
+});*/
+
+
+
+
