@@ -96,6 +96,7 @@ var config = {
         divTimelineItem.style.outline.none;
         divTimelineItem.style.borderColor = "#FF0000";
         divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
+        divTimelineItem.scrollIntoView();
     }
 
     divTimelineItem.addEventListener("mouseover", function(){
@@ -203,6 +204,7 @@ var config = {
             ).then(function() {
                // alert("Comment updated!");
                 modal.style.display = "none";
+                
             }).catch(function(error) {
                 console.error("Error removing document: ", error);
             });
@@ -244,10 +246,7 @@ var config = {
 
                 if (r == true) {
                     
-                    db.collection("users").doc(reviewDoc.data().user.id).get()
-                    .then(function(querySnapshot) {
-                        querySnapshot.forEach(function(doc) {
-                            db.collection("users").doc(doc.id).update({                                  
+                    db.collection("users").doc(reviewDoc.data().user.id).update({                                  
                             updated_at: firebase.firestore.FieldValue.serverTimestamp(),
                             status: true
                             }).then(function() {
@@ -258,11 +257,6 @@ var config = {
                             .catch(function(error) {
                                 console.error("Error writing document: ", error);
                             });
-                        });
-                    })
-                    .catch(function(error) {
-                        console.log("Error getting documents: ", error);
-                    });
 
                 }else{
                    // location.reload();
@@ -311,6 +305,7 @@ var config = {
         divTimelineItem.style.outline.none;
         divTimelineItem.style.borderColor = "#FF0000";
         divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
+        divTimelineItem.scrollIntoView();
     }
 
     divTimelineItem.addEventListener("mouseover", function(){
