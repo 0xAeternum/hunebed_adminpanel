@@ -21,14 +21,10 @@ checkSession();
 // Submit form
 function submitForm(e) {
   // Get values
-  var name        = getInputVal('name');
-  var email       = getInputVal('email');
-  var password    = getInputVal('password');
-  var title       = getInputVal('title');
-  var super_admin = $('#super_admin').get()[0].checked;
-
+  var name  = getInputVal('name');
+  var email = getInputVal('email');
   // Save Admin
-  saveAdmin(name, email, password, title, super_admin);
+  saveAdmin(name, email);
   //uploadFile();
   // Show alert
   alert(name + " has been added!");
@@ -39,20 +35,16 @@ function submitForm(e) {
 // Update form
 function updateForm(e) {
   // Get values
-  var name        = getInputVal('name');
-  var email       = getInputVal('email');
-  var password    = getInputVal('password');
-  var title       = getInputVal('title');
-  var super_admin = $('#super_admin').get()[0].checked;
-
+  var id    = getInputVal('admin_id');
+  var name  = getInputVal('name');
+  var email = getInputVal('email');
   // Update Admin
-  updateAdmin(name, email, password, title, super_admin);
+  updateAdmin(id, name, email);
   //uploadFile();
   // Show alert
   alert(name + " has been updated!");
   // Clear form
   document.getElementById('addAdminForm').reset();
-  document.getElementById("name").readOnly = false;
   document.getElementById("submit").style.visibility = 'visible';
   document.getElementById("delete").style.visibility = 'hidden';
   document.getElementById("update").style.visibility = 'hidden';
@@ -61,10 +53,11 @@ function updateForm(e) {
 
 function deleteInput() {
   if (confirm("Are you sure you want to delete the administrator?")) {
+    var id   = getInputVal('admin_id');
     var name = getInputVal('name');
-    db.collection("administrators").doc(name).update({
+    db.collection("administrator").doc(id).update({
       active: false, 
-      updated_at: Dfirebase.firestore.FieldValue.serverTimestamp()
+      updated_at: firebase.firestore.FieldValue.serverTimestamp()
     })
     .then(function() {
       alert(name + " has been deleted!");
@@ -74,7 +67,6 @@ function deleteInput() {
     });
     // Clear form
     document.getElementById('addAdminForm').reset();
-    document.getElementById("name").readOnly = false;
     document.getElementById("submit").style.visibility = 'visible';
     document.getElementById("delete").style.visibility = 'hidden';
     document.getElementById("update").style.visibility = 'hidden';
@@ -85,13 +77,11 @@ function deleteInput() {
 }
 
 // Update Admin in firebase
-function updateAdmin(name, email, password, title, super_admin) {
-  db.collection("administrators").doc(name).update({
+function updateAdmin(id, name, email) {
+  db.collection("administrators").doc(id).update({
     updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-    email: email,
-    password: password,
-    title: title,
-    super_admin: super_admin
+    username: name,
+    email: email
   })
   .then(function() {
     //console.log("Document successfully written!");
@@ -102,16 +92,13 @@ function updateAdmin(name, email, password, title, super_admin) {
 }
 
 // Save Admin to firebase
-function saveAdmin(name, email, password, title, super_admin){
-  db.collection("administrators").doc(name).set({
+function saveAdmin(name, email){
+  db.collection("administrators").add({
     created_at: firebase.firestore.FieldValue.serverTimestamp(),
     updated_at: firebase.firestore.FieldValue.serverTimestamp(),
     active: true,
-    name: name,
-    email: email,
-    password: password,
-    title: title,
-    super_admin: super_admin
+    username: name,
+    email: email
   })
   .then(function() {
     //console.log("Document successfully written!");
@@ -136,15 +123,11 @@ function checkSession() {
   document.getElementById("delete").style.visibility = 'hidden';
   document.getElementById("update").style.visibility = 'hidden';
   
-  if(sessionStorage.getItem('name') != null){
+  if(sessionStorage.getItem('admin_id') != null){
+    document.getElementById('admin_id').value = sessionStorage.getItem('admin_id');
     document.getElementById('name').value = sessionStorage.getItem('name');
     document.getElementById('email').value = sessionStorage.getItem('email');
-    document.getElementById('password').value = sessionStorage.getItem('password');
-    document.getElementById('title').value = sessionStorage.getItem('title');
-    $('#super_admin').get()[0].checked = sessionStorage.getItem('super_admin');
-
     sessionStorage.clear();
-    document.getElementById("name").readOnly = true;
     document.getElementById("form-title-textbox").innerHTML = "Update Admin";
     document.getElementById("submit").style.visibility = 'hidden';
     document.getElementById("delete").style.visibility = 'visible';
