@@ -17,19 +17,8 @@ var monthsEnglishShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'
 
 // Populate 4 small boxes on top
 populateSmallBoxes();
-// Populate ratings box
-populateRatings();
-// Populate comments box
-populateComments();
-
-// $('#deviceTable tbody').on('click', 'button', function () {
-//   var data = table.row( $(this).parents('tr') ).data();
-//   alert('You will edit: ' + data[0]);
-//   sessionStorage.setItem('name',        data[0]);
-//   sessionStorage.setItem('user',        data[1]);
-//   sessionStorage.setItem('mac_address', data[2]);
-//   window.location.assign('device-add.html');
-// });
+// Populate ratings and comments box
+populateRatingsComments();
 
 async function populateSmallBoxes() {
   // Calculate user registrations from today
@@ -51,7 +40,6 @@ async function populateSmallBoxes() {
   var dt = new Date();
   dt.setDate(todayMidnight.getDate() - 30);
   i = 0;
-
   await db.collection("user").where("created_at", ">", dt).get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(user) {
@@ -100,17 +88,28 @@ async function populateSmallBoxes() {
     });
 }
 
-async function populateRatings() {
-  // Calculate ratings from today
+async function populateRatingsComments() {
+  // Calculate ratings + rating average + comments from today
   var j = 0;
+  var i = 0;
+  var averageToday = 0;
   await db.collection("attraction").where("active", "==", true).get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(async function(attraction) {
         await db.collection('attraction/' + attraction.id + '/review').where("created_at", ">", todayMidnight).get()
           .then(function(querySnapshot1) {
-            querySnapshot1.forEach(function(rating) {
-              if(rating.data().active == true && rating.data().rating) j++;
-              document.getElementById("newRatingsCount").innerHTML = j;
+            querySnapshot1.forEach(function(review) {
+              if(review.data().active == true && review.data().rating) {
+                j++;
+                averageToday += review.data().rating;
+                document.getElementById("newRatingsCount").innerHTML = j;
+                document.getElementById("newRatingsAverageTodayCount").innerHTML = averageToday / j;
+              }
+              if(review.data().active == true && review.data().comment) {
+                i++;
+                document.getElementById("newCommentsCount").innerHTML = i;
+              }
+              
             })
           })
           .catch(function(error) {
@@ -122,155 +121,83 @@ async function populateRatings() {
         console.log("Error getting documents: ", error);
     });
 
-  // Get two most recent ratings
-  var i = 1;
-  var ratingArray = [];
+  // Calculate rating average last 30 days
+  var dt = new Date();
+  dt.setDate(todayMidnight.getDate() - 30);
+  var x = 0;
+  var averageDays = 0;
   await db.collection("attraction").where("active", "==", true).get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(async function(attraction) {
-        db.collection('attraction/' + attraction.id + '/review').orderBy("created_at", "desc").limit(2).get()
+        await db.collection('attraction/' + attraction.id + '/review').where("created_at", ">", dt).get()
           .then(function(querySnapshot1) {
-            querySnapshot1.forEach(function(rating) {
-              var newRating = {
-                'review':         rating.data().rating,
-                'date':           rating.data().created_at.seconds * 1000,
-                'attraction_id':  attraction.id
+            querySnapshot1.forEach(function(review) {
+              if(review.data().active == true && review.data().rating) {
+                x++;
+                averageDays += review.data().rating;
+                document.getElementById("newRatingsAverageDaysCount").innerHTML = (averageDays / x).toFixed(2);
               }
-              ratingArray.push(newRating);
             })
           })
+          .catch(function(error) {
+            console.log("Error getting documents: ", error);
+          })
       })
     })
     .catch(function(error) {
-      console.log("Error getting documents: ", error);
+        console.log("Error getting documents: ", error);
     });
-  
-  console.log(ratingArray);
-  ratingArray.forEach(function (rate){
-    console.log(rate);
-  });
-  
-  
-    // .then(function(querySnapshot) {
-    //   querySnapshot.forEach(function(rating) {
-    //     if(rating.data().active == true && rating.data().type == 1) {
-    //       db.collection("attraction").doc(rating.data().attraction.id).get()
-    //         .then(function(attraction) {
-    //           if(attraction.data().active == true) {
-    //             if(i < 3) {
-    //               // Create the box layout
-    //               var text = "<a class=\"info-box-more bg-green\" href=\"../../pages/user_requests/ratings.html\">" +
-    //                         "<span class=\"small pull-right\" id=\"ratingdate" + i + "\"></span><br />" + 
-    //                         "<span class=\"pull-right\">";
-    //               // Add rating starts
-    //               for(var x = 5 - rating.data().review; x > 0; x--) {
-    //                 text += "<i class=\"fa fa-star-o pull-right\"></i>\n";
-    //               }
-    //               for(var x = rating.data().review; x > 0; x--) {
-    //                 text += "<i class=\"fa fa-star pull-right\"></i>\n";
-    //               }
-    //               text += "</span></a>" + 
-    //                       "<span onclick=\"seeAttraction('" +
-    //                         rating.data().attraction.id + "', '" +
-    //                         attraction.data().description + "', " +
-    //                         attraction.data().position.latitude + ", " +
-    //                         attraction.data().position.longitude + ", " +
-    //                         attraction.data().direction +
-    //                       ")\" style=\"cursor: pointer\">" + rating.data().attraction.id + "</span>";
-    //               // Add text to document
-    //               if(i == 1) document.getElementById("ratingbox").innerHTML = text;
-    //               else document.getElementById("ratingbox").innerHTML += text;
 
-    //               // Prepare and add date of rating
-    //               var a     =     new Date(rating.data().created_at.seconds * 1000);
-    //               var year  =  a.getFullYear();
-    //               var month = monthsEnglishShort[a.getMonth()];
-    //               var date  =  a.getDate();
-    //               var hour  =  a.getHours();
-    //               var min   =   a.getMinutes();
-    //               if(min < 10) min = "0" + min;
-    //               var sec   =   a.getSeconds();
-    //               if(sec < 10) sec = "0" + sec;
-    //               var time  =  date + ' ' + month + ' ' + year + ' at ' + hour + ':' + min + ':' + sec;
-    //               document.getElementById("ratingdate" + i).innerHTML = time;
-    //             }
-    //             i++;
-    //           }
-    //         })
-    //         .catch(function(error) {
-    //           console.log("Error getting documents: ", error);
-    //         })
-    //       }
-    //   })
-    // })
-    // .catch(function(error) {
-    //     console.log("Error getting documents: ", error);
-    // });
-}
-
-async function populateComments() {
-  // Calculate comments from today
-  var j = 0;
+  // Calculate added comments in last 7 days
+  var dt1 = new Date();
+  dt1.setDate(todayMidnight.getDate() - 7);
+  var y = 0;
   await db.collection("attraction").where("active", "==", true).get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(async function(attraction) {
-        await db.collection('attraction/' + attraction.id + '/review').where("created_at", ">", todayMidnight).get()
-        .then(function(querySnapshot) {
-          querySnapshot.forEach(function(comment) {
-            if(comment.data().active == true && comment.data().comment) j++;
-            document.getElementById("newCommentsCount").innerHTML = j;
+        await db.collection('attraction/' + attraction.id + '/review').where("created_at", ">", dt1).get()
+          .then(function(querySnapshot1) {
+            querySnapshot1.forEach(function(review) {
+              if(review.data().active == true && review.data().comment) {
+                y++;
+                document.getElementById("newComments7DaysCount").innerHTML = y;
+              }
+            })
           })
-        })
-        .catch(function(error) {
-          console.log("Error getting documents: ", error);
-        });
+          .catch(function(error) {
+            console.log("Error getting documents: ", error);
+          })
       })
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
 
-  // Get two most recent comments
-  i = 1;
-  db.collection("reviews")
-    .orderBy("created_at", "desc").limit(20).get()
+  // Calculate added comments in last 30 days
+  var dt2 = new Date();
+  dt2.setDate(todayMidnight.getDate() - 30);
+  var z = 0;
+  await db.collection("attraction").where("active", "==", true).get()
     .then(function(querySnapshot) {
-        querySnapshot.forEach(function(comment) {
-          if(comment.data().active == true && comment.data().type == 0) {
-            if(i < 3) {
-              var text = "<a class=\"info-box-more bg-green\" href=\"../../pages/user_requests/ratings.html\">" +
-                            "<span class=\"small pull-right\" id=\"ratingdate" + i + 
-                            "\"></span><br /><span class=\"pull-right\">";
-              // Create the box layout
-              var text = "<a class=\"info-box-more bg-blue\" href=\"../../pages/user_requests/comments-manage.html\">" +
-                "<span class=\"small pull-right\" id=\"commentdate" + i + "\"></span><br />" +
-                "<span class=\"pull-right\" onclick=\"seeUser(" + comment.data().user.id + ")\" style=\"cursor: pointer\">" +
-                  "<b>" + comment.data().user.id + "</b>" +
-                "</span>" + comment.data().review + "</a>";
-              // Add text to document
-              if(i == 1) document.getElementById("commentbox").innerHTML = text;
-              else document.getElementById("commentbox").innerHTML += text;
-
-              // Prepare and add date of rating
-              var a     = new Date(comment.data().created_at.seconds * 1000);
-              var year  = a.getFullYear();
-              var month = monthsEnglishShort[a.getMonth()];
-              var date  = a.getDate();
-              var hour  = a.getHours();
-              var min   = a.getMinutes();
-              if(min < 10) min = "0" + min;
-              var sec   = a.getSeconds();
-              if(sec < 10) sec = "0" + sec;
-              var time  = date + ' ' + month + ' ' + year + ' at ' + hour + ':' + min + ':' + sec;
-              document.getElementById("commentdate" + i).innerHTML = time;
-            }
-            i++;
-          }
-        })
+      querySnapshot.forEach(async function(attraction) {
+        await db.collection('attraction/' + attraction.id + '/review').where("created_at", ">", dt2).get()
+          .then(function(querySnapshot1) {
+            querySnapshot1.forEach(function(review) {
+              if(review.data().active == true && review.data().comment) {
+                z++;
+                document.getElementById("newComments30DaysCount").innerHTML = z;
+              }
+            })
+          })
+          .catch(function(error) {
+            console.log("Error getting documents: ", error);
+          })
+      })
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
+  
 }
 
 function seeAttraction(id, title, description, latitude, longitude, image) {

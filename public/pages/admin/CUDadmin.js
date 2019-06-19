@@ -56,8 +56,7 @@ function deleteInput() {
     var id   = getInputVal('admin_id');
     var name = getInputVal('name');
     db.collection("administrator").doc(id).update({
-      active: false, 
-      updated_at: firebase.firestore.FieldValue.serverTimestamp()
+      active: false
     })
     .then(function() {
       alert(name + " has been deleted!");
@@ -79,7 +78,6 @@ function deleteInput() {
 // Update Admin in firebase
 function updateAdmin(id, name, email) {
   db.collection("administrators").doc(id).update({
-    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
     username: name,
     email: email
   })
@@ -94,9 +92,6 @@ function updateAdmin(id, name, email) {
 // Save Admin to firebase
 function saveAdmin(name, email){
   db.collection("administrators").add({
-    created_at: firebase.firestore.FieldValue.serverTimestamp(),
-    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-    active: true,
     username: name,
     email: email
   })
