@@ -21,10 +21,11 @@ function login(){
                // console.log(doc.data());
                 location.assign('../../pages/dashboard/statistics.html');
             }else{
-                
+              logout();
             }
         }).catch(function(error){
            // console.log(error);
+           logout();
         });
         // ...
       }).catch(function(error) {
