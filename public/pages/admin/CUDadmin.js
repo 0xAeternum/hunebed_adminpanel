@@ -1,17 +1,4 @@
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyC37ynDc3SyuxzwDcQLWs3luTbfz-MLSfw",
-  authDomain: "fir-test-c91f4.firebaseapp.com",
-  databaseURL: "https://fir-test-c91f4.firebaseio.com",
-  projectId: "fir-test-c91f4",
-  storageBucket: "fir-test-c91f4.appspot.com",
-  messagingSenderId: "231032087489",
-  appId: "1:231032087489:web:37267e6ec937a3e6"
-};
-firebase.initializeApp(config);
 
-// Reference Admin collection
-var db = firebase.firestore();
 //var storage = firebase.storage();
 //var ref = storage.ref();
 
@@ -21,14 +8,14 @@ checkSession();
 // Submit form
 function submitForm(e) {
   // Get values
-  var name        = getInputVal('name');
+  //var name        = getInputVal('name');
   var email       = getInputVal('email');
-  var password    = getInputVal('password');
-  var title       = getInputVal('title');
+
+  //var title       = getInputVal('title');
   var super_admin = $('#super_admin').get()[0].checked;
 
   // Save Admin
-  saveAdmin(name, email, password, title, super_admin);
+  saveAdmin(email);
   //uploadFile();
   // Show alert
   alert(name + " has been added!");
@@ -102,7 +89,36 @@ function updateAdmin(name, email, password, title, super_admin) {
 }
 
 // Save Admin to firebase
-function saveAdmin(name, email, password, title, super_admin){
+function saveAdmin(email){
+  var actionCodeSettings = {
+    // The URL to redirect to for sign-in completion. This is also the deep
+    // link for mobile redirects. The domain (www.example.com) for this URL
+    // must be whitelisted in the Firebase Console.
+    url: 'https://fir-test-c91f4.firebaseapp.com/pages/login.html',
+    iOS: {
+      bundleId: 'com.example.ios'
+    },
+    android: {
+      packageName: 'com.example.android',
+      installApp: true,
+      minimumVersion: '12'
+    },
+    // This must be true.
+    handleCodeInApp: true
+
+  };
+  console.log(email);
+  firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+    .then(function() {
+      // The link was successfully sent. Inform the user. Save the email
+      // locally so you don't need to ask the user for it again if they open
+      // the link on the same device.
+    })
+    .catch(function(error) {
+      // Some error occurred, you can inspect the code: error.code
+      console.log(error);
+    });
+  /*
   db.collection("administrators").doc(name).set({
     created_at: firebase.firestore.FieldValue.serverTimestamp(),
     updated_at: firebase.firestore.FieldValue.serverTimestamp(),
@@ -119,6 +135,7 @@ function saveAdmin(name, email, password, title, super_admin){
   .catch(function(error) {
     console.error("Error saving changes: ", error);
   });
+  */
 }
 
 // Function to get values form inputs

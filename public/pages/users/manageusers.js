@@ -1,21 +1,8 @@
  
- var config = {
-    apiKey: "AIzaSyC37ynDc3SyuxzwDcQLWs3luTbfz-MLSfw",
-    authDomain: "fir-test-c91f4.firebaseapp.com",
-    databaseURL: "https://fir-test-c91f4.firebaseio.com",
-    projectId: "fir-test-c91f4",
-    storageBucket: "fir-test-c91f4.appspot.com",
-    messagingSenderId: "231032087489",
-    appId: "1:231032087489:web:37267e6ec937a3e6"
-  };
-  firebase.initializeApp(config);
- // Reference users collection
- // var usersRef = firebase.database().ref('users');
-  var db = firebase.firestore();
  // var table =  null;
   function getAll(status){
     //table =  $('#monumentsTable').DataTable();
-    db.collection("user").where("blocked", "==", status).onSnapshot(function(querySnapshot) {
+    db.collection("user").where("blocked", "==", status).where('active', '==', true).onSnapshot(function(querySnapshot) {
       
       
       var table =  $('#usersTable').DataTable();

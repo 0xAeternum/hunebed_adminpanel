@@ -62,7 +62,7 @@
     </form>
   -->
     <div class="social-auth-links text-center">
-      <a class="btn btn-block btn-social btn-google btn-flat" onclick="login()"><i class="fa fa-google"></i> Sign in using
+      <a class="btn btn-block btn-social btn-google btn-flat" id='signin' onclick="login()"><i class="fa fa-google"></i> Sign in using
         Google</a>
     </div>
     <!-- /.social-auth-links -->
@@ -95,6 +95,58 @@
 
 
 <script src="../dist/js/connectivity.js"></script>
+<script>
+  if(firebase.auth().isSignInWithEmailLink(window.location.href)){
+    //document.getElementById('signin')
+    var email = window.prompt('Please provide the email you\'d like to sign-in with for confirmation.');
+    firebase.auth().signInWithEmailLink(email, window.location.href).then(function(result) {
+
+      // Clear email from storage.
+      //window.localStorage.removeItem('emailForSignIn');
+      // Signed-in user's information.
+      var user = result.user;
+      var isNewUser = result.additionalUserInfo.isNewUser;
+      console.log(db.collection("administrator").doc(user.uid).get());
+      
+     
+
+
+        db.collection("administrator").doc(user.uid).get().then(function(doc) {
+            if (doc.exists) {
+                //console.log("Document data:", doc.data());
+                location.assign('../../pages/dashboard/statistics.html');
+            } else {
+                // doc.data() will be undefined in this case
+                db.collection("administrator").doc(user.uid).set({
+                created_at: firebase.firestore.FieldValue.serverTimestamp(),
+                updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+                active: true,
+                username: user.displayName,
+                  email: email
+                })
+                .then(function() {
+                  //console.log("Document successfully written!");
+                  location.assign('../../pages/dashboard/statistics.html');
+                })
+                .catch(function(error) {
+                  console.error("Error saving changes: ", error);
+                });
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+        
+        
+        
+        
+      
+
+    });
+/*
+
+*/
+  }
+  </script>
 
 </body>
 </html>

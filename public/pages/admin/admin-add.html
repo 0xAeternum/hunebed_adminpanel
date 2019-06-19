@@ -153,36 +153,28 @@
                   <div class="col-md-6">
                     <div class="form-group col-md-7">
                       <label for="name">Name and Surname *</label>
-                      <input type="text" class="form-control" id="name" placeholder="Name Surname" required>
+                      <input type="text" class="form-control" id="name" placeholder="Name Surname" >
                     </div>
                     <div class="form-group col-md-7">
                       <label for="email">Email *</label>
                       <input type="email" class="form-control" id="email" placeholder="email@email.com" required> 
                     </div>
-                    <div class="form-group col-md-7">
-                      <label for="password">Password *</label>
-                      <input type="password" class="form-control" id="password" required> 
-                    </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group col-md-7">
                       <label for="title">Title *</label>
-                      <input type="text" class="form-control" id="title" placeholder="Title" required>
+                      <input type="text" class="form-control" id="title" placeholder="Title" >
                     </div>
                     <div class="form-group col-md-7">
                       <input type="checkbox" class="" id="super_admin">
                       <label for="super_admin" style="margin-left: 8px">All levels of security</label>
-                    </div>
-                    <div class="form-group col-md-7">
-                      <label id="profile_picture" for="InputFile">Profile picture</label>
-                      <input type="file" id="profile_picture">
                     </div>
                   </div>
                 </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary" id="submit" onclick="submitForm()">Submit</button>
+                <button type="button" class="btn btn-primary" id="submit" onclick="submitForm()">Submit</button>
                 <button class="btn btn-danger pull-right" id="delete" onclick="deleteInput()" hidden>Delete</button>
                 <button type="submit" class="btn btn-primary pull-right" id="update" onclick="updateForm()" style="margin-right: 8px">Update</button>
               </div>
@@ -224,7 +216,10 @@
     <!-- JS for adding admins -->
     <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-firestore.js"></script>
+    <script src="../../dist/js/connectivity.js"></script>
+    <script src="../../dist/js/loggedIn.js"></script>
     <script src="CUDadmin.js"></script>
     <!-- FastClick -->
     <script src="../../../bower_components/fastclick/lib/fastclick.js"></script>
