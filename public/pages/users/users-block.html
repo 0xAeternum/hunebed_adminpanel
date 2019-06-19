@@ -231,14 +231,12 @@
             $('#usersTable tbody').on( 'click', 'button', function () {
               var data = table.row( $(this).parents('tr') ).data();
               if(table.data().count() < 5){
-                console.log(1);
-                console.log(table.data().count());
+                
                 blockUser(data[0], true);
                 table.rows().remove();
                 table.draw()
               }else{
-                console.log(2);
-                console.log(table.data().count());
+                
                 blockUser(data[0], true);
               }
             //alert(name + " has been added!");

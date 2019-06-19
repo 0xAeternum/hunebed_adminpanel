@@ -132,7 +132,7 @@ var config = {
     //console.log(getUser(reviewDoc.data().user.id));
     var user;
     
-    db.collection("users").doc(reviewDoc.data().user.id).get().then(function(doc) {
+    db.collection("user").doc(reviewDoc.data().user.id).get().then(function(doc) {
         if (doc.exists) {
             user = doc.data().username;
             timelineHeader.innerHTML = "<b>" + user + "</b>" + " commented on " + "<b>" + reviewDoc.data().attraction.id + "</b>";           // console.log(user);
@@ -246,7 +246,7 @@ var config = {
 
                 if (r == true) {
                     
-                    db.collection("users").doc(reviewDoc.data().user.id).update({                                  
+                    db.collection("user").doc(reviewDoc.data().user.id).update({                                  
                             updated_at: firebase.firestore.FieldValue.serverTimestamp(),
                             status: true
                             }).then(function() {
@@ -337,7 +337,7 @@ var config = {
     var timelineHeader = document.createElement("h3");
     timelineHeader.className = "timeline-header";
 
-   db.collection("users").doc(reviewDoc.data().user.id).get().then(function(doc) {
+   db.collection("user").doc(reviewDoc.data().user.id).get().then(function(doc) {
         if (doc.exists) {
             user = doc.data().username;
         
