@@ -148,24 +148,21 @@
               <div class="box-body">
                 <table id="usersTable" class="table table-bordered table-striped">
                   <thead>
-                  <tr>
+                  <tr>               
                     <th>User</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
                     <th>Email</th>
+                    <th>Visited Attractions</th>
                     <th></th>
-
                   </tr>
                   </thead>
                   <tbody>
 
                   </tbody>
                   <tfoot>
-                  <tr>
+                  <tr>                   
                     <th>User</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
                     <th>Email</th>
+                    <th>Visited Attractions</th>
                     <th></th>
                   </tr>
                   </tfoot>
@@ -229,8 +226,17 @@
     
             } ]});
             $('#usersTable tbody').on( 'click', 'button', function () {
-            var data = table.row( $(this).parents('tr') ).data();
-            blockUser(data[0], false);
+              var data = table.row( $(this).parents('tr') ).data();
+              if(table.data().count() < 5){
+               
+                blockUser(data[0], false);
+                table.rows().remove();
+                table.draw()
+              }else{
+                
+                blockUser(data[0], false);
+              }
+           
 
             //alert(name + " has been added!");
             //location.reload();

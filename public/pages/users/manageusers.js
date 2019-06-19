@@ -15,7 +15,7 @@
  // var table =  null;
   function getAll(status){
     //table =  $('#monumentsTable').DataTable();
-    db.collection("users").where("status", "==", status).onSnapshot(function(querySnapshot) {
+    db.collection("user").where("blocked", "==", status).onSnapshot(function(querySnapshot) {
       
       
       var table =  $('#usersTable').DataTable();
@@ -30,9 +30,8 @@
         table.row.add([
          
           String(doc.data().username),
-          null,
-          null,
-          null,
+          String(doc.data().email),
+          doc.data().vieworder.length,
           null
         ]).draw(); 
 
@@ -52,18 +51,15 @@
        latitude:latitude,
        direction:direction
      });*/
-     db.collection("users").where("username", "==", name)
+     db.collection("user").where('username', '==', name)
     .get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        db.collection("users").doc(doc.id).set({
-        created: firebase.firestore.FieldValue.serverTimestamp(),
-        updated: firebase.firestore.FieldValue.serverTimestamp(),
-
-        username: name,
-        status: blocked
+        db.collection("user").doc(doc.id).update({     
+        updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+        blocked: blocked
         }).then(function() {
-          //console.log("Document successfully written!");
+         // console.log("Document successfully written!");
          // location.reload();
 
         })
