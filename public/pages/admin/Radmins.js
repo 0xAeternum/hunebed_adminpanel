@@ -21,7 +21,7 @@ var table = $('#adminTable').DataTable({
     "data": null,
     "defaultContent": "<button class='btn-warning'>Edit</button>",
   }, {
-    "targets": [ 2 ],
+    "targets": [2],
     "visible": false
 }]});
 
@@ -35,9 +35,9 @@ $('#adminTable tbody').on('click', 'button', function () {
 });
 
 function getAll() {
-  db.collection("administrator").get().then(function(querySnapshot) {
-    querySnapshot.forEach(function(admin) {
-      if(admin.data().active == true) {
+  db.collection("administrator").where('active', '==', true).get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(admin) {
         var adminTable = $('#adminTable').DataTable();
         adminTable.row.add([
           String(admin.data().username),
@@ -45,7 +45,9 @@ function getAll() {
           String(admin.id),
           null,
         ]).draw();
-      }
+      })
+    })
+    .catch(function(error) {
+      console.log("Error getting documents: ", error);
     });
-  });
 }

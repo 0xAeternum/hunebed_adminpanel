@@ -10,7 +10,6 @@ var config = {
 };
 firebase.initializeApp(config);
 
-// Reference Admin collection
 var db = firebase.firestore();
 //var storage = firebase.storage();
 //var ref = storage.ref();
@@ -38,7 +37,7 @@ function updateForm(e) {
   var id    = getInputVal('admin_id');
   var name  = getInputVal('name');
   var email = getInputVal('email');
-  // Update Admin
+  // Update admin
   updateAdmin(id, name, email);
   //uploadFile();
   // Show alert
@@ -51,6 +50,7 @@ function updateForm(e) {
   document.getElementById("form-title-textbox").innerHTML = "Add Admin";
 }
 
+// Delete input
 function deleteInput() {
   if (confirm("Are you sure you want to delete the administrator?")) {
     var id   = getInputVal('admin_id');
@@ -75,7 +75,7 @@ function deleteInput() {
   }
 }
 
-// Update Admin in firebase
+// Update admin in firebase
 function updateAdmin(id, name, email) {
   db.collection("administrators").doc(id).update({
     username: name,
@@ -89,7 +89,7 @@ function updateAdmin(id, name, email) {
   });
 }
 
-// Save Admin to firebase
+// Save admin to firebase
 function saveAdmin(name, email){
   db.collection("administrators").add({
     username: name,
@@ -108,24 +108,26 @@ function getInputVal(field_id) {
   return document.getElementById(field_id).value;
 }
 
+// File uploading
 function uploadFile() {
   const file = $('#InputFile').get(0).files[0];
   const fileName = (+new Date()) + '-' + file.name + '-' + name;
   //const task = ref.child(fileName).put(file, metadata);
 }
 
+// Check for items in session
 function checkSession() {
   document.getElementById("delete").style.visibility = 'hidden';
   document.getElementById("update").style.visibility = 'hidden';
   
   if(sessionStorage.getItem('admin_id') != null){
     document.getElementById('admin_id').value = sessionStorage.getItem('admin_id');
-    document.getElementById('name').value = sessionStorage.getItem('name');
-    document.getElementById('email').value = sessionStorage.getItem('email');
+    document.getElementById('name').value     = sessionStorage.getItem('name');
+    document.getElementById('email').value    = sessionStorage.getItem('email');
     sessionStorage.clear();
     document.getElementById("form-title-textbox").innerHTML = "Update Admin";
-    document.getElementById("submit").style.visibility = 'hidden';
-    document.getElementById("delete").style.visibility = 'visible';
-    document.getElementById("update").style.visibility = 'visible';
+    document.getElementById("submit").style.visibility      = 'hidden';
+    document.getElementById("delete").style.visibility      = 'visible';
+    document.getElementById("update").style.visibility      = 'visible';
   }
 }

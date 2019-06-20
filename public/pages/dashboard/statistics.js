@@ -11,13 +11,13 @@ var config = {
 
 firebase.initializeApp(config);
 var db = firebase.firestore();
+//Prepare global today midnight for queries
 var todayMidnight = new Date();
 todayMidnight.setHours(0,0,0,0);
-var monthsEnglishShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 // Populate 4 small boxes on top
 populateSmallBoxes();
-// Populate ratings and comments box
+// Populate ratings and comments boxes
 populateRatingsComments();
 
 async function populateSmallBoxes() {
@@ -103,7 +103,7 @@ async function populateRatingsComments() {
                 j++;
                 averageToday += review.data().rating;
                 document.getElementById("newRatingsCount").innerHTML = j;
-                document.getElementById("newRatingsAverageTodayCount").innerHTML = averageToday / j;
+                document.getElementById("newRatingsAverageTodayCount").innerHTML = (averageToday / j).toFixed(2);
               }
               if(review.data().active == true && review.data().comment) {
                 i++;
@@ -121,9 +121,9 @@ async function populateRatingsComments() {
         console.log("Error getting documents: ", error);
     });
 
-  // Calculate rating average last 30 days
+  // Calculate rating average last 7 days
   var dt = new Date();
-  dt.setDate(todayMidnight.getDate() - 30);
+  dt.setDate(todayMidnight.getDate() - 7);
   var x = 0;
   var averageDays = 0;
   await db.collection("attraction").where("active", "==", true).get()
@@ -198,23 +198,6 @@ async function populateRatingsComments() {
         console.log("Error getting documents: ", error);
     });
   
-}
-
-function seeAttraction(id, title, description, latitude, longitude, image) {
-  // Add the attraction to sessionStorage to modify and redirect
-  sessionStorage.setItem('id',          id);
-  sessionStorage.setItem('title',       title);
-  sessionStorage.setItem('description', description);
-  sessionStorage.setItem('latitude',    latitude);
-  sessionStorage.setItem('longitude',   longitude);
-  sessionStorage.setItem('image',       image);
-  window.location.assign('../../pages/locations/locations-add.html');
-}
-
-function seeUser(id) {
-  // Add the user to sessionStorage to outline and redirect
-  sessionStorage.setItem('id',          id);
-  window.location.assign('../../pages/users/users-block.html');
 }
 
 //Date range picker and map population
@@ -344,6 +327,7 @@ $(async function () {
   var barChart        = new Chart(barChartCanvas);
 
   //Prepare month labels starting this month
+  var monthsEnglishShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var monthLabels = [];
   var monthNumbers = [];
   for(let i = 0; i < 12; i++) {
@@ -389,30 +373,18 @@ $(async function () {
   barChartData.datasets[0].strokeColor = 'rgb(225,163,11)';
   barChartData.datasets[0].pointColor  = 'rgb(225,163,11)';
   var barChartOptions                  = {
-    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-    scaleBeginAtZero        : true,
-    //Boolean - Whether grid lines are shown across the chart
-    scaleShowGridLines      : true,
-    //String - Colour of the grid lines
-    scaleGridLineColor      : 'rgba(0,0,0,.05)',
-    //Number - Width of the grid lines
-    scaleGridLineWidth      : 1,
-    //Boolean - Whether to show horizontal lines (except X axis)
-    scaleShowHorizontalLines: true,
-    //Boolean - Whether to show vertical lines (except Y axis)
-    scaleShowVerticalLines  : true,
-    //Boolean - If there is a stroke on each bar
-    barShowStroke           : true,
-    //Number - Pixel width of the bar stroke
-    barStrokeWidth          : 2,
-    //Number - Spacing between each of the X value sets
-    barValueSpacing         : 5,
-    //Number - Spacing between data sets within X values
-    barDatasetSpacing       : 1,
-    //String - A legend template
-    legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
-    //Boolean - whether to make the chart responsive
-    responsive              : true,
+    scaleBeginAtZero        : true, //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+    scaleShowGridLines      : true, //Boolean - Whether grid lines are shown across the chart
+    scaleGridLineColor      : 'rgba(0,0,0,.05)', //String - Colour of the grid lines
+    scaleGridLineWidth      : 1, //Number - Width of the grid lines
+    scaleShowHorizontalLines: true, //Boolean - Whether to show horizontal lines (except X axis)
+    scaleShowVerticalLines  : false, //Boolean - Whether to show vertical lines (except Y axis)
+    barShowStroke           : true, //Boolean - If there is a stroke on each bar
+    barStrokeWidth          : 2, //Number - Pixel width of the bar stroke
+    barValueSpacing         : 5, //Number - Spacing between each of the X value sets
+    barDatasetSpacing       : 1, //Number - Spacing between data sets within X values
+    legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>', //String - A legend template
+    responsive              : true, //Boolean - whether to make the chart responsive
     maintainAspectRatio     : true
   };
 

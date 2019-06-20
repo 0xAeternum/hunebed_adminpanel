@@ -1,3 +1,4 @@
+// Initialize Firebase
 var config = {
   apiKey: "AIzaSyC37ynDc3SyuxzwDcQLWs3luTbfz-MLSfw",
   authDomain: "fir-test-c91f4.firebaseapp.com",
@@ -7,43 +8,52 @@ var config = {
   messagingSenderId: "231032087489",
   appId: "1:231032087489:web:37267e6ec937a3e6"
 };
+
 firebase.initializeApp(config);
-  
-  // Reference attraction collection
- // var attractionRef = firebase.database().ref('attraction');
-  var db = firebase.firestore();
- // var table =  null;
- 
-  function getAll(){
-    //table =  $('#monumentsTable').DataTable();
-    db.collection("attraction").where('active','==',true).onSnapshot(function(querySnapshot) {
-      
+var db = firebase.firestore();
 
-      var table =  $('#monumentsTable').DataTable();
-      table.rows().remove();
-     
-      querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        //var table = document.getElementById("monumentsTable");
-        //console.log(doc.id);
-        
+// Get all attractions
+getAll();
 
-        
-        table.row.add([
-          String(doc.id),
-          String(doc.data().description),
-          String(doc.data().position.latitude),
-          String(doc.data().position.longitude),
-          String(doc.data().direction),
+var table = $('#attractionTable').DataTable({
+  "columnDefs": [{
+    "targets": -1,
+    "data": null,
+    "defaultContent": "<button class='btn-warning'>Edit</button>",
+  }, {
+    "targets": [4],
+    "visible": false
+  }]});
+
+$('#attractionTable tbody').on( 'click', 'button', function () {
+  var data = table.row($(this).parents('tr')).data();
+  alert('You will edit: ' +               data[0]);
+  sessionStorage.setItem('title',         data[0]);
+  sessionStorage.setItem('description',   data[1]);
+  sessionStorage.setItem('latitude',      data[2]);
+  sessionStorage.setItem('longitude',     data[3]);
+  sessionStorage.setItem('attraction_id', data[4]);
+  window.location.assign('attraction-add.html');
+} );
+
+function getAll() {
+  db.collection("attraction").where('active', '==', true).get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(attraction) {
+        var attractionTable =  $('#attractionTable').DataTable();
+        attractionTable.row.add([
+          String(attraction.data().title),
+          String(attraction.data().description),
+          String(attraction.data().geopoint.latitude),
+          String(attraction.data().geopoint.longitude),
+          String(attraction.id),
           null
         ]).draw(); 
-
-
-      });
-     //var table =  $('#monumentsTable').DataTable();
-     
-  });
-  
-  }
+      })
+    })
+    .catch(function(error) {
+      console.log("Error getting documents: ", error);
+    });
+}
 
   

@@ -149,9 +149,39 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" id="addDeviceForm">
+            <form role="form" id="addStoryForm">
               <div class="box-body">
                 <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group col-md-7">
+                      <label for="attraction">Attraction *</label>
+                      <select class="form-control select2" style="width: 100%;" id="attraction" required>
+                      </select>
+                    </div>
+                    <br><br>
+                    <div class="form-group col-md-5">
+                      <label for="longitude">Longitude *</label>
+                      <input type="number" min="-180" max="180" value="0.00" step="0.0000001" class="form-control" id="longitude" required> 
+                    </div>
+                    <div class="form-group col-md-5">
+                      <label for="latitude">Latitude *</label>
+                      <input type="number" min="-90" max="90" value="0.00" step="0.0000001°" class="form-control" id="latitude" required>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label id="InputFile" for="InputFile">File input</label>
+                        <input type="file" id="InputFile">
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Text</label>
+                        <div class="pad">        
+                            <textarea id="text" class="textarea" placeholder="AR Text"
+                                      style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
+                            </textarea>
+                        </div>
+                    </div>
+                  </div>
                   <div class="col-md-6">
                     <div class="form-group col-md-7">
                       <label for="name">Name *</label>
@@ -165,7 +195,6 @@
                       <label for="user">User *</label>
                       <select class="form-control select2" style="width: 100%;" id="user" required>
                       </select>
-                      <input type="hidden" id="old_user">
                     </div>
                   </div>
                 </div>
