@@ -1,5 +1,4 @@
 // Initialize Firebase
-
 var config = {
   apiKey: "AIzaSyC37ynDc3SyuxzwDcQLWs3luTbfz-MLSfw",
   authDomain: "fir-test-c91f4.firebaseapp.com",
@@ -9,6 +8,7 @@ var config = {
   messagingSenderId: "231032087489",
   appId: "1:231032087489:web:37267e6ec937a3e6"
 };
+
 firebase.initializeApp(config);
 var db = firebase.firestore();
 //var storage = firebase.storage();
@@ -49,9 +49,9 @@ function updateForm(e) {
   alert(title + " has been updated!");
   // Clear form
   document.getElementById('addAttractionForm').reset();
-  document.getElementById("submit").style.visibility = 'visible';
-  document.getElementById("delete").style.visibility = 'hidden';
-  document.getElementById("update").style.visibility = 'hidden';
+  document.getElementById("submit").style.visibility      = 'visible';
+  document.getElementById("delete").style.visibility      = 'hidden';
+  document.getElementById("update").style.visibility      = 'hidden';
   document.getElementById("form-title-textbox").innerHTML = "Add Attraction";
 }
 
@@ -71,9 +71,9 @@ function deleteInput() {
     });
     // Clear form
     document.getElementById('addAttractionForm').reset();
-    document.getElementById("submit").style.visibility = 'visible';
-    document.getElementById("delete").style.visibility = 'hidden';
-    document.getElementById("update").style.visibility = 'hidden';
+    document.getElementById("submit").style.visibility      = 'visible';
+    document.getElementById("delete").style.visibility      = 'hidden';
+    document.getElementById("update").style.visibility      = 'hidden';
     document.getElementById("form-title-textbox").innerHTML = "Add Attraction";
   } else {
     //alert("Cancelled.");
@@ -103,7 +103,7 @@ function saveAttraction(title, description, longitude, latitude) {
     geopoint: new firebase.firestore.GeoPoint(latitude, longitude)
   })
   .then(function() {
-    console.log("Document successfully written!");
+    //console.log("Document successfully written!");
   })
   .catch(function(error) {
     console.error("Error writing document: ", error);
@@ -128,7 +128,7 @@ function checkSession() {
   document.getElementById("delete").style.visibility = 'hidden';
   document.getElementById("update").style.visibility = 'hidden';
   
-  if(sessionStorage.getItem('attraction_id') != null){
+  if(sessionStorage.getItem('attraction_id') != null) {
     document.getElementById('attraction_id').value = sessionStorage.getItem('attraction_id');
     document.getElementById('title').value         = sessionStorage.getItem('title');
     document.getElementById('description').value   = sessionStorage.getItem('description');
