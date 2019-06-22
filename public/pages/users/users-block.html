@@ -149,11 +149,11 @@
                 <table id="usersTable" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>User</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th></th>
+             
+                      <th>User</th>
+                      <th>Email</th>
+                      <th>Visited Attractions</th>
+                      <th></th>
 
                   </tr>
                   </thead>
@@ -162,11 +162,11 @@
                   </tbody>
                   <tfoot>
                   <tr>
-                    <th>User</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th></th>
+                   
+                      <th>User</th>
+                      <th>Email</th>
+                      <th>Visited Attractions</th>
+                      <th></th>
                   </tr>
                   </tfoot>
                 </table>
@@ -207,7 +207,10 @@
     <!-- JS for managing users -->
     <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-firestore.js"></script>
+    <script src="../../dist/js/connectivity.js"></script>
+    <script src="../../dist/js/loggedIn.js"></script>
     <script src="manageusers.js"></script>
     <!-- FastClick -->
     <script src="../../bower_components/fastclick/lib/fastclick.js"></script>
@@ -229,9 +232,16 @@
     
             } ]});
             $('#usersTable tbody').on( 'click', 'button', function () {
-            var data = table.row( $(this).parents('tr') ).data();
-            blockUser(data[0], true);
-
+              var data = table.row( $(this).parents('tr') ).data();
+              if(table.data().count() < 5){
+                
+                blockUser(data[0], true);
+                table.rows().remove();
+                table.draw()
+              }else{
+                
+                blockUser(data[0], true);
+              }
             //alert(name + " has been added!");
             //location.reload();
             } );

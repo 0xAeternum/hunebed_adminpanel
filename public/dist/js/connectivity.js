@@ -13,31 +13,36 @@ var provider = new firebase.auth.GoogleAuthProvider();
 var db = firebase.firestore();
 
 function login(){
+
     firebase.auth().signInWithPopup(provider).then(function(result) {
         
        
-        db.collection('administrator').doc(result.user.uid).get().then(function(doc){
-            if(doc.data().email == result.user.email){
-               // console.log(doc.data());
-                location.assign('../../pages/dashboard/statistics.html');
-            }else{
-                
-            }
-        }).catch(function(error){
-           // console.log(error);
-        });
-        // ...
-      }).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
-        console.log(error)
+      db.collection('administrator').doc(result.user.uid).get().then(function(doc){
+          if(doc.data().email == result.user.email){
+             // console.log(doc.data());
+              location.assign('../../pages/dashboard/statistics.html');
+          }else{
+            logout();
+          }
+      }).catch(function(error){
+         // console.log(error);
+         logout();
       });
+      // ...
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+     // console.log(error)
+    });
+  
+
+    
 }
 function logout(){
     firebase.auth().signOut().then(function() {

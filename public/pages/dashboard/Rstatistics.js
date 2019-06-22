@@ -1,5 +1,4 @@
 
-var db = firebase.firestore();
 var todayMidnight = new Date();
 todayMidnight.setHours(0,0,0,0);
 var monthsEnglishShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
