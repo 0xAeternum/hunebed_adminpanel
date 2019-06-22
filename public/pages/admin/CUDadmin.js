@@ -26,32 +26,29 @@ function submitForm(e) {
 // Update form
 function updateForm(e) {
   // Get values
-  var name        = getInputVal('name');
-  var email       = getInputVal('email');
-  var password    = getInputVal('password');
-  var title       = getInputVal('title');
-  var super_admin = $('#super_admin').get()[0].checked;
-
-  // Update Admin
-  updateAdmin(name, email, password, title, super_admin);
+  var id    = getInputVal('admin_id');
+  var name  = getInputVal('name');
+  var email = getInputVal('email');
+  // Update admin
+  updateAdmin(id, name, email);
   //uploadFile();
   // Show alert
   alert(name + " has been updated!");
   // Clear form
   document.getElementById('addAdminForm').reset();
-  document.getElementById("name").readOnly = false;
   document.getElementById("submit").style.visibility = 'visible';
   document.getElementById("delete").style.visibility = 'hidden';
   document.getElementById("update").style.visibility = 'hidden';
   document.getElementById("form-title-textbox").innerHTML = "Add Admin";
 }
 
+// Delete input
 function deleteInput() {
   if (confirm("Are you sure you want to delete the administrator?")) {
+    var id   = getInputVal('admin_id');
     var name = getInputVal('name');
-    db.collection("administrators").doc(name).update({
-      active: false, 
-      updated_at: Dfirebase.firestore.FieldValue.serverTimestamp()
+    db.collection("administrator").doc(id).update({
+      active: false
     })
     .then(function() {
       alert(name + " has been deleted!");
@@ -61,7 +58,6 @@ function deleteInput() {
     });
     // Clear form
     document.getElementById('addAdminForm').reset();
-    document.getElementById("name").readOnly = false;
     document.getElementById("submit").style.visibility = 'visible';
     document.getElementById("delete").style.visibility = 'hidden';
     document.getElementById("update").style.visibility = 'hidden';
@@ -71,14 +67,11 @@ function deleteInput() {
   }
 }
 
-// Update Admin in firebase
-function updateAdmin(name, email, password, title, super_admin) {
-  db.collection("administrators").doc(name).update({
-    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-    email: email,
-    password: password,
-    title: title,
-    super_admin: super_admin
+// Update admin in firebase
+function updateAdmin(id, name, email) {
+  db.collection("administrators").doc(id).update({
+    username: name,
+    email: email
   })
   .then(function() {
     //console.log("Document successfully written!");
@@ -143,28 +136,26 @@ function getInputVal(field_id) {
   return document.getElementById(field_id).value;
 }
 
+// File uploading
 function uploadFile() {
   const file = $('#InputFile').get(0).files[0];
   const fileName = (+new Date()) + '-' + file.name + '-' + name;
   //const task = ref.child(fileName).put(file, metadata);
 }
 
+// Check for items in session
 function checkSession() {
   document.getElementById("delete").style.visibility = 'hidden';
   document.getElementById("update").style.visibility = 'hidden';
   
-  if(sessionStorage.getItem('name') != null){
-    document.getElementById('name').value = sessionStorage.getItem('name');
-    document.getElementById('email').value = sessionStorage.getItem('email');
-    document.getElementById('password').value = sessionStorage.getItem('password');
-    document.getElementById('title').value = sessionStorage.getItem('title');
-    $('#super_admin').get()[0].checked = sessionStorage.getItem('super_admin');
-
+  if(sessionStorage.getItem('admin_id') != null){
+    document.getElementById('admin_id').value = sessionStorage.getItem('admin_id');
+    document.getElementById('name').value     = sessionStorage.getItem('name');
+    document.getElementById('email').value    = sessionStorage.getItem('email');
     sessionStorage.clear();
-    document.getElementById("name").readOnly = true;
     document.getElementById("form-title-textbox").innerHTML = "Update Admin";
-    document.getElementById("submit").style.visibility = 'hidden';
-    document.getElementById("delete").style.visibility = 'visible';
-    document.getElementById("update").style.visibility = 'visible';
+    document.getElementById("submit").style.visibility      = 'hidden';
+    document.getElementById("delete").style.visibility      = 'visible';
+    document.getElementById("update").style.visibility      = 'visible';
   }
 }
