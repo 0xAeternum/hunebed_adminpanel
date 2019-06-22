@@ -200,19 +200,67 @@ async function populateRatingsComments() {
   
 }
 
-//Date range picker and map population
+async function getAttractionArea(latitude, longitude) {
+  return Math.floor(Math.random() * Math.floor(5));
+}
+
+// Map and charts population
 $(async function () {
 
   'use strict';
 
   // jvectormap data
   var visitorsData = {
-    HC:   240,  // Hunebed Centre
-    D27:  148,  // Hunebed D27
-    HGEG: 78,   // Hundsrug Geopark Expedition Gateway
-    PP:   79,   // Prehistoric Park
-    BG:   37    // Boulder Garden
+    HC:   0,  // Hunebed Centre
+    D27:  0,  // Hunebed D27
+    HGEG: 0,  // Hundsrug Geopark Expedition Gateway
+    PP:   0,  // Prehistoric Park
+    BG:   0   // Boulder Garden
   };
+  var pieData = {
+    HC:   0,  // Hunebed Centre
+    D27:  0,  // Hunebed D27
+    HGEG: 0,  // Hundsrug Geopark Expedition Gateway
+    PP:   0,  // Prehistoric Park
+    BG:   0   // Boulder Garden
+  };
+
+  await db.collection("attraction").where("active", "==", true).get().then(async function(querySnapshot) {
+      await querySnapshot.forEach(async function(attraction) {
+        let areaCode = await getAttractionArea(attraction.data().geopoint.latitude, attraction.data().geopoint.longitude);
+        let comments = 0;
+        await db.collection("attraction/" + attraction.id + "/element").get().then(snap => {
+          comments = snap.size;
+        });
+        switch(areaCode) {
+          case 1:
+            visitorsData.HC += attraction.data().views;
+            pieData.HC      += comments;
+            break;
+          case 2:
+            visitorsData.D27 += attraction.data().views;
+            pieData.D27      += comments;
+            break;
+          case 3:
+            visitorsData.HGEG += attraction.data().views;
+            pieData.HGEG      += comments;
+            break;
+          case 4:
+            visitorsData.PP += attraction.data().views;
+            pieData.PP      += comments;
+            break;
+          case 5:
+            visitorsData.BG += attraction.data().views;
+            pieData.BG      += comments;
+            break;
+          default:
+            console.log("Location not found in areas. Lat: " + attraction.data().geopoint.latitude + " Lon: " + attraction.data().geopoint.longitude);
+        }
+      })
+    })
+    .catch(function(error) {
+      console.log("Error getting documents: ", error);
+    });
 
   // Hunebed map by jvectormap
   $('#hunebed-map').vectorMap({
@@ -250,46 +298,34 @@ $(async function () {
   var pieChart       = new Chart(pieChartCanvas);
   var PieData        = [
     {
-      value    : 700,
-      color    : 'rgb(151,181,33)',
-      highlight: 'rgb(151,181,33)',
-      label    : 'Chrome'
-    },
-    {
-      value    : 600,
-      color    : 'rgb(68,153,193)',
-      highlight: 'rgb(68,153,193)',
-      label    : 'FireFox'
-    },
-    {
-      value    : 500,
+      value    : pieData.HC,
       color    : 'rgb(229,29,68)',
       highlight: 'rgb(229,29,68)',
-      label    : 'Opera'
+      label    : 'Hunebed Centre'
     },
     {
-      value    : 400,
-      color    : 'rgb(225,163,11)',
-      highlight: 'rgb(225,163,11)',
-      label    : 'Navigator'
-    },
-    {
-      value    : 400,
-      color    : 'rgb(191,213,199)',
-      highlight: 'rgb(191,213,199)',
-      label    : 'IE'
-    },
-    {
-      value    : 300,
-      color    : 'rgb(210,225,232)',
-      highlight: 'rgb(210,225,232)',
-      label    : 'Safari'
-    },
-    {
-      value    : 100,
+      value    : pieData.D27,
       color    : 'rgb(237,212,211)',
       highlight: 'rgb(237,212,211)',
-      label    : 'Navigator'
+      label    : 'Hunebed D27'
+    },
+    {
+      value    : pieData.HGEG,
+      color    : 'rgb(151,181,33)',
+      highlight: 'rgb(151,181,33)',
+      label    : 'Hundsrug Geopark Expedition Gateway'
+    },
+    {
+      value    : pieData.PP,
+      color    : 'rgb(191,213,199)',
+      highlight: 'rgb(191,213,199)',
+      label    : 'Prehistoric Park'
+    },
+    {
+      value    : pieData.BG,
+      color    : 'rgb(225,163,11)',
+      highlight: 'rgb(225,163,11)',
+      label    : 'Boulder Garden'
     }
   ];
   var pieOptions     = {
