@@ -106,11 +106,7 @@
       // Signed-in user's information.
       var user = result.user;
       var isNewUser = result.additionalUserInfo.isNewUser;
-      console.log(db.collection("administrator").doc(user.uid).get());
-      
-     
-
-
+      console.log(db.collection("administrator").doc(user.uid).get());     
         db.collection("administrator").doc(user.uid).get().then(function(doc) {
             if (doc.exists) {
                 //console.log("Document data:", doc.data());
@@ -134,19 +130,9 @@
             }
         }).catch(function(error) {
             console.log("Error getting document:", error);
-        });
-        
-        
-        
-        
-      
-
+        });    
     });
-/*
-
-*/
   }
   </script>
-
 </body>
 </html>
