@@ -98,8 +98,7 @@ function createFeedItem(attractionId,attractionName,reviewDoc){
           number.className = 'h2 text-danger';
       }
       number.innerHTML = reviewDoc.data().rating;
-      number.addEventListener("mouseover", function(){
-        
+      number.addEventListener("mouseover", function(){      
         number.style.outline.none;
         number.style.borderColor = " #";
         number.style.borderRadius = "25px";
