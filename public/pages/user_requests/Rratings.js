@@ -1,5 +1,5 @@
 function draw(){
-    setInterval(() => {
+    setTimeout(function(){
         document.getElementById('timeline');
         ratings.forEach(element => {
            
@@ -127,4 +127,4 @@ function createRatingItem(attractionId,attractionName,reviewDoc){
             document.getElementById("timeline").appendChild(li);   
         }
     });
-    }
+}

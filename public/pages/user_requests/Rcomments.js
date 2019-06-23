@@ -1,16 +1,16 @@
 function draw(){
-    setInterval(() => {
+    setTimeout(function(){
         document.getElementById('timeline');
         ratings.forEach(element => {
-           
+            
             createCommentItem(element.attractionId,element.attractionName,element.id);
         });
-    },100);
+    },150);
 }
 
 function createCommentItem(attractionId,attractionName,reviewDoc){
       
-    db.collection('attraction').doc(attractionId).collection('review').doc(reviewDoc).get().then(function(doc){
+    db.collection('attraction').doc(attractionId).collection('review').doc(reviewDoc).onSnapshot(function(doc){
         
       
     reviewDoc = doc;
