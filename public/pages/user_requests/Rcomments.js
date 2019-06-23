@@ -1,11 +1,17 @@
 function draw(){
-    setTimeout(function(){
-        document.getElementById('timeline');
-        ratings.forEach(element => {
-            
-            createCommentItem(element.attractionId,element.attractionName,element.id);
-        });
-    },150);
+    var lenght = ratings.length;
+    setInterval(function(){
+        if(lenght == ratings.length){
+  
+
+        }else{
+            lenght = ratings.length;
+            document.getElementById('timeline').innerHTML = '';
+            ratings.forEach(element => {       
+                createCommentItem(element.attractionId,element.attractionName,element.id);
+            });
+        }
+    },250);
 }
 
 function createCommentItem(attractionId,attractionName,reviewDoc){
@@ -17,9 +23,9 @@ function createCommentItem(attractionId,attractionName,reviewDoc){
        
     getDates(reviewDoc.data().created_at.toDate().getFullYear(),reviewDoc.data().created_at.toDate().getMonth(),reviewDoc.data().created_at.toDate().getDate());
     
-    if(document.getElementById(reviewDoc.id + ' c') != null){
+    if(document.getElementById(reviewDoc.id ) != null){
         //console.log(reviewDoc.id+' exists');
-        var text = document.getElementById(reviewDoc.id + ' c');
+        var text = document.getElementById(reviewDoc.id);
         text.innerHTML = reviewDoc.data().comment;
     }else{
         //console.log(reviewDoc.id+' doesnt');
@@ -84,7 +90,7 @@ function createCommentItem(attractionId,attractionName,reviewDoc){
         
         
         var divTimelineBody = document.createElement("div");
-        divTimelineBody.id = reviewDoc.id+' c';
+        divTimelineBody.id = reviewDoc.id;
         divTimelineBody.className = "timeline-body";
         divTimelineBody.innerHTML = reviewDoc.data().comment;
 

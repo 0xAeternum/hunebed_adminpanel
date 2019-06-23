@@ -1,11 +1,17 @@
 function draw(){
-  setTimeout(function(){
-    document.getElementById('timeline');
-    ratings.forEach(element => {
-       
-        createFeedItem(element.attractionId,element.attractionName,element.id);
-    });
-  },150);
+  var lenght = ratings.length;
+  setInterval(function(){
+    if(lenght == ratings.length){
+
+
+    }else{
+      lenght = ratings.length;
+      document.getElementById('timeline').innerHTML = '';
+      ratings.forEach(element => {       
+          createFeedItem(element.attractionId,element.attractionName,element.id);
+      });
+    }
+  },250);
 }
 
 function createFeedItem(attractionId,attractionName,reviewDoc){
@@ -33,13 +39,6 @@ function createFeedItem(attractionId,attractionName,reviewDoc){
 
       var divTimelineItem = document.createElement("div");
       divTimelineItem.className="timeline-item";
-      
-      if(pathname != null && pathname == reviewDoc.id){
-          divTimelineItem.style.outline.none;
-          divTimelineItem.style.borderColor = "#FF0000";
-          divTimelineItem.style.boxShadow = "0 0 10px #FF0000";
-          divTimelineItem.scrollIntoView();
-      }
 
       divTimelineItem.addEventListener("mouseover", function(){
         
@@ -90,7 +89,7 @@ function createFeedItem(attractionId,attractionName,reviewDoc){
       divTimelineBody.style.paddingBottom = "2%";
       //Create rating
       var number = document.createElement('span');
-      number.id = reviewDoc.id;
+      number.id = reviewDoc.id+ ' r';
       if(reviewDoc.data().rating > 7){
           number.className = 'h2 text-success';
       }else if(reviewDoc.data().rating > 3){
@@ -99,17 +98,64 @@ function createFeedItem(attractionId,attractionName,reviewDoc){
           number.className = 'h2 text-danger';
       }
       number.innerHTML = reviewDoc.data().rating;
+      number.addEventListener("mouseover", function(){
+        
+        number.style.outline.none;
+        number.style.borderColor = " #";
+        number.style.borderRadius = "25px";
+        number.style.boxShadow = "0 0 10px  #add8e6";
+      });
+      number.style.cursor = 'pointer';
+      number.style.padding = '2pt';
+      number.style.marginBottom = '10pt';
+      
+      number.addEventListener("mouseout", function(){
+        
+          setTimeout(function(){
+            number.style.outline.none;
+            number.style.borderColor = "transparent";
+            number.style.boxShadow = "0 0 0px black";
+          }, 250);
+      });
+      number.addEventListener("click", function(){
+        location.assign('../user_requests/ratings.html')
+      });
        //Create comment
       var text = document.createElement("span");
       text.id = reviewDoc.id + ' c';
       text.className = "timeline-body";
       text.innerHTML = reviewDoc.data().comment;
-             
+      text.style.cursor = 'pointer';
+      text.style.padding = '2pt';
+      
+      text.addEventListener("mouseover", function(){
+        
+        text.style.outline.none;
+        text.style.borderColor = " #";
+        text.style.borderRadius = "25px";
+        text.style.boxShadow = "0 0 10px  #add8e6";
+      });
+      text.addEventListener("mouseout", function(){
+        
+          setTimeout(function(){
+            text.style.outline.none;
+            text.style.borderColor = "transparent";
+            text.style.boxShadow = "0 0 0px black";
+          }, 250);
+      });
+      text.addEventListener("click", function(){
+        
+        location.assign('../user_requests/commments-manage.html')
+      });       
+
+
+      var br = document.createElement('br');
       span.appendChild(iClock);     
 
       divTimelineBody.appendChild(number);
-
-      divTimelineBody.appendChild(text);
+      divTimelineBody.appendChild(br);
+    
+      divTimelineBody.appendChild(text);    
       divTimelineItem.appendChild(span);
       divTimelineItem.appendChild(timelineHeader);
 

@@ -1,19 +1,25 @@
 function draw(){
-    setTimeout(function(){
-        document.getElementById('timeline');
-        ratings.forEach(element => {
-           
-            createRatingItem(element.attractionId,element.attractionName,element.id);
-        });
-    },150);
+    var lenght = ratings.length;
+    setInterval(function(){
+        if(lenght == ratings.length){
+       
+
+        }else{
+            lenght = ratings.length;
+            document.getElementById('timeline').innerHTML = '';
+            ratings.forEach(element => {       
+                createRatingItem(element.attractionId,element.attractionName,element.id);
+            });
+        }
+    },250);
 }
 function createRatingItem(attractionId,attractionName,reviewDoc){
     db.collection('attraction').doc(attractionId).collection('review').doc(reviewDoc).onSnapshot(function(doc){
         reviewDoc = doc;
   
     getDates(reviewDoc.data().created_at.toDate().getFullYear(),reviewDoc.data().created_at.toDate().getMonth(),reviewDoc.data().created_at.toDate().getDate());
-    if(document.getElementById(reviewDoc.id +' r') != null){
-        var text = document.getElementById(reviewDoc.id + ' r');
+    if(document.getElementById(reviewDoc.id ) != null){
+        var text = document.getElementById(reviewDoc.id);
         if(reviewDoc.data().rating > 7){
             text.className = 'h1 text-success';
         }else if(reviewDoc.data().rating > 3){
@@ -89,7 +95,7 @@ function createRatingItem(attractionId,attractionName,reviewDoc){
             divTimelineBody.className = "timeline-body";
             divTimelineBody.style.paddingBottom = "2%";
             var number = document.createElement('span');
-            number.id = reviewDoc.id+' r';
+            number.id = reviewDoc.id;
             if(reviewDoc.data().rating > 7){
                 number.className = 'h1 text-success';
             }else if(reviewDoc.data().rating > 3){
@@ -98,19 +104,7 @@ function createRatingItem(attractionId,attractionName,reviewDoc){
                 number.className = 'h1 text-danger';
             }
             number.innerHTML = reviewDoc.data().rating;
-            /*
-            for(var x = reviewDoc.data().rating; x > 0; x--) {
-            
-                var i = document.createElement('i');
-                i.className = "fa fa-star pull-left";
-                divTimelineBody.appendChild(i);
-            }
-            for(var x = 5 - reviewDoc.data().rating; x > 0; x--) {
 
-                var i = document.createElement('i');
-                i.className = "fa fa-star-o pull-left";
-                divTimelineBody.appendChild(i);
-            }*/
 
 
             li.appendChild(iStar);
