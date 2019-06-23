@@ -12,7 +12,7 @@ function submitForm(e) {
   var email       = getInputVal('email');
 
   //var title       = getInputVal('title');
-  var super_admin = $('#super_admin').get()[0].checked;
+  //var super_admin = $('#super_admin').get()[0].checked;
 
   // Save Admin
   saveAdmin(email);
@@ -26,8 +26,8 @@ function submitForm(e) {
 // Update form
 function updateForm(e) {
   // Get values
-  var id    = getInputVal('admin_id');
-  var name  = getInputVal('name');
+  //var id    = getInputVal('admin_id');
+  //var name  = getInputVal('name');
   var email = getInputVal('email');
   // Update admin
   updateAdmin(id, name, email);
