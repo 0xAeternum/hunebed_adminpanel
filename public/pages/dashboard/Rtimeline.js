@@ -144,7 +144,7 @@ function createFeedItem(attractionId,attractionName,reviewDoc){
       });
       text.addEventListener("click", function(){
         
-        location.assign('../user_requests/commments-manage.html')
+        location.assign('../user_requests/comments-manage.html')
       });       
 
 
