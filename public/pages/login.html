@@ -35,32 +35,7 @@
   <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
-<!-- Login form
-    <form action="dashboard/statistics.html" method="post">
-      <div class="form-group has-feedback">
-        <input type="email" class="form-control" placeholder="Email">
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password">
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-      </div>
-      <div class="row">
-        <div class="col-xs-8">
-          <div class="checkbox icheck">
-            <label>
-              <input type="checkbox"> Remember Me
-            </label>
-          </div>
-        </div>
-   
-        <div class="col-xs-4">
-          <a class="btn btn-primary btn-block btn-flat">Sign In</a>
-        </div>
-        
-      </div>
-    </form>
-  -->
+
     <div class="social-auth-links text-center">
       <a class="btn btn-block btn-social btn-google btn-flat" id='signin' onclick="login()"><i class="fa fa-google"></i> Sign in using
         Google</a>
@@ -96,9 +71,13 @@
 
 <script src="../dist/js/connectivity.js"></script>
 <script>
+  //var email = window.location.pathname.split('/');
+  
   if(firebase.auth().isSignInWithEmailLink(window.location.href)){
+
+    var email = window.location.href.split('?')[1].split('&')[0];
     //document.getElementById('signin')
-    var email = window.prompt('Please provide the email you\'d like to sign-in with for confirmation.');
+   // var email = window.prompt('Please provide the email you\'d like to sign-in with for confirmation.');
     firebase.auth().signInWithEmailLink(email, window.location.href).then(function(result) {
 
       // Clear email from storage.
@@ -106,11 +85,12 @@
       // Signed-in user's information.
       var user = result.user;
       var isNewUser = result.additionalUserInfo.isNewUser;
-      console.log(db.collection("administrator").doc(user.uid).get());     
+     // console.log(db.collection("administrator").doc(user.uid).get());     
         db.collection("administrator").doc(user.uid).get().then(function(doc) {
             if (doc.exists) {
                 //console.log("Document data:", doc.data());
                 location.assign('../../pages/dashboard/statistics.html');
+               //console.log(user.displayName);
             } else {
                 // doc.data() will be undefined in this case
                 db.collection("administrator").doc(user.uid).set({
@@ -118,7 +98,7 @@
                 updated_at: firebase.firestore.FieldValue.serverTimestamp(),
                 active: true,
                 username: user.displayName,
-                  email: email
+                email: email
                 })
                 .then(function() {
                   //console.log("Document successfully written!");

@@ -87,7 +87,7 @@ function saveAdmin(email){
     // The URL to redirect to for sign-in completion. This is also the deep
     // link for mobile redirects. The domain (www.example.com) for this URL
     // must be whitelisted in the Firebase Console.
-    url: 'https://fir-test-c91f4.firebaseapp.com/pages/login.html',
+    url: 'https://fir-test-c91f4.firebaseapp.com/pages/login.html?' + email,
     iOS: {
       bundleId: 'com.example.ios'
     },
@@ -100,7 +100,7 @@ function saveAdmin(email){
     handleCodeInApp: true
 
   };
-  console.log(email);
+ // console.log(email);
   firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
     .then(function() {
       // The link was successfully sent. Inform the user. Save the email
