@@ -1,5 +1,3 @@
-
-
 // Get all attractions
 getAll();
 
