@@ -18,7 +18,7 @@ function login(){
         
        
       db.collection('administrator').doc(result.user.uid).get().then(function(doc){
-          if(doc.data().email == result.user.email){
+          if(doc.data().email == result.user.email && doc.data().active){
              // console.log(doc.data());
               location.assign('../../pages/dashboard/statistics.html');
           }else{

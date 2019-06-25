@@ -18,30 +18,10 @@ function submitForm(e) {
   saveAdmin(email);
   //uploadFile();
   // Show alert
-  alert(name + " has been added!");
+  alert(name + " was requested to join");
   // Clear form
   document.getElementById('addAdminForm').reset();
 }
-
-// Update form
-function updateForm(e) {
-  // Get values
-  //var id    = getInputVal('admin_id');
-  //var name  = getInputVal('name');
-  var email = getInputVal('email');
-  // Update admin
-  updateAdmin(id, name, email);
-  //uploadFile();
-  // Show alert
-  alert(name + " has been updated!");
-  // Clear form
-  document.getElementById('addAdminForm').reset();
-  document.getElementById("submit").style.visibility = 'visible';
-  document.getElementById("delete").style.visibility = 'hidden';
-  document.getElementById("update").style.visibility = 'hidden';
-  document.getElementById("form-title-textbox").innerHTML = "Add Admin";
-}
-
 // Delete input
 function deleteInput() {
   if (confirm("Are you sure you want to delete the administrator?")) {
@@ -67,19 +47,6 @@ function deleteInput() {
   }
 }
 
-// Update admin in firebase
-function updateAdmin(id, name, email) {
-  db.collection("administrators").doc(id).update({
-    username: name,
-    email: email
-  })
-  .then(function() {
-    //console.log("Document successfully written!");
-  })
-  .catch(function(error) {
-    console.error("Error saving changes: ", error);
-  });
-}
 
 // Save Admin to firebase
 function saveAdmin(email){
@@ -111,24 +78,7 @@ function saveAdmin(email){
       // Some error occurred, you can inspect the code: error.code
       console.log(error);
     });
-  /*
-  db.collection("administrators").doc(name).set({
-    created_at: firebase.firestore.FieldValue.serverTimestamp(),
-    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-    active: true,
-    name: name,
-    email: email,
-    password: password,
-    title: title,
-    super_admin: super_admin
-  })
-  .then(function() {
-    //console.log("Document successfully written!");
-  })
-  .catch(function(error) {
-    console.error("Error saving changes: ", error);
-  });
-  */
+
 }
 
 // Function to get values form inputs
