@@ -13,12 +13,17 @@
         //console.log(doc.id);
         
 
-        
+        var user = doc.data().username;
+        var email = doc.data().email;
+        var views = 0;
+        if(doc.data().vieworder != undefined){
+          views = doc.data().vieworder.length;
+        }
         table.row.add([
          
-          String(doc.data().username),
-          String(doc.data().email),
-          doc.data().vieworder.length,
+          user,
+          email,
+          views,
           null
         ]).draw(); 
 
