@@ -1,21 +1,38 @@
-
-//var storage = firebase.storage();
-//var ref = storage.ref();
-
 // Check session for preloaded data
 checkSession();
 
+//Date for files title
+function getDate() {
+  var d = new Date(),
+      second = '' + d.getSeconds(),
+      minute = '' + d.getMinutes(),
+      hour   = '' + d.getHours(),
+      month  = '' + (d.getMonth() + 1),
+      day    = '' + d.getDate(),
+      year   = d.getFullYear();
+  
+  if (second.length < 2) second = '0' + second;
+  if (minute.length < 2) minute = '0' + minute;
+  if (hour.length < 2) hour = '0' + hour;
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return ([year, month, day].join('-') + '@' + [hour, minute, second].join(':'));
+}
+
 // Submit form
-function submitForm(e) {
+function submitForm() {
   // Get values
   var title       = getInputVal('title');
   var description = getInputVal('description');
   var longitude   = parseFloat(getInputVal('longitude'));
   var latitude    = parseFloat(getInputVal('latitude'));
+  var file        = document.getElementById('inputFile').files[0];
+  var date        = getDate();
 
   // Save attraction
-  saveAttraction(title, description, longitude, latitude);
-  //uploadFile();
+  saveAttraction(title, description, longitude, latitude, date);
+  uploadFile(file, title, date);
   // Show alert
   alert(title + " has been added!");
   // Clear form
@@ -23,16 +40,22 @@ function submitForm(e) {
 }
 
 // Update form
-function updateForm(e) {
+async function updateForm() {
   // Get values
   var id          = getInputVal('attraction_id');
   var title       = getInputVal('title');
   var description = getInputVal('description');
   var longitude   = parseFloat(getInputVal('longitude'));
   var latitude    = parseFloat(getInputVal('latitude'));
+  var date        = null;
+  if(document.getElementById('inputFile').files[0]) {
+    var file      = document.getElementById('inputFile').files[0];
+    var date      = getDate();
+    await uploadFile(file, title, date);
+  }
+
   // Update attraction
-  updateAttraction(id, title, description, longitude, latitude);
-  //uploadFile();
+  await updateAttraction(id, title, description, longitude, latitude, date);
   // Show alert
   alert(title + " has been updated!");
   // Clear form
@@ -69,25 +92,38 @@ function deleteInput() {
 }
 
 // Update attraction in firebase
-function updateAttraction(id, title, description, longitude, latitude) {
-  db.collection("attraction").doc(id).update({
-    title: title,
-    description: description,
-    geopoint: new firebase.firestore.GeoPoint(latitude, longitude)
-  })
-  .then(function() {
-    //console.log("Document successfully written!");
-  })
-  .catch(function(error) {
-    console.error("Error saving changes: ", error);
-  });
+function updateAttraction(id, title, description, longitude, latitude, date) {
+  if(date == null) {
+    var fields= {
+      title: title,
+      description: description,
+      geopoint: new firebase.firestore.GeoPoint(latitude, longitude)
+    }
+  } else {
+    var fields= {
+      title: title,
+      description: description,
+      image: date + '-' + title.split(' ').join('_'),
+      geopoint: new firebase.firestore.GeoPoint(latitude, longitude)
+    }
+  }
+  
+  db.collection("attraction").doc(id).update(fields)
+    .then(function() {
+      //console.log("Document successfully written!");
+    })
+    .catch(function(error) {
+      console.error("Error saving changes: ", error);
+    });
 }
 
 // Save attraction to firebase
-function saveAttraction(title, description, longitude, latitude) {
+function saveAttraction(title, description, longitude, latitude, date) {
   db.collection("attraction").add({
+    active: true,
     title: title,
     description: description,
+    image: date + '-' + title.split(' ').join('_'),
     geopoint: new firebase.firestore.GeoPoint(latitude, longitude)
   })
   .then(function() {
@@ -105,10 +141,25 @@ function getInputVal(field_id) {
 }
 
 // File uploading
-function uploadFile() {
-  const file = $('#InputFile').get(0).files[0];
-  const fileName = (+new Date()) + '-' + file.name + '-' + name;
-  //const task = ref.child(fileName).put(file, metadata);
+function uploadFile(file, title, date) {
+  var ref = firebase.storage().ref();
+  var name = date + '-' + title.split(' ').join('_');;
+  var metadata = { contentType: file.type };
+  var task = ref.child(`attraction/${name}`).put(file, metadata);
+  task.on(firebase.storage.TaskEvent.STATE_CHANGED,
+    function(snapshot) {
+      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      switch (snapshot.state) {
+        case firebase.storage.TaskState.PAUSED: // or 'paused'
+          console.log('Upload is paused');
+          break;
+        case firebase.storage.TaskState.RUNNING: // or 'running'
+          console.log('Upload is running');
+          break;
+      }
+    });
 }
 
 // Check for items in session

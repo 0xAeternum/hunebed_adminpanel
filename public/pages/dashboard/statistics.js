@@ -1,19 +1,11 @@
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyC37ynDc3SyuxzwDcQLWs3luTbfz-MLSfw",
-  authDomain: "fir-test-c91f4.firebaseapp.com",
-  databaseURL: "https://fir-test-c91f4.firebaseio.com",
-  projectId: "fir-test-c91f4",
-  storageBucket: "fir-test-c91f4.appspot.com",
-  messagingSenderId: "231032087489",
-  appId: "1:231032087489:web:37267e6ec937a3e6"
-};
-
-firebase.initializeApp(config);
-var db = firebase.firestore();
 //Prepare global today midnight for queries
 var todayMidnight = new Date();
 todayMidnight.setHours(0,0,0,0);
+
+const cors = require('cors')({
+  origin: true,
+});
+
 
 // Populate 4 small boxes on top
 populateSmallBoxes();
@@ -201,6 +193,19 @@ async function populateRatingsComments() {
 }
 
 async function getAttractionArea(latitude, longitude) {
+  // var url = "https://us-central1-fir-test-c91f4.cloudfunctions.net/checkArea?x="
+  //         + latitude + "&y=" + longitude;
+  var url = "https://us-central1-fir-test-c91f4.cloudfunctions.net/checkArea?x=52.930297&y=6.797986";
+  await $.ajax({
+			url: url,
+			success: function(result) {
+				console.log(result);
+			},
+			error: function(R) {
+				console.log(R);
+			},
+			dataType: 'json'
+		});
   return Math.floor(Math.random() * Math.floor(5));
 }
 
