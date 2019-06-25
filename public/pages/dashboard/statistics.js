@@ -2,11 +2,6 @@
 var todayMidnight = new Date();
 todayMidnight.setHours(0,0,0,0);
 
-const cors = require('cors')({
-  origin: true,
-});
-
-
 // Populate 4 small boxes on top
 populateSmallBoxes();
 // Populate ratings and comments boxes
@@ -193,25 +188,22 @@ async function populateRatingsComments() {
 }
 
 async function getAttractionArea(latitude, longitude) {
-  // var url = "https://us-central1-fir-test-c91f4.cloudfunctions.net/checkArea?x="
-  //         + latitude + "&y=" + longitude;
-  var url = "https://us-central1-fir-test-c91f4.cloudfunctions.net/checkArea?x=52.930297&y=6.797986";
-  await $.ajax({
+  var url = "https://us-central1-fir-test-c91f4.cloudfunctions.net/checkArea?x="
+          + latitude + "&y=" + longitude;
+  return await $.ajax({
 			url: url,
 			success: function(result) {
-				console.log(result);
+        return String(result);
 			},
 			error: function(R) {
 				console.log(R);
 			},
 			dataType: 'json'
-		});
-  return Math.floor(Math.random() * Math.floor(5));
+    });
 }
 
 // Map and charts population
 $(async function () {
-
   'use strict';
 
   // jvectormap data
@@ -230,137 +222,50 @@ $(async function () {
     BG:   0   // Boulder Garden
   };
 
-  await db.collection("attraction").where("active", "==", true).get().then(async function(querySnapshot) {
+  await db.collection("attraction").where("active", "==", true).get()
+    .then(async function(querySnapshot) {
       await querySnapshot.forEach(async function(attraction) {
         let areaCode = await getAttractionArea(attraction.data().geopoint.latitude, attraction.data().geopoint.longitude);
         let comments = 0;
-        await db.collection("attraction/" + attraction.id + "/element").get().then(snap => {
+        await db.collection("attraction").doc(attraction.id).collection("review").get().then(snap => {
           comments = snap.size;
         });
-        switch(areaCode) {
-          case 1:
+        console.log(areaCode.result + " " + comments);
+        switch(areaCode.result) {
+          case "HC":
             visitorsData.HC += attraction.data().views;
             pieData.HC      += comments;
             break;
-          case 2:
+          case "D27":
             visitorsData.D27 += attraction.data().views;
             pieData.D27      += comments;
             break;
-          case 3:
+          case "HGEG":
             visitorsData.HGEG += attraction.data().views;
             pieData.HGEG      += comments;
             break;
-          case 4:
+          case "PP":
             visitorsData.PP += attraction.data().views;
             pieData.PP      += comments;
             break;
-          case 5:
+          case "BG":
             visitorsData.BG += attraction.data().views;
             pieData.BG      += comments;
             break;
           default:
             console.log("Location not found in areas. Lat: " + attraction.data().geopoint.latitude + " Lon: " + attraction.data().geopoint.longitude);
+            break;
         }
-      })
+      });
+      console.log(visitorsData);
+      console.log(pieData);
+      populateMap();
+      populatePieChart();
     })
     .catch(function(error) {
       console.log("Error getting documents: ", error);
     });
-
-  // Hunebed map by jvectormap
-  $('#hunebed-map').vectorMap({
-    map              : 'hunebed-map',
-    backgroundColor  : 'transparent',
-    regionStyle      : {
-      initial: {
-        fill            : '#e4e4e4',
-        'fill-opacity'  : 1,
-        stroke          : 'none',
-        'stroke-width'  : 0,
-        'stroke-opacity': 1
-      }
-    },
-    series           : {
-      regions: [
-        {
-          values           : visitorsData,
-          scale            : ['#92c1dc', '#ebf4f9'],
-          normalizeFunction: 'polynomial'
-        }
-      ]
-    },
-    onRegionLabelShow: function (e, el, code) {
-      if (typeof visitorsData[code] != 'undefined')
-        el.html(el.html() + ': ' + visitorsData[code] + ' visitors');
-    }
-  });
-
-  //-------------
-  //- PIE CHART -
-  //-------------
-  // Get context with jQuery - using jQuery's .get() method.
-  var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-  var pieChart       = new Chart(pieChartCanvas);
-  var PieData        = [
-    {
-      value    : pieData.HC,
-      color    : 'rgb(229,29,68)',
-      highlight: 'rgb(229,29,68)',
-      label    : 'Hunebed Centre'
-    },
-    {
-      value    : pieData.D27,
-      color    : 'rgb(237,212,211)',
-      highlight: 'rgb(237,212,211)',
-      label    : 'Hunebed D27'
-    },
-    {
-      value    : pieData.HGEG,
-      color    : 'rgb(151,181,33)',
-      highlight: 'rgb(151,181,33)',
-      label    : 'Hundsrug Geopark Expedition Gateway'
-    },
-    {
-      value    : pieData.PP,
-      color    : 'rgb(191,213,199)',
-      highlight: 'rgb(191,213,199)',
-      label    : 'Prehistoric Park'
-    },
-    {
-      value    : pieData.BG,
-      color    : 'rgb(225,163,11)',
-      highlight: 'rgb(225,163,11)',
-      label    : 'Boulder Garden'
-    }
-  ];
-  var pieOptions     = {
-    //Boolean - Whether we should show a stroke on each segment
-    segmentShowStroke    : true,
-    //String - The colour of each segment stroke
-    segmentStrokeColor   : '#fff',
-    //Number - The width of each segment stroke
-    segmentStrokeWidth   : 2,
-    //Number - The percentage of the chart that we cut out of the middle
-    percentageInnerCutout: 50, // This is 0 for Pie charts
-    //Number - Amount of animation steps
-    animationSteps       : 100,
-    //String - Animation easing effect
-    animationEasing      : 'easeOutBounce',
-    //Boolean - Whether we animate the rotation of the Doughnut
-    animateRotate        : true,
-    //Boolean - Whether we animate scaling the Doughnut from the centre
-    animateScale         : false,
-    //Boolean - whether to make the chart responsive to window resizing
-    responsive           : true,
-    // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-    maintainAspectRatio  : true,
-    //String - A legend template
-    legendTemplate       : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
-  };
-  //Create pie or douhnut chart
-  // You can switch between pie and douhnut using the method below.
-  pieChart.Doughnut(PieData, pieOptions);
-
+  
   //-------------
   //- BAR CHART -
   //-------------
@@ -431,4 +336,102 @@ $(async function () {
 
   barChartOptions.datasetFill = false;
   barChart.Bar(barChartData, barChartOptions);
+
+  function populateMap() {
+    // Hunebed map by jvectormap
+    $('#hunebed-map').vectorMap({
+      map              : 'hunebed-map',
+      backgroundColor  : 'transparent',
+      regionStyle      : {
+        initial: {
+          fill            : '#e4e4e4',
+          'fill-opacity'  : 1,
+          stroke          : 'none',
+          'stroke-width'  : 0,
+          'stroke-opacity': 1
+        }
+      },
+      series           : {
+        regions: [
+          {
+            values           : visitorsData,
+            scale            : ['#92c1dc', '#ebf4f9'],
+            normalizeFunction: 'polynomial'
+          }
+        ]
+      },
+      onRegionLabelShow: function (e, el, code) {
+        if (typeof visitorsData[code] != 'undefined')
+          el.html(el.html() + ': ' + visitorsData[code] + ' visitors');
+      }
+    });
+  }
+
+  function populatePieChart() {
+    //-------------
+    //- PIE CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+    var pieChart       = new Chart(pieChartCanvas);
+    var PieData        = [
+      {
+        value    : pieData.HC,
+        color    : 'rgb(229,29,68)',
+        highlight: 'rgb(229,29,68)',
+        label    : 'Hunebed Centre'
+      },
+      {
+        value    : pieData.D27,
+        color    : 'rgb(237,212,211)',
+        highlight: 'rgb(237,212,211)',
+        label    : 'Hunebed D27'
+      },
+      {
+        value    : pieData.HGEG,
+        color    : 'rgb(151,181,33)',
+        highlight: 'rgb(151,181,33)',
+        label    : 'Hundsrug Geopark Expedition Gateway'
+      },
+      {
+        value    : pieData.PP,
+        color    : 'rgb(191,213,199)',
+        highlight: 'rgb(191,213,199)',
+        label    : 'Prehistoric Park'
+      },
+      {
+        value    : pieData.BG,
+        color    : 'rgb(225,163,11)',
+        highlight: 'rgb(225,163,11)',
+        label    : 'Boulder Garden'
+      }
+    ];
+    var pieOptions     = {
+      //Boolean - Whether we should show a stroke on each segment
+      segmentShowStroke    : true,
+      //String - The colour of each segment stroke
+      segmentStrokeColor   : '#fff',
+      //Number - The width of each segment stroke
+      segmentStrokeWidth   : 2,
+      //Number - The percentage of the chart that we cut out of the middle
+      percentageInnerCutout: 50, // This is 0 for Pie charts
+      //Number - Amount of animation steps
+      animationSteps       : 100,
+      //String - Animation easing effect
+      animationEasing      : 'easeOutBounce',
+      //Boolean - Whether we animate the rotation of the Doughnut
+      animateRotate        : true,
+      //Boolean - Whether we animate scaling the Doughnut from the centre
+      animateScale         : false,
+      //Boolean - whether to make the chart responsive to window resizing
+      responsive           : true,
+      // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+      maintainAspectRatio  : true,
+      //String - A legend template
+      legendTemplate       : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+    };
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    pieChart.Doughnut(PieData, pieOptions);
+  }
 });
