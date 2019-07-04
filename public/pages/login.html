@@ -71,28 +71,24 @@
 
 <script src="../dist/js/connectivity.js"></script>
 <script>
-  //var email = window.location.pathname.split('/');
-  
+ 
+  //Check if the login page was redirected from a registration link and login the new admin
   if(firebase.auth().isSignInWithEmailLink(window.location.href)){
 
     var email = window.location.href.split('?')[1].split('&')[0];
-    //document.getElementById('signin')
-   // var email = window.prompt('Please provide the email you\'d like to sign-in with for confirmation.');
-    firebase.auth().signInWithEmailLink(email, window.location.href).then(function(result) {
 
-      // Clear email from storage.
-      //window.localStorage.removeItem('emailForSignIn');
+    firebase.auth().signInWithEmailLink(email, window.location.href).then(function(result) {
       // Signed-in user's information.
       var user = result.user;
       var isNewUser = result.additionalUserInfo.isNewUser;
-     // console.log(db.collection("administrator").doc(user.uid).get());     
+
         db.collection("administrator").doc(user.uid).get().then(function(doc) {
             if (doc.exists) {
-                //console.log("Document data:", doc.data());
+
                 location.assign('../../pages/dashboard/statistics.html');
-               //console.log(user.displayName);
+
             } else {
-                // doc.data() will be undefined in this case
+
                 db.collection("administrator").doc(user.uid).set({
                 created_at: firebase.firestore.FieldValue.serverTimestamp(),
                 updated_at: firebase.firestore.FieldValue.serverTimestamp(),
@@ -101,7 +97,7 @@
                 email: email
                 })
                 .then(function() {
-                  //console.log("Document successfully written!");
+                
                   location.assign('../../pages/dashboard/statistics.html');
                 })
                 .catch(function(error) {

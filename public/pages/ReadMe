@@ -1,0 +1,8 @@
+This is the pages folder it contains all the HTML files in sections which are pretty self explanatory
+
+    -admin : all the admin CRUD pages
+    -dashboard : the statistics and feed pages
+    -locations : the attractions and stories CRUD pages
+    -user_requests : the comments and ratings pages 
+    -users : managing users (un/blocking)
+The login page is where the index.html in the public folder redirects to.

@@ -1,3 +1,4 @@
+//Draw items and check if new items have been added and draw them
 function draw(){
     var lenght = ratings.length;
     setInterval(function(){
@@ -13,6 +14,7 @@ function draw(){
         }
     },250);
 }
+//Create a rating item and when data is updated reload the rating item 
 function createRatingItem(attractionId,attractionName,reviewDoc){
     db.collection('attraction').doc(attractionId).collection('review').doc(reviewDoc).onSnapshot(function(doc){
         reviewDoc = doc;

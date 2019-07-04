@@ -1,17 +1,12 @@
- 
- // var table =  null;
+ //Retrieves all users from the database and on any update diplays it in the table
   function getAll(status){
-    //table =  $('#monumentsTable').DataTable();
+
     db.collection("user").where("blocked", "==", status).where('active', '==', true).onSnapshot(function(querySnapshot) {
       
       
       var table =  $('#usersTable').DataTable();
       table.rows().remove();
       querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        //var table = document.getElementById("monumentsTable");
-        //console.log(doc.id);
-        
 
         var user = doc.data().username;
         var email = doc.data().email;
@@ -35,14 +30,9 @@
   });
  
   }
+  //Block a user which set their status to blocked = true or false
   function blockUser(name,blocked){
-    /* var newusersRef = usersRef.push();
-     newusersRef.set({
-       name:name,
-       longitude:longitude,
-       latitude:latitude,
-       direction:direction
-     });*/
+
      db.collection("user").where('username', '==', name)
     .get()
     .then(function(querySnapshot) {
@@ -51,8 +41,6 @@
         updated_at: firebase.firestore.FieldValue.serverTimestamp(),
         blocked: blocked
         }).then(function() {
-         // console.log("Document successfully written!");
-         // location.reload();
 
         })
         .catch(function(error) {

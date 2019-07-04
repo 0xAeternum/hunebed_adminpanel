@@ -1,7 +1,7 @@
 
 // Get all admins
 getAll();
-
+//Create table 
 var table = $('#adminTable').DataTable({
   "columnDefs": [{
     "targets": -1,
@@ -11,7 +11,7 @@ var table = $('#adminTable').DataTable({
     "targets": [2],
     "visible": false
 }]});
-
+//Wait for remove button to be pressed and ask user to confirm
 $('#adminTable tbody').on('click', 'button', function () {
   var data = table.row($(this).parents('tr')).data();
 
@@ -26,7 +26,7 @@ $('#adminTable tbody').on('click', 'button', function () {
   }
 
 });
-
+//Call all users from the database and on any activity reload the table
 function getAll() {
   db.collection("administrator").where('active', '==', true).onSnapshot(function(querySnapshot){
     var adminTable = $('#adminTable').DataTable();

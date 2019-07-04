@@ -14,6 +14,8 @@ function draw(){
   },250);
 }
 
+//Create a feed item and when data is updated reload the feed item 
+
 function createFeedItem(attractionId,attractionName,reviewDoc){
 
       
@@ -155,7 +157,7 @@ function createFeedItem(attractionId,attractionName,reviewDoc){
         divTimelineBody.appendChild(text);    
       }
 
-
+      //Apped all items to the div and append the div to the page
     
       span.appendChild(iClock);     
 
